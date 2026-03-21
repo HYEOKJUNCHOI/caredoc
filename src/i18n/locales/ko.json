@@ -1,0 +1,126 @@
+{
+  "app": { "title": "CareDoc" },
+  "nav": { "home": "홈", "back": "뒤로" },
+  "lang": { "toggle": "日本語", "current": "한국어" },
+
+  "home": {
+    "title": "이용자 목록",
+    "addUser": "+ 새 이용자 추가",
+    "noUsers": "등록된 이용자가 없습니다",
+    "selectDoc": "서류 선택"
+  },
+
+  "userForm": {
+    "titleNew": "이용자 등록",
+    "titleEdit": "이용자 수정",
+    "name": "이용자 성명",
+    "manager": "담당자 성명",
+    "namePlaceholder": "이름을 입력하세요",
+    "managerPlaceholder": "비우면 栗須康子로 저장됩니다",
+    "save": "저장",
+    "cancel": "취소"
+  },
+
+  "select": {
+    "title": "서류 선택",
+    "subtitle": "작성할 서류를 선택하세요",
+    "printAll": "전체 인쇄 (4종)",
+    "supportPlan": "개별지원계획서",
+    "monitoring": "모니터링기록표",
+    "meetingMinutes": "작성회의록",
+    "basicInfo": "기본정보",
+    "supportPlanDesc": "이용자의 지원 목표와 구체적인 지원 내용을 작성합니다",
+    "monitoringDesc": "지원 목표 달성도와 이용자 본인의 감상을 기록합니다",
+    "meetingMinutesDesc": "서비스 담당자 회의 내용을 정리합니다",
+    "basicInfoDesc": "이용자의 기본 신상정보·수급자증·주訴 등을 작성합니다"
+  },
+
+  "doc": {
+    "userName": "이용자 성명",
+    "writerName": "기입자 성명",
+    "writeDate": "기입 연월일",
+
+    "supportPlan": {
+      "title": "개별지원계획서 (공동생활원조)",
+      "needs": "본인(가족)의 의향·니즈",
+      "longTermGoal": "장기목표 (종합적 지원 방침)",
+      "shortTermSection": "단기목표 및 구체적 지원내용",
+      "shortTermGoal": "단기목표",
+      "supportContent": "구체적 지원내용",
+      "period": "기간",
+      "periodValue": "①~② 3개월",
+      "specialNotes": "특기사항",
+      "consentSection": "상기 계획에 동의합니다",
+      "consentDate": "설명(동의) 일",
+      "consentDateFormat": "년    월    일",
+      "consentSign": "동의 서명",
+      "note1": "필요에 따라 관계기관과 정보 공유 (필요 최소한 범위)",
+      "note2": "야간 정시 안전 확인 실시 (에어컨·침구 조정 등)",
+      "note3": "입원 시 필요한 지원 제공 (병원 연락·조정, 세탁물·필수품 구입 등)",
+      "note4": "귀가 시 가족과 연락 조정 (긴급 연락처 공유)",
+      "disclaimer": "※ 본 계획서는 기입 연월일 현재의 계약 기간 만료 시까지의 목표와 지원 계획을 나타낸 것으로, 상황에 따라 계획의 변경 및 재검토가 발생할 수 있습니다."
+    },
+
+    "monitoring": {
+      "title": "모니터링기록표",
+      "yearMonth": "연도 ・ 월",
+      "year": "년",
+      "month": "월",
+      "supportGoal": "지원목표",
+      "satisfaction": "본인 만족도・감상",
+      "contentChange": "지원내용・상황변화 및 소견・다음 계획",
+      "planChange": "계획 변경 여부",
+      "planChangeYes": "유",
+      "planChangeNo": "무",
+      "achieveA": "A　매우 만족",
+      "achieveB": "B　만족",
+      "achieveC": "C　불만족"
+    },
+
+    "meeting": {
+      "title": "개별지원계획 작성회의 회의록",
+      "participants": "참가자",
+      "supportGoalPlan": "지원목표 (계획안)",
+      "opinion": "본인의 감상 등",
+      "review": "검토내용・대응",
+      "futureTask": "향후 과제 및 확인사항"
+    }
+  },
+
+  "edit": {
+    "phraseSelect": "문구 선택",
+    "customPlaceholder": "직접 입력하세요...",
+    "preview": "미리보기로 이동",
+    "goalRow": "목표",
+    "autoLinked": "개별지원계획서에서 자동 연동",
+    "section": {
+      "goals":        "지원 목표",
+      "support":      "지원 내용",
+      "satisfaction": "본인 감상"
+    }
+  },
+
+  "preview": {
+    "title": "미리보기",
+    "downloadWord": "Word 다운로드",
+    "downloadPdf": "PDF 다운로드",
+    "print": "프린트",
+    "backToEdit": "수정하기"
+  },
+
+  "admin": {
+    "title": "문구 관리",
+    "default": "기본",
+    "addPlaceholder": "새 문구를 입력하세요...",
+    "goAdmin": "문구 관리"
+  },
+
+  "common": {
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "confirm": "확인",
+    "selected": "선택됨",
+    "none": "없음"
+  }
+}

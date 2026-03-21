@@ -10,10 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "docx": "^9.6.1",
     "html2canvas": "^1.4.1",
     "i18next": "^25.8.20",
     "jspdf": "^4.2.1",
+    "kuroshiro": "^1.2.0",
+    "kuroshiro-analyzer-kuromoji": "^1.1.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-i18next": "^16.5.8",

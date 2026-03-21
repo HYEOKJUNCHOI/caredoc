@@ -1,0 +1,70 @@
+/* Header — Excel 리본 스타일 */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 46px;
+  padding: 0 12px;
+  background: #217346;           /* Excel 초록 */
+  border-bottom: 1px solid #185C37;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 로고 */
+.logo {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.2px;
+}
+
+.logoDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #C6E0B4;
+  margin-left: 2px;
+  margin-bottom: 2px;
+  vertical-align: middle;
+}
+
+/* 뒤로가기 버튼 */
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.1s;
+}
+
+.backBtn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.backArrow {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media print {
+  .header { display: none !important; }
+}

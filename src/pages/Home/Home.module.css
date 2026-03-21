@@ -1,0 +1,198 @@
+/* Home — Notion 스타일 이용자 목록 */
+.container {
+  padding: 32px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* 상단 타이틀 영역 */
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* 관리자 버튼 */
+.adminBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.12s;
+}
+
+.adminBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* 이용자 목록 */
+.userList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-tertiary);
+  padding: 48px 0;
+  font-size: 14px;
+}
+
+/* 카드 래퍼 — 삭제 버튼 포지셔닝 기준 */
+.userCardWrap {
+  position: relative;
+  overflow: visible;
+}
+
+.userCardWrap:hover .deleteUserBtn {
+  opacity: 1;
+}
+
+/* 삭제 버튼 — 호버 시 우측 상단 모서리에 크로스오버 */
+.deleteUserBtn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.1s;
+  box-shadow: 0 1px 6px rgba(255, 59, 48, 0.6);
+  z-index: 2;
+}
+
+.deleteUserBtn:hover {
+  transform: scale(1.15);
+}
+
+/* 이용자 카드 — Notion 페이지 행 스타일 */
+.userCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: var(--bg-page);
+  transition: background 0.12s, border-color 0.12s;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.userCard:hover {
+  background: var(--bg-surface);
+  border-color: var(--border-default);
+}
+
+.userCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 아바타 원형 */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent-subtle);
+  border: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-text);
+  flex-shrink: 0;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userName {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.userManager {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.chevron {
+  color: var(--text-tertiary);
+  font-size: 16px;
+}
+
+/* 구분선 */
+.divider {
+  height: 1px;
+  background: var(--divider);
+  margin: 8px 0;
+}
+
+/* 새 이용자 추가 버튼 */
+.addBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-strong);
+  background: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.12s, color 0.12s;
+  width: 100%;
+}
+
+.addBtn:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-style: solid;
+}
+
+.addIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text-secondary);
+}

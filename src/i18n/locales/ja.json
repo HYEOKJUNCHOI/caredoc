@@ -1,0 +1,126 @@
+{
+  "app": { "title": "CareDoc" },
+  "nav": { "home": "ホーム", "back": "戻る" },
+  "lang": { "toggle": "한국어", "current": "日本語" },
+
+  "home": {
+    "title": "利用者一覧",
+    "addUser": "+ 新しい利用者を追加",
+    "noUsers": "登録された利用者がいません",
+    "selectDoc": "書類選択"
+  },
+
+  "userForm": {
+    "titleNew": "利用者登録",
+    "titleEdit": "利用者編集",
+    "name": "利用者氏名",
+    "manager": "記入者名",
+    "namePlaceholder": "お名前を入力してください",
+    "managerPlaceholder": "空白のままにすると栗須康子が入ります",
+    "save": "保存",
+    "cancel": "キャンセル"
+  },
+
+  "select": {
+    "title": "書類選択",
+    "subtitle": "作成する書類を選択してください",
+    "printAll": "全書類印刷（4種）",
+    "supportPlan": "個別支援計画書",
+    "monitoring": "モニタリング記録表",
+    "meetingMinutes": "作成会議録",
+    "basicInfo": "基本情報",
+    "supportPlanDesc": "利用者の支援目標と具体的な支援内容を作成します",
+    "monitoringDesc": "支援目標の達成度と利用者本人の感想を記録します",
+    "meetingMinutesDesc": "サービス担当者会議の内容を整理します",
+    "basicInfoDesc": "利用者の基本情報・受給者証・主訴等を作成します"
+  },
+
+  "doc": {
+    "userName": "利用者氏名",
+    "writerName": "記入者名",
+    "writeDate": "記入年月日",
+
+    "supportPlan": {
+      "title": "個別支援計画書（共同生活援助）",
+      "needs": "本人（家族）の意向（ニーズ）",
+      "longTermGoal": "長期目標（総合的な援助の方針）",
+      "shortTermSection": "短期目標及び具体的支援内容",
+      "shortTermGoal": "短期目標",
+      "supportContent": "具体的支援内容",
+      "period": "期間",
+      "periodValue": "①〜②　3ヵ月",
+      "specialNotes": "特記事項",
+      "consentSection": "上記の計画に同意します",
+      "consentDate": "説明（同意）日",
+      "consentDateFormat": "年　　月　　日",
+      "consentSign": "同意署名",
+      "note1": "必要に応じて、関係機関と情報を共有することがありますので、ご了承ください。（情報は必要最小限の範囲です。）",
+      "note2": "夜間定時見守りを行います（エアコン、寝具の調整等）",
+      "note3": "入院時に必要な支援を行います（病院との連携や調整、洗濯物・必需品の購入などの支援）",
+      "note4": "帰宅する時は家族と連絡調整をする（お互いの生活の様子を共有する）。また、緊急時の連絡先を伝えあっておく。",
+      "disclaimer": "※本計画書は、記入年月日現在における契約期間満了時までの目標と支援計画を示したものであり、状況により計画の変更及び見直しが生じる場合があります。計画の変更及び見直しが生じた場合は、再度利用者に説明し同意を得るものです。"
+    },
+
+    "monitoring": {
+      "title": "モニタリング記録表",
+      "yearMonth": "年 ・ 月",
+      "year": "年",
+      "month": "月",
+      "supportGoal": "支援目標",
+      "satisfaction": "本人の満足度・感想",
+      "contentChange": "支援内容・状況変化及びモニタリングの所見・次への取り組み",
+      "planChange": "計画変更の有無",
+      "planChangeYes": "有",
+      "planChangeNo": "無",
+      "achieveA": "A　大変満足",
+      "achieveB": "B　満足",
+      "achieveC": "C　不満足"
+    },
+
+    "meeting": {
+      "title": "個別支援計画作成会議　会議録",
+      "participants": "参加者",
+      "supportGoalPlan": "支援目標（計画案）",
+      "opinion": "本人の感想等",
+      "review": "検討内容・対応",
+      "futureTask": "今後の課題及び確認等"
+    }
+  },
+
+  "edit": {
+    "phraseSelect": "文言選択",
+    "customPlaceholder": "直接入力してください...",
+    "preview": "プレビューへ",
+    "goalRow": "目標",
+    "autoLinked": "個別支援計画書から自動連動",
+    "section": {
+      "goals":        "支援目標",
+      "support":      "支援内容",
+      "satisfaction": "本人の感想"
+    }
+  },
+
+  "preview": {
+    "title": "プレビュー",
+    "downloadWord": "Wordダウンロード",
+    "downloadPdf": "PDFダウンロード",
+    "print": "印刷",
+    "backToEdit": "修正する"
+  },
+
+  "admin": {
+    "title": "文言管理",
+    "default": "デフォルト",
+    "addPlaceholder": "新しい文言を入力してください...",
+    "goAdmin": "文言管理"
+  },
+
+  "common": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "confirm": "確認",
+    "selected": "選択済み",
+    "none": "なし"
+  }
+}

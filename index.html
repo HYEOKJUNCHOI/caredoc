@@ -1,10 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>yasuko</title>
+    <!-- Pretendard JP — 한국어·일본어 겸용 폰트 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/niceplugin/Pretendard-JP@v1.0.0/dist/web/static/pretendard-jp.min.css"
+    />
+    <title>CareDoc</title>
+    <!-- 인쇄 가로 방향 전역 강제 — JS/CSS Modules 로딩 전에 적용되어야 확실함 -->
+    <style>@page { size: 297mm 210mm; margin: 0; }</style>
   </head>
   <body>
     <div id="root"></div>

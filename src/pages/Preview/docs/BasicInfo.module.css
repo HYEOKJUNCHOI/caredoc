@@ -1,0 +1,551 @@
+/* ================================================
+   基本情報 A4 가로 레이아웃
+   크기: 297mm × 210mm → 1122px × 794px (96dpi)
+   ================================================ */
+
+.page {
+  width: 1122px;
+  height: 794px;
+  padding: 7px 10px;
+  background: #fff;
+  color: #000;
+  font-family: 'Yu Mincho', 'MS Mincho', 'Hiragino Mincho Pro', 'Pretendard JP', serif;
+  font-size: 7.5pt;
+  line-height: 1.3;
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 문서 헤더 ── */
+.docHeader {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.docTitle {
+  flex: 1;
+  text-align: center;
+  font-size: 15pt;
+  font-weight: bold;
+  letter-spacing: 10px;
+  padding-left: 10px;
+}
+
+.docHeaderRight {
+  text-align: right;
+  font-size: 8pt;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* ── 본문: 좌/우 2컬럼 ── */
+.docBody {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #000;
+}
+
+.leftCol {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #000;
+  overflow: hidden;
+}
+
+.rightCol {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── 긴급연락처 스트립 ── */
+.emergencyStrip {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+  min-height: 22px;
+  font-size: 7pt;
+}
+
+.emLabel {
+  background: #efefef;
+  border-right: 1px solid #000;
+  padding: 2px 5px;
+  font-weight: bold;
+  white-space: nowrap;
+  font-size: 6.5pt;
+}
+
+.emValue {
+  padding: 1px 6px;
+  flex: 1;
+  font-size: 7pt;
+}
+
+.bloodLabel {
+  background: #efefef;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  padding: 2px 5px;
+  font-weight: bold;
+  white-space: nowrap;
+  font-size: 6.5pt;
+}
+
+.bloodValue {
+  padding: 1px 8px;
+  min-width: 28px;
+  font-size: 7pt;
+}
+
+/* ── 섹션 행 (세로 라벨 + 내용) ── */
+.sectionRow {
+  display: flex;
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+}
+
+.sectionRow:last-child {
+  border-bottom: none;
+  flex: 1;
+}
+
+/* 세로 쓰기 라벨 */
+.sideLabel {
+  writing-mode: vertical-rl;
+  text-align: center;
+  background: #efefef;
+  border-right: 1px solid #000;
+  padding: 4px 2px;
+  font-weight: bold;
+  font-size: 7pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  flex-shrink: 0;
+}
+
+.sectionContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── 필드 행 ── */
+.fieldRow {
+  display: flex;
+  border-bottom: 1px solid #d0d0d0;
+  min-height: 20px;
+  flex-shrink: 0;
+}
+
+.fieldRow:last-child {
+  border-bottom: none;
+}
+
+.fieldLabel {
+  background: #f7f7f7;
+  border-right: 1px solid #bbb;
+  padding: 2px 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 6.5pt;
+  display: flex;
+  align-items: center;
+  min-width: 62px;
+  flex-shrink: 0;
+}
+
+.fieldValue {
+  padding: 2px 5px;
+  flex: 1;
+  font-size: 7pt;
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+/* 이름 두 줄 */
+.nameGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 7pt;
+  line-height: 1.3;
+}
+
+/* 성별 강조 */
+.genderSelected {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* ── 가족 행 — compact 제노그램이 높이 기준으로 채움 ── */
+.familyRow {
+  display: flex;
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+  height: 128px;
+  overflow: hidden;
+}
+
+.familyContent {
+  flex: 1;
+  display: flex;
+  font-size: 7pt;
+}
+
+.familyLeft {
+  flex: 1;
+  padding: 3px 5px;
+  border-right: 1px solid #d0d0d0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.familyRight {
+  flex: 1;
+  padding: 3px 5px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.familySubLabel {
+  font-size: 6pt;
+  color: #666;
+  margin-bottom: 2px;
+  font-weight: bold;
+}
+
+/* ── 3컬럼 테이블 (의료·과거서비스) ── */
+.table3 {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 6.5pt;
+  flex-shrink: 0;
+}
+
+.table3 th {
+  background: #efefef;
+  border: 1px solid #bbb;
+  padding: 2px 4px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 6pt;
+}
+
+.table3 td {
+  border: 1px solid #d0d0d0;
+  padding: 2px 4px;
+  vertical-align: top;
+  min-height: 18px;
+}
+
+/* ── 기왕력 행 ── */
+.historyContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 6.5pt;
+}
+
+.historyRow {
+  display: flex;
+  border-bottom: 1px solid #d0d0d0;
+  min-height: 17px;
+  flex-shrink: 0;
+}
+
+.historyRow:last-child {
+  border-bottom: none;
+  flex: 1;
+}
+
+.historyLabel {
+  background: #f7f7f7;
+  border-right: 1px solid #bbb;
+  padding: 2px 4px;
+  white-space: nowrap;
+  min-width: 54px;
+  font-size: 6pt;
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.historyValue {
+  padding: 2px 4px;
+  flex: 1;
+  word-break: break-word;
+  white-space: pre-wrap;
+  font-size: 6.5pt;
+}
+
+/* 취학기 서브 테이블 */
+.schoolGrid {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.schoolRow {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 14px;
+  flex-shrink: 0;
+}
+
+.schoolRow:last-child {
+  border-bottom: none;
+}
+
+.schoolLabel {
+  padding: 1px 3px;
+  font-size: 6pt;
+  min-width: 52px;
+  border-right: 1px solid #d0d0d0;
+  color: #555;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.schoolValue {
+  padding: 1px 4px;
+  font-size: 6.5pt;
+  flex: 1;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+}
+
+/* ── 우측 컬럼 ── */
+
+/* 現況 세로 라벨 포함 섹션 */
+.certWrapper {
+  display: flex;
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+}
+
+.certContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 수급자증 서브섹션 라벨 */
+.certSubLabel {
+  background: #efefef;
+  border-bottom: 1px solid #bbb;
+  border-right: 1px solid #bbb;
+  padding: 2px 4px;
+  font-weight: bold;
+  font-size: 6pt;
+  white-space: nowrap;
+  min-width: 56px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.certRow {
+  display: flex;
+  border-bottom: 1px solid #d0d0d0;
+  min-height: 19px;
+  flex-shrink: 0;
+  font-size: 7pt;
+}
+
+.certRow:last-child {
+  border-bottom: none;
+}
+
+.certLabel {
+  background: #f7f7f7;
+  border-right: 1px solid #bbb;
+  padding: 2px 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 6pt;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.certValue {
+  padding: 2px 5px;
+  flex: 1;
+  font-size: 7pt;
+  display: flex;
+  align-items: center;
+  word-break: break-word;
+}
+
+/* 서비스 종별 테이블 */
+.serviceTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 6.5pt;
+}
+
+.serviceTable th {
+  background: #efefef;
+  border: 1px solid #bbb;
+  padding: 2px 4px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 6pt;
+}
+
+.serviceTable td {
+  border: 1px solid #d0d0d0;
+  padding: 2px 4px;
+  min-height: 17px;
+  vertical-align: middle;
+}
+
+/* ── 사회관계도 ── */
+.socialSection {
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+  padding: 3px 5px;
+}
+
+.socialSectionLabel {
+  font-weight: bold;
+  font-size: 6.5pt;
+  border-bottom: 1px solid #d0d0d0;
+  padding-bottom: 2px;
+  margin-bottom: 3px;
+}
+
+.socialDiagramArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.mainOfficesRow {
+  font-size: 6.5pt;
+  padding: 2px 0;
+  border-top: 1px solid #d0d0d0;
+  margin-top: 2px;
+}
+
+/* ── 기타정보 ── */
+.otherInfoRow {
+  display: flex;
+  border-bottom: 1px solid #000;
+  min-height: 22px;
+  flex-shrink: 0;
+  font-size: 7pt;
+}
+
+/* ── 주訴 ── */
+.complaintSection {
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+}
+
+.complaintHeaderRow {
+  background: #efefef;
+  border-bottom: 1px solid #bbb;
+  padding: 2px 5px;
+  font-weight: bold;
+  font-size: 6.5pt;
+}
+
+.complaintRow {
+  display: flex;
+  border-bottom: 1px solid #d0d0d0;
+  min-height: 20px;
+  font-size: 7pt;
+}
+
+.complaintRow:last-child {
+  border-bottom: none;
+}
+
+.complaintWho {
+  background: #f7f7f7;
+  border-right: 1px solid #bbb;
+  padding: 2px 4px;
+  font-size: 6pt;
+  display: flex;
+  align-items: center;
+  min-width: 26px;
+  flex-shrink: 0;
+}
+
+.complaintSub {
+  background: #fafafa;
+  border-right: 1px solid #d0d0d0;
+  padding: 2px 4px;
+  font-size: 6pt;
+  display: flex;
+  align-items: center;
+  min-width: 30px;
+  flex-shrink: 0;
+}
+
+.complaintValue {
+  padding: 2px 5px;
+  flex: 1;
+  font-size: 7pt;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+}
+
+/* ── 비고 ── */
+.remarksSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.remarksSectionLabel {
+  background: #efefef;
+  border-bottom: 1px solid #bbb;
+  padding: 2px 5px;
+  font-weight: bold;
+  font-size: 6.5pt;
+  flex-shrink: 0;
+}
+
+.remarksContent {
+  flex: 1;
+  padding: 3px 5px;
+  font-size: 7pt;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── 인쇄 ── */
+@page { size: 297mm 210mm; margin: 0; }
+
+@media print {
+  .page {
+    width: 297mm;
+    height: 210mm;
+    padding: 7px 10px;
+    page-break-after: always;
+    box-shadow: none;
+  }
+}

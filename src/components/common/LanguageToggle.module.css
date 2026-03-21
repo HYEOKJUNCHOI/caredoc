@@ -1,0 +1,22 @@
+/* 언어 토글 버튼 — Excel 헤더 위 스타일 */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.1s;
+}
+
+.toggle:hover {
+  background: rgba(255,255,255,0.22);
+}
+
+.flag {
+  font-size: 13px;
+}
