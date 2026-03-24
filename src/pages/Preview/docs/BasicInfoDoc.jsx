@@ -62,7 +62,7 @@ const certPeriod = (from, to) => {
 const SocialDiagramSVG = ({ nodes }) => {
   const items = (nodes || '')
     .split('\n')
-    .map((s) => s.trim())
+    .map((str) => str.trim())
     .filter(Boolean)
     .slice(0, 5);
 
@@ -194,33 +194,35 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
   const serviceTypeLocal= pad(d?.serviceTypeLocal, 3);  /* 원본 3행: 日中一時支援・移動支援・空 */
 
   /* 주거상황 선택지 표시 헬퍼 — 선택된 항목만 동그라미, 미선택은 아주 연하게 */
-  const residenceDisplay = (selected, opt) =>
-    selected === opt
-      ? <span key={opt} className={s.genderSelected}>{opt}</span>
+  const selOpt = (val, opt) =>
+    val === opt
+      ? <span key={opt} className={s.circled}>{opt}</span>
       : <span key={opt} style={{ color: '#ccc', fontSize: '7pt' }}>（{opt}）</span>;
 
-  const residenceOpts = ['持家', '賃貸共同住宅', 'グループホーム等', 'その他'];
+  const RESIDENCE_OPTS = ['持家', '賃貸共同住宅', 'グループホーム等', 'その他'];
+
+  /* 셀 공통 인라인 스타일 */
+  const innerBorder = { borderBottom: '0.5px solid #ccc' };
+  const innerBorderR = { borderRight: '0.5px solid #ccc' };
 
   return (
     <div className={`${s.page} page`} data-a4-page>
+      <div className={s.body}>
 
-      {/* ── 본문 2컬럼 (제목은 좌측 안에 있음 — 반접으면 표지가 됨) ── */}
-      <div className={s.docBody}>
-
-        {/* ══════════ 좌측 컬럼 ══════════ */}
+        {/* ══════ 좌측 컬럼 (48%) ══════ */}
         <div className={s.leftCol}>
 
-          {/* 제목 — 좌측 절반 상단에만 표시 */}
-          <div className={s.docHeader}>
-            <div className={s.docTitle}>基 本 情 報</div>
-            <div className={s.docHeaderRight}>
+          {/* ① 헤더: 52px */}
+          <div className={s.header}>
+            <div className={s.headerTitle}>基 本 情 報</div>
+            <div className={s.headerRight}>
               {toJaEra(date) || '　'}<br />
               {d?.facilityName || '　'}
             </div>
           </div>
 
-          {/* 긴급연락처 스트립 */}
-          <div className={s.emergencyStrip}>
+          {/* ② 긴급연락처: 22px */}
+          <div className={s.emergencyRow}>
             <span className={s.emLabel}>緊急時の連絡先</span>
             <span className={s.emValue}>
               {d?.emergencyName || '　'}
@@ -231,130 +233,126 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
             <span className={s.bloodValue}>{d?.bloodType || '　'}</span>
           </div>
 
-          {/* プロフィール */}
-          <div className={s.sectionRow} style={{ height: 170, flexShrink: 0, overflow: 'hidden' }}>
+          {/* ③ プロフィール */}
+          <div className={s.section}>
             <div className={s.sideLabel}>プロフィール</div>
-            <div className={s.sectionContent}>
-              {/* フリガナ — 氏名 셀 위에 작게 표시 (원본 양식과 동일) */}
-              <div className={s.fieldRow}>
-                <div className={s.fieldLabel}>氏 名</div>
-                <div className={s.fieldValue} style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
-                  <span style={{ fontSize: '7pt', color: '#555' }}>{nameKana || '　'}</span>
-                  <span style={{ fontWeight: 600, fontSize: '9pt' }}>{nameKanji}</span>
-                </div>
+            <div className={s.sectionBody}>
+              {/* ふりがな: 16px */}
+              <div className={s.row} style={{ minHeight: 16 }}>
+                <div className={s.fieldLabel}>ふりがな</div>
+                <div className={s.fieldValue} style={{ fontSize: '7pt', color: '#666' }}>{nameKana || '　'}</div>
               </div>
-              <div className={s.fieldRow}>
+              {/* 氏名: 22px */}
+              <div className={s.row}>
+                <div className={s.fieldLabel}>氏　名</div>
+                <div className={s.fieldValue} style={{ fontSize: '9pt', fontWeight: 600 }}>{nameKanji || '　'}</div>
+              </div>
+              {/* 生年月日・性別: 22px */}
+              <div className={s.row}>
                 <div className={s.fieldLabel}>生年月日</div>
                 <div className={s.fieldValue} style={{ flex: 1 }}>
                   {toJaEra(d?.birthDate) || '　'}
                   {calcAge(d?.birthDate) !== '' ? `（${calcAge(d?.birthDate)}歳）` : ''}
                 </div>
-                <div className={s.fieldLabel} style={{ borderLeft: '1px solid #bbb', minWidth: 36 }}>性別</div>
+                <div className={s.fieldLabel} style={{ borderLeft: '0.5px solid #ccc' }}>性別</div>
                 <div className={s.fieldValue} style={{ minWidth: 72, justifyContent: 'center' }}>
                   {d?.gender === '男性'
-                    ? <><span className={s.genderSelected}>男性</span>・<span style={{ color: '#ccc', fontSize: '7pt' }}>女性</span></>
+                    ? <><span className={s.circled}>男性</span>・<span style={{ color: '#ccc', fontSize: '7pt' }}>女性</span></>
                     : d?.gender === '女性'
-                    ? <><span style={{ color: '#ccc', fontSize: '7pt' }}>男性</span>・<span className={s.genderSelected}>女性</span></>
-                    : <span>男性・女性</span>
-                  }
+                    ? <><span style={{ color: '#ccc', fontSize: '7pt' }}>男性</span>・<span className={s.circled}>女性</span></>
+                    : <span>男性・女性</span>}
                 </div>
               </div>
-              <div className={s.fieldRow}>
-                <div className={s.fieldLabel}>住 所</div>
+              {/* 住所: 22px */}
+              <div className={s.row}>
+                <div className={s.fieldLabel}>住　所</div>
                 <div className={s.fieldValue}>{d?.address || '　'}</div>
               </div>
-              <div className={s.fieldRow}>
+              {/* 住居状況: 22px */}
+              <div className={s.row}>
                 <div className={s.fieldLabel}>住居状況</div>
-                <div className={s.fieldValue} style={{ gap: '4px' }}>
-                  {residenceOpts.map((opt, i) => (
+                <div className={s.fieldValue} style={{ gap: 3 }}>
+                  {RESIDENCE_OPTS.map((opt, i) => (
                     <span key={opt}>
-                      {residenceDisplay(d?.residenceType, opt)}
-                      {i < residenceOpts.length - 1 ? '・' : ''}
+                      {selOpt(d?.residenceType, opt)}
+                      {i < RESIDENCE_OPTS.length - 1 ? '・' : ''}
                     </span>
                   ))}
                 </div>
               </div>
-              <div className={s.fieldRow}>
-                <div className={s.fieldLabel}>電 話</div>
-                <div className={s.fieldValue} style={{ flexWrap: 'wrap', gap: '10px' }}>
-                  <span>自宅：ホーム：{d?.phoneOffice || d?.phoneHome || '　'}</span>
-                  <span>携帯電話：（本人）：{d?.phoneMobile || '　'}</span>
+              {/* 電話: 22px */}
+              <div className={s.row} style={{ borderBottom: 'none' }}>
+                <div className={s.fieldLabel}>電　話</div>
+                <div className={s.fieldValue}>
+                  自宅・ホーム：{d?.phoneOffice || d?.phoneHome || '　'}
+                  携帯：（本人）：{d?.phoneMobile || '　'}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 家族状況 — 제노그램 SVG */}
-          <div className={s.familyRow} style={{ height: 185 }}>
+          {/* ④ 家族状況: 180px ★ */}
+          <div className={s.section} style={{ height: 180, flexShrink: 0 }}>
             <div className={s.sideLabel}>家族状況</div>
-            {/* 높이 100% 컨테이너 → SVG가 높이 기준으로 비율 유지하며 채움 */}
-            <div style={{ flex: 1, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', overflow: 'hidden' }}>
-              <GenogramSVG
-                members={d?.familyMembers || []}
-                selfGender={d?.gender || '女性'}
-                compact
-              />
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: 4 }}>
+              <GenogramSVG members={d?.familyMembers || []} selfGender={d?.gender || '女性'} compact />
             </div>
           </div>
 
-          {/* 障害の状況 */}
-          <div className={s.sectionRow} style={{ height: 132, flexShrink: 0, overflow: 'hidden' }}>
+          {/* ⑤ 障害の状況 */}
+          <div className={s.section}>
             <div className={s.sideLabel}>障害の状況</div>
-            <div className={s.sectionContent}>
-              <div className={s.fieldRow}>
+            <div className={s.sectionBody}>
+              <div className={s.row}>
                 <div className={s.fieldLabel}>障害・疾病名</div>
                 <div className={s.fieldValue}>
-                  {d?.disabilityNames?.length
-                    ? d.disabilityNames.join('　')
-                    : (d?.disabilityName || '精神障害')}
+                  {d?.disabilityNames?.length ? d.disabilityNames.join('、') : (d?.disabilityName || '　')}
                 </div>
               </div>
-              <div className={s.fieldRow}>
-                <div className={s.fieldLabel}>手 帳</div>
+              <div className={s.row}>
+                <div className={s.fieldLabel}>手　帳</div>
                 <div className={s.fieldValue}>
-                  {d?.notebookType || '　'}
-                  {d?.notebookLevel ? `　${d.notebookLevel}　級` : ''}
+                  {d?.notebookType || '　'}{d?.notebookLevel ? `　${d.notebookLevel}` : ''}
                 </div>
               </div>
-              <div className={s.fieldRow}>
+              <div className={s.row}>
                 <div className={s.fieldLabel}>障害年金</div>
-                <div className={s.fieldValue}>{d?.disabilityPension || '　'}　{d?.disabilityPension ? '級' : ''}</div>
+                <div className={s.fieldValue}>{d?.disabilityPension || '　'}</div>
               </div>
-              <div className={s.fieldRow} style={{ minHeight: '24px' }}>
-                <div className={s.fieldLabel}>概 況</div>
+              <div className={s.row} style={{ borderBottom: 'none' }}>
+                <div className={s.fieldLabel}>概　況</div>
                 <div className={s.fieldValue}>{d?.disabilityOverview || '　'}</div>
               </div>
             </div>
           </div>
 
-          {/* 介護保険 */}
-          <div className={s.sectionRow} style={{ height: 42, flexShrink: 0, overflow: 'hidden' }}>
+          {/* ⑥ 介護保険: 22px */}
+          <div className={s.section} style={{ minHeight: 22 }}>
             <div className={s.sideLabel}>介護保険</div>
-            <div className={s.sectionContent}>
-              <div className={s.fieldRow} style={{ minHeight: '20px' }}>
-                <div className={s.fieldValue} style={{ gap: '12px' }}>
+            <div className={s.sectionBody}>
+              <div className={s.row} style={{ borderBottom: 'none' }}>
+                <div className={s.fieldValue} style={{ gap: 10 }}>
                   {d?.careInsurance === '有'
-                    ? <><span className={s.genderSelected}>有</span>・<span style={{ color: '#ccc', fontSize: '7pt' }}>（無）</span></>
+                    ? <><span className={s.circled}>有</span>・<span style={{ color: '#ccc', fontSize: '7pt' }}>（無）</span></>
                     : d?.careInsurance === '無'
-                    ? <><span style={{ color: '#ccc', fontSize: '7pt' }}>有</span>・<span className={s.genderSelected}>（無）</span></>
-                    : <span>有・無</span>
-                  }
-                  <span>介護度：{d?.careLevel || '　'}</span>
+                    ? <><span style={{ color: '#ccc', fontSize: '7pt' }}>有</span>・<span className={s.circled}>（無）</span></>
+                    : <span>有・無</span>}
+                  　介護度：{d?.careLevel || '　'}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 医療機関・服薬状況 */}
-          <div className={s.sectionRow} style={{ height: 165, flexShrink: 0, overflow: 'hidden' }}>
+          {/* ⑦ 医療機関・服薬 */}
+          <div className={s.section}>
             <div className={s.sideLabel}>医療機関服薬状況</div>
-            <div className={s.sectionContent}>
-              <table className={s.table3}>
+            <div className={s.sectionBody}>
+              <table className={s.medTable}>
                 <thead>
                   <tr>
-                    <th style={{ width: '38%' }}>病院・診療科目</th>
-                    <th style={{ width: '30%' }}>主たる疾患等</th>
-                    <th style={{ width: '32%' }}>服 薬</th>
+                    <th style={{ width: '29%' }}>病院・診療科目</th>
+                    <th style={{ width: '38%' }}>主たる疾患等</th>
+                    <th>服　薬</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -370,45 +368,43 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
             </div>
           </div>
 
-          {/* 既往 */}
-          <div className={s.sectionRow}>
+          {/* ⑧ 既往 + 過去サービス: 나머지 채움 */}
+          <div className={s.sectionFill}>
             <div className={s.sideLabel}>既　往</div>
-            <div className={s.historyContent}>
-              <div className={s.historyRow} style={{ minHeight: '28px' }}>
+            <div className={s.sectionBody}>
+              {/* 出生・乳幼児期: 30px */}
+              <div className={s.row} style={{ minHeight: 30 }}>
                 <div className={s.historyLabel}>出生・乳幼児期</div>
-                <div className={s.historyValue}>{d?.historyBirth || '　'}</div>
+                <div className={s.fieldValue}>{d?.historyBirth || '　'}</div>
               </div>
-              <div className={s.historyRow}>
-                <div className={s.historyLabel}>就学期</div>
-                <div className={s.schoolGrid}>
-                  {[
-                    ['保育所・幼稚園', d?.historyKindergarten],
-                    ['小学校',         d?.historyElementary],
-                    ['中学校',         d?.historyJuniorHigh],
-                    ['高等学校',       d?.historySeniorHigh],
-                    ['その他',         d?.historyOtherSchool],
-                  ].map(([label, val]) => (
-                    <div key={label} className={s.schoolRow}>
-                      <span className={s.schoolLabel}>{label}</span>
-                      <span className={s.schoolValue}>{val || '　'}</span>
-                    </div>
-                  ))}
+              {/* 就学期 5행: 20px each */}
+              {[
+                ['保育所・幼稚園', d?.historyKindergarten],
+                ['小学校',         d?.historyElementary],
+                ['中学校',         d?.historyJuniorHigh],
+                ['高等学校',       d?.historySeniorHigh],
+                ['その他',         d?.historyOtherSchool],
+              ].map(([label, val]) => (
+                <div key={label} className={s.row} style={{ minHeight: 20 }}>
+                  <div className={s.historySubLabel}>{label}</div>
+                  <div className={s.fieldValue}>{val || '　'}</div>
                 </div>
-              </div>
-              <div className={s.historyRow} style={{ minHeight: '28px' }}>
+              ))}
+              {/* 成人期: 40px */}
+              <div className={s.row} style={{ minHeight: 40 }}>
                 <div className={s.historyLabel}>成人期</div>
-                <div className={s.historyValue}>{d?.historyAdult || '　'}</div>
+                <div className={s.fieldValue}>{d?.historyAdult || '　'}</div>
               </div>
-              {/* 過去のサービス利用 */}
-              <div className={s.historyRow} style={{ flex: 1 }}>
+              {/* 過去のサービス利用: 나머지 */}
+              <div className={s.rowFill} style={{ flex: 1, borderBottom: 'none' }}>
                 <div className={s.historyLabel}>過去のサービス利用</div>
                 <div style={{ flex: 1 }}>
-                  <table className={s.table3} style={{ width: '100%' }}>
+                  <table className={s.medTable}>
                     <thead>
                       <tr>
-                        <th style={{ width: '30%' }}>サービス名</th>
-                        <th style={{ width: '38%' }}>事業所名</th>
-                        <th style={{ width: '32%' }}>利用時期・利用期間</th>
+                        <th style={{ width: '33%' }}>サービス名</th>
+                        <th style={{ width: '34%' }}>事業所名</th>
+                        <th>利用時期・期間</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -428,163 +424,151 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
 
         </div>{/* /leftCol */}
 
-        {/* ══════════ 우측 컬럼 ══════════ */}
+        {/* ══════ 우측 컬럼 (52%) ══════ */}
         <div className={s.rightCol}>
 
-          {/* 現況 — 원본 양식과 동일: 現況(외부) > 受給者証(내부 세로라벨) > 서비스테이블 */}
-          <div className={s.certWrapper} style={{ height: 700, flexShrink: 0, overflow: 'hidden' }}>
+          {/* ① 現況 섹션 */}
+          <div className={s.section}>
             <div className={s.sideLabel}>現　況</div>
-            <div className={s.certContent}>
+            <div className={s.sectionBody}>
 
-              {/* 受給者証 — 가로 라벨 (원본 양식과 동일) */}
-              <div style={{ display: 'flex', borderBottom: '1px solid #d0d0d0', flexShrink: 0 }}>
-                <div style={{
-                  textAlign: 'center',
-                  background: '#efefef', borderRight: '1px solid #bbb',
-                  padding: '4px 5px', fontWeight: 'bold', fontSize: '8pt',
-                  minWidth: '52px', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', flexShrink: 0,
-                }}>受給者証</div>
+              {/* 受給者証 그룹 */}
+              <div style={{ display: 'flex', ...innerBorder, flexShrink: 0 }}>
+                <div className={s.certGroupLabel}>受給者証</div>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-
-                  {/* 支援区分 + 認定有効期間 */}
-                  <div style={{ display: 'flex', borderBottom: '1px solid #d0d0d0', minHeight: '20px' }}>
-                    <span className={s.certLabel} style={{ minWidth: '52px' }}>支援区分</span>
-                    <span className={s.certValue} style={{ minWidth: '24px', borderRight: '1px solid #d0d0d0' }}>
-                      {d?.supportLevel || '　'}
-                    </span>
-                    <span className={s.certLabel}>認定有効期間</span>
-                    <span className={s.certValue} style={{ fontSize: '7.5pt', whiteSpace: 'nowrap', overflow: 'hidden' }}>{certPeriod(d?.certValidFrom, d?.certValidTo)}</span>
+                  {/* 지원구분 + 인정유효기간 */}
+                  <div className={s.row} style={{ minHeight: 22 }}>
+                    <div className={s.certLabel} style={{ minWidth: 52 }}>支援区分</div>
+                    <div className={s.certValue} style={{ minWidth: 28, ...innerBorderR }}>{d?.supportLevel || '　'}</div>
+                    <div className={s.certLabel}>認定有効期間</div>
+                    <div className={s.certValue} style={{ fontSize: '7.5pt' }}>{certPeriod(d?.certValidFrom, d?.certValidTo)}</div>
                   </div>
-
-                  {/* 支給市町村 + 交付年月日 */}
-                  <div style={{ display: 'flex', borderBottom: '1px solid #d0d0d0', minHeight: '20px' }}>
-                    <span className={s.certLabel}>支給市町村</span>
-                    <span className={s.certValue} style={{ borderRight: '1px solid #d0d0d0' }}>
-                      {d?.paymentCity || '　'}
-                    </span>
-                    <span className={s.certLabel}>交付年月日</span>
-                    <span className={s.certValue}>{toJaShort(d?.certIssuedDate)}</span>
+                  {/* 지급시정촌 + 교부일 */}
+                  <div className={s.row} style={{ minHeight: 22 }}>
+                    <div className={s.certLabel}>支給市町村</div>
+                    <div className={s.certValue} style={{ ...innerBorderR }}>{d?.paymentCity || '　'}</div>
+                    <div className={s.certLabel}>交付年月日</div>
+                    <div className={s.certValue}>{toJaShort(d?.certIssuedDate)}</div>
                   </div>
-
-                  {/* 番号 */}
-                  <div style={{ display: 'flex', borderBottom: '1px solid #d0d0d0', minHeight: '20px' }}>
-                    <span className={s.certLabel}>番 号</span>
-                    <span className={s.certValue}>{d?.certNumber || '　'}</span>
+                  {/* 번호 */}
+                  <div className={s.row} style={{ minHeight: 22, borderBottom: 'none' }}>
+                    <div className={s.certLabel}>番　号</div>
+                    <div className={s.certValue}>{d?.certNumber || '　'}</div>
                   </div>
-
-                  {/* 支給決定（支援法）*/}
-                  <div style={{ display: 'flex', borderBottom: '1px solid #d0d0d0', flexShrink: 0 }}>
-                    <div className={s.certLabel} style={{ minWidth: '52px', textAlign: 'center', padding: '3px 4px', fontSize: '7pt', whiteSpace: 'normal', lineHeight: 1.3 }}>支給決定<br/>（支援法）</div>
-                    <div style={{ flex: 1 }}>
-                      <table className={s.serviceTable}>
-                        <thead>
-                          <tr>
-                            <th>サービス種別</th>
-                            <th>支給量（当該月の日数/月）</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {serviceTypeLaw.map((row, i) => (
-                            <tr key={i}>
-                              <td>{row.type || '　'}</td>
-                              <td>{row.amount || '　'}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  {/* 支給決定（地域生活支援事業）*/}
-                  <div style={{ display: 'flex', flexShrink: 0 }}>
-                    <div className={s.certLabel} style={{ minWidth: '52px', textAlign: 'center', padding: '3px 4px', fontSize: '7pt', whiteSpace: 'normal', lineHeight: 1.3 }}>支給決定<br/>（地域生活<br/>支援事業）</div>
-                    <div style={{ flex: 1 }}>
-                      <table className={s.serviceTable}>
-                        <tbody>
-                          {serviceTypeLocal.map((row, i) => (
-                            <tr key={i}>
-                              <td>{row.type || '　'}</td>
-                              <td>{row.amount || '　'}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
                 </div>
-              </div>{/* /受給者証 */}
-
-              {/* 상담지원사업소 */}
-              <div style={{ display: 'flex', borderBottom: '1px solid #d0d0d0', minHeight: '22px', flexShrink: 0 }}>
-                <span className={s.certLabel}>相談支援事業所</span>
-                <span className={s.certValue}>{d?.consultationOffice || '　'}</span>
               </div>
 
-              {/* 사회관계도 */}
-              <div className={s.socialSection}>
-                <div className={s.socialSectionLabel}>社会関係図</div>
-                <div className={s.socialDiagramArea}>
+              {/* 支給決定（支援法） */}
+              <div style={{ display: 'flex', ...innerBorder, flexShrink: 0 }}>
+                <div className={s.certGroupLabel} style={{ fontSize: '6.5pt', whiteSpace: 'normal', lineHeight: 1.3 }}>
+                  支給決定<br/>（支援法）
+                </div>
+                <div style={{ flex: 1 }}>
+                  <table className={s.medTable}>
+                    <thead><tr><th>サービス種別</th><th>支給量（当該月の日数/月）</th></tr></thead>
+                    <tbody>
+                      {serviceTypeLaw.map((row, i) => (
+                        <tr key={i} style={{ height: 22 }}>
+                          <td>{row.type || '　'}</td>
+                          <td>{row.amount || '　'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* 支給決定（地域生活支援事業） */}
+              <div style={{ display: 'flex', ...innerBorder, flexShrink: 0 }}>
+                <div className={s.certGroupLabel} style={{ fontSize: '6.5pt', whiteSpace: 'normal', lineHeight: 1.3 }}>
+                  支給決定<br/>（地域生活<br/>支援事業）
+                </div>
+                <div style={{ flex: 1 }}>
+                  <table className={s.medTable}>
+                    <tbody>
+                      {serviceTypeLocal.map((row, i) => (
+                        <tr key={i} style={{ height: 22 }}>
+                          <td>{row.type || '　'}</td>
+                          <td>{row.amount || '　'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* 相談支援事業所: 22px */}
+              <div className={s.row} style={{ minHeight: 22, ...innerBorder }}>
+                <div className={s.certLabel}>相談支援事業所</div>
+                <div className={s.certValue}>{d?.consultationOffice || '　'}</div>
+              </div>
+
+              {/* 社会関係図: 160px ★ */}
+              <div style={{ height: 160, flexShrink: 0, display: 'flex', flexDirection: 'column', ...innerBorder, padding: '4px 6px' }}>
+                <div style={{ fontSize: '7.5pt', fontWeight: 'bold', borderBottom: '0.5px solid #ccc', paddingBottom: 2, marginBottom: 3 }}>
+                  社会関係図
+                </div>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <SocialDiagramSVG nodes={d?.socialRelationNodes} />
                 </div>
-                {d?.mainOffices && (
-                  <div className={s.mainOfficesRow}>
-                    <span style={{ fontWeight: 'bold' }}>主たる事業所・機関：</span>
-                    {d.mainOffices}
-                  </div>
-                )}
               </div>
 
-              {/* 기타 정보 */}
-              <div style={{ display: 'flex', borderTop: '1px solid #000', minHeight: '22px', flexShrink: 0 }}>
-                <span className={s.certLabel}>その他情報</span>
-                <span className={s.certValue}>{d?.otherInfo || '　'}</span>
+              {/* 主たる事業所・機関: 22px */}
+              <div className={s.row} style={{ minHeight: 22, ...innerBorder }}>
+                <div className={s.certLabel}>主たる事業所・機関</div>
+                <div className={s.certValue}>{d?.mainOffices || '　'}</div>
+              </div>
+
+              {/* その他情報: 22px */}
+              <div className={s.row} style={{ minHeight: 22, borderBottom: 'none' }}>
+                <div className={s.certLabel}>その他情報</div>
+                <div className={s.certValue}>{d?.otherInfo || '　'}</div>
               </div>
 
             </div>
-          </div>{/* /certWrapper */}
+          </div>{/* /現況 */}
 
-          {/* 주訴 — 원본 양식: 本人 rowspan 4 테이블 구조 */}
-          <div style={{ display: 'flex', flexShrink: 0, borderBottom: '1px solid #000', overflow: 'hidden' }}>
+          {/* ② 主訴: 5행 × 22px */}
+          <div className={s.section}>
             <div className={s.sideLabel}>当該事業所利用時の主訴</div>
-            <table style={{ flex: 1, borderCollapse: 'collapse', fontSize: '8pt', tableLayout: 'fixed' }}>
+            <table style={{ flex: 1, borderCollapse: 'collapse', fontSize: '8.5pt', tableLayout: 'fixed' }}>
               <tbody>
                 <tr>
-                  <td rowSpan={4} style={{ textAlign: 'center', width: 32, background: '#f7f7f7', borderRight: '1px solid #bbb', borderBottom: '1px solid #bbb', padding: '2px 4px', verticalAlign: 'middle', fontSize: '8pt' }}>本人</td>
-                  <td style={{ width: 36, textAlign: 'center', background: '#f7f7f7', borderRight: '1px solid #bbb', borderBottom: '1px solid #d0d0d0', padding: '2px 4px' }}>全般</td>
-                  <td style={{ padding: '2px 6px', borderBottom: '1px solid #d0d0d0' }}>{d?.chiefComplaintGeneral || '　'}</td>
+                  <td rowSpan={4} style={{ width: 28, textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #ccc', verticalAlign: 'middle', fontSize: '7.5pt', padding: '2px 3px' }}>本人</td>
+                  <td style={{ width: 34, textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #ccc', borderBottom: '0.5px solid #ccc', padding: '2px 3px', fontSize: '7.5pt' }}>全般</td>
+                  <td style={{ padding: '2px 6px', borderBottom: '0.5px solid #ccc' }}>{d?.chiefComplaintGeneral || '　'}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center', background: '#f7f7f7', borderRight: '1px solid #bbb', borderBottom: '1px solid #d0d0d0', padding: '2px 4px' }}>就労</td>
-                  <td style={{ padding: '2px 6px', borderBottom: '1px solid #d0d0d0' }}>{d?.chiefComplaintWork || '　'}</td>
+                  <td style={{ textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #ccc', borderBottom: '0.5px solid #ccc', padding: '2px 3px', fontSize: '7.5pt' }}>就労</td>
+                  <td style={{ padding: '2px 6px', borderBottom: '0.5px solid #ccc' }}>{d?.chiefComplaintWork || '　'}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center', background: '#f7f7f7', borderRight: '1px solid #bbb', borderBottom: '1px solid #d0d0d0', padding: '2px 4px' }}>生活</td>
-                  <td style={{ padding: '2px 6px', borderBottom: '1px solid #d0d0d0' }}>{d?.chiefComplaintLife || '　'}</td>
+                  <td style={{ textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #ccc', borderBottom: '0.5px solid #ccc', padding: '2px 3px', fontSize: '7.5pt' }}>生活</td>
+                  <td style={{ padding: '2px 6px', borderBottom: '0.5px solid #ccc' }}>{d?.chiefComplaintLife || '　'}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center', background: '#f7f7f7', borderRight: '1px solid #bbb', borderBottom: '1px solid #d0d0d0', padding: '2px 4px' }}>その他</td>
-                  <td style={{ padding: '2px 6px', borderBottom: '1px solid #d0d0d0' }}>{d?.chiefComplaintOther || '　'}</td>
+                  <td style={{ textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #ccc', borderBottom: '0.5px solid #ccc', padding: '2px 3px', fontSize: '7.5pt' }}>その他</td>
+                  <td style={{ padding: '2px 6px', borderBottom: '0.5px solid #ccc' }}>{d?.chiefComplaintOther || '　'}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign: 'center', background: '#f7f7f7', borderRight: '1px solid #bbb', padding: '2px 4px' }}>家族</td>
-                  <td colSpan={2} style={{ padding: '2px 6px' }}>{d?.chiefComplaintFamily || '　'}</td>
+                  <td colSpan={2} style={{ textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #ccc', padding: '2px 3px', fontSize: '7.5pt' }}>家族</td>
+                  <td style={{ padding: '2px 6px' }}>{d?.chiefComplaintFamily || '　'}</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          {/* 비고 — 원본 양식: 세로라벨 + 내용 */}
-          <div className={s.remarksSection} style={{ flexDirection: 'row' }}>
-            <div className={s.sideLabel} style={{ background: 'none', borderRight: '1px solid #000' }}>備　考</div>
-            <div className={s.remarksContent}>{d?.remarks || '　'}</div>
+          {/* ③ 備考: 나머지 채움 */}
+          <div className={s.sectionFill}>
+            <div className={s.sideLabel}>備　考</div>
+            <div style={{ flex: 1, padding: '6px 8px', fontSize: '8.5pt', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+              {d?.remarks || ''}
+            </div>
           </div>
 
         </div>{/* /rightCol */}
 
-      </div>{/* /docBody */}
-
+      </div>
     </div>
   );
 };

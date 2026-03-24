@@ -1,59 +1,33 @@
 /* ================================================
-   基本情報 A3 가로 레이아웃 (A4 2장 합친 크기)
-   크기: 420mm × 297mm → 1587px × 1122px (96dpi)
+   基本情報 — A3 가로 레이아웃
+   용지: 420×297mm → 1587×1123px @96dpi
    ================================================ */
 
+/* ── 페이지 ── */
 .page {
   width: 1587px;
-  height: 1122px;
-  padding: 8px 12px;
+  height: 1123px;
+  padding: 30px;
   background: #fff;
   color: #000;
-  font-family: 'Yu Mincho', 'MS Mincho', 'Hiragino Mincho Pro', 'Pretendard JP', serif;
-  font-size: 9pt;
-  line-height: 1.35;
+  font-family: 'MS Mincho', 'Yu Mincho', 'Hiragino Mincho Pro', 'Pretendard JP', serif;
+  font-size: 8.5pt;
+  line-height: 1.3;
   box-sizing: border-box;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
-  display: flex;
-  flex-direction: column;
 }
 
-/* ── 문서 헤더 ── */
-.docHeader {
-  display: flex;
-  align-items: flex-end;
-  margin-bottom: 4px;
-  flex-shrink: 0;
-}
-
-.docTitle {
-  flex: 1;
-  text-align: center;
-  font-size: 18pt;
-  font-weight: bold;
-  letter-spacing: 10px;
-  padding-left: 10px;
-}
-
-.docHeaderRight {
-  text-align: right;
-  font-size: 9.5pt;
-  line-height: 1.5;
-  white-space: nowrap;
-}
-
-/* ── 본문: 좌/우 2컬럼 ── */
-.docBody {
-  display: flex;
-  flex: 1;
-  min-height: 0;
+/* ── 본문 그리드 (48:52) ── */
+.body {
+  display: grid;
+  grid-template-columns: 48fr 52fr;
+  height: 100%;
   border: 1px solid #000;
-  gap: 10px;
+  overflow: hidden;
 }
 
 .leftCol {
-  width: calc(50% - 6px);
   display: flex;
   flex-direction: column;
   border-right: 1px solid #000;
@@ -61,491 +35,253 @@
 }
 
 .rightCol {
-  width: 50%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* ── 긴급연락처 스트립 ── */
-.emergencyStrip {
+/* ── 문서 헤더 ── */
+.header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  padding: 0 6px 4px;
+  height: 52px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #000;
+}
+
+.headerTitle {
+  flex: 1;
+  text-align: center;
+  font-size: 18pt;
+  font-weight: bold;
+  letter-spacing: 8px;
+}
+
+.headerRight {
+  text-align: right;
+  font-size: 9pt;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* ── 긴급연락처 행 ── */
+.emergencyRow {
+  display: flex;
+  min-height: 22px;
   border-bottom: 1px solid #000;
   flex-shrink: 0;
-  min-height: 28px;
-  font-size: 7pt;
+  align-items: center;
+  font-size: 8pt;
 }
 
 .emLabel {
   background: #efefef;
   border-right: 1px solid #000;
-  padding: 4px 6px;
+  padding: 2px 6px;
   font-weight: bold;
   white-space: nowrap;
-  font-size: 8pt;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
 }
 
 .emValue {
-  padding: 4px 8px;
   flex: 1;
+  padding: 2px 8px;
   font-size: 8.5pt;
 }
 
 .bloodLabel {
-  background: #efefef;
   border-left: 1px solid #000;
   border-right: 1px solid #000;
-  padding: 4px 6px;
+  background: #efefef;
+  padding: 2px 6px;
   font-weight: bold;
   white-space: nowrap;
-  font-size: 8pt;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
 }
 
 .bloodValue {
-  padding: 4px 8px;
-  min-width: 36px;
+  padding: 2px 8px;
+  min-width: 28px;
   font-size: 8.5pt;
 }
 
-/* ── 섹션 행 (세로 라벨 + 내용) ── */
-.sectionRow {
+/* ── 섹션 (세로라벨 + 내용) ── */
+.section {
   display: flex;
   border-bottom: 1px solid #000;
   flex-shrink: 0;
 }
 
-.sectionRow:last-child {
-  border-bottom: none;
+.sectionFill {
+  display: flex;
   flex: 1;
+  min-height: 0;
 }
 
-/* 세로 쓰기 라벨 */
+/* 세로쓰기 섹션 라벨 (10%) */
 .sideLabel {
+  width: 10%;
   writing-mode: vertical-rl;
   text-align: center;
   background: #efefef;
   border-right: 1px solid #000;
-  padding: 4px 3px;
   font-weight: bold;
-  font-size: 8pt;
+  font-size: 7.5pt;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 22px;
   flex-shrink: 0;
-  word-break: keep-all;
+  letter-spacing: 2px;
 }
 
-.sectionContent {
+/* 섹션 내부 컨텐츠 영역 */
+.sectionBody {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* ── 필드 행 ── */
-.fieldRow {
+/* ── 일반 행 (min-height: 22px) ── */
+.row {
   display: flex;
-  border-bottom: 1px solid #d0d0d0;
-  min-height: 30px;
+  min-height: 22px;
+  border-bottom: 0.5px solid #ccc;
   flex-shrink: 0;
+  align-items: stretch;
 }
 
-.fieldRow:last-child {
-  border-bottom: none;
+.rowFill {
+  display: flex;
+  flex: 1;
+  border-bottom: 0.5px solid #ccc;
+  align-items: stretch;
 }
 
+/* ── 필드 라벨 (13%) ── */
 .fieldLabel {
-  background: #f7f7f7;
-  border-right: 1px solid #bbb;
-  padding: 4px 5px;
+  width: 14.5%;  /* sectionBody 90% 기준 → 전체 컬럼의 13% */
+  background: #f5f5f5;
+  border-right: 0.5px solid #ccc;
+  font-size: 7.5pt;
   font-weight: 600;
-  white-space: nowrap;
-  font-size: 8pt;
+  padding: 2px 5px;
   display: flex;
   align-items: center;
-  min-width: 76px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .fieldValue {
-  padding: 4px 7px;
   flex: 1;
   font-size: 8.5pt;
-  word-break: break-all;
+  padding: 2px 6px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 3px;
+  gap: 2px;
+  word-break: break-all;
 }
 
-/* 이름 두 줄 */
-.nameGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  font-size: 8.5pt;
-  line-height: 1.35;
-}
-
-/* 성별 강조 — 동그라미 (일본 서류 ○囲み 스타일) */
-.genderSelected {
-  display: inline-block;
-  border: 1px solid #000;
-  border-radius: 50%;
-  padding: 1px 5px;
-  min-width: 1.4em;
-  text-align: center;
-  line-height: 1.3;
-}
-
-/* ── 가족 행 — compact 제노그램이 높이 기준으로 채움 ── */
-.familyRow {
-  display: flex;
-  border-bottom: 1px solid #000;
-  flex-shrink: 0;
-  height: 135px;
-  overflow: hidden;
-}
-
-.familyContent {
-  flex: 1;
-  display: flex;
-  font-size: 8.5pt;
-}
-
-.familyLeft {
-  flex: 1;
-  padding: 4px 6px;
-  border-right: 1px solid #d0d0d0;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.familyRight {
-  flex: 1;
-  padding: 4px 6px;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.familySubLabel {
-  font-size: 6pt;
-  color: #666;
-  margin-bottom: 2px;
-  font-weight: bold;
-}
-
-/* ── 3컬럼 테이블 (의료·과거서비스) ── */
-.table3 {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 8pt;
-  flex-shrink: 0;
-}
-
-.table3 th {
-  background: #efefef;
-  border: 1px solid #bbb;
-  padding: 3px 5px;
-  font-weight: bold;
-  text-align: center;
-  font-size: 7.5pt;
-}
-
-.table3 td {
-  border: 1px solid #d0d0d0;
-  padding: 4px 6px;
-  vertical-align: top;
-  height: 26px;
-}
-
-/* ── 기왕력 행 ── */
-.historyContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 8pt;
-}
-
-.historyRow {
-  display: flex;
-  border-bottom: 1px solid #d0d0d0;
-  min-height: 26px;
-  flex-shrink: 0;
-}
-
-.historyRow:last-child {
-  border-bottom: none;
-  flex: 1;
-}
-
+/* ── 기왕력 라벨 ── */
 .historyLabel {
-  background: #f7f7f7;
-  border-right: 1px solid #bbb;
-  padding: 4px 5px;
-  white-space: nowrap;
-  min-width: 70px;
+  width: 19%;
+  background: #f5f5f5;
+  border-right: 0.5px solid #ccc;
   font-size: 7.5pt;
+  padding: 3px 5px;
   display: flex;
   align-items: flex-start;
   flex-shrink: 0;
-}
-
-.historyValue {
-  padding: 4px 6px;
-  flex: 1;
-  word-break: break-word;
-  white-space: pre-wrap;
-  font-size: 8pt;
-}
-
-/* 취학기 서브 테이블 */
-.schoolGrid {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.schoolRow {
-  display: flex;
-  border-bottom: 1px solid #e0e0e0;
-  min-height: 22px;
-  flex-shrink: 0;
-}
-
-.schoolRow:last-child {
-  border-bottom: none;
-}
-
-.schoolLabel {
-  padding: 2px 5px;
-  font-size: 7.5pt;
-  min-width: 68px;
-  border-right: 1px solid #d0d0d0;
-  color: #555;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.schoolValue {
-  padding: 2px 6px;
-  font-size: 8pt;
-  flex: 1;
-  word-break: break-word;
-  display: flex;
-  align-items: center;
-}
-
-/* ── 우측 컬럼 ── */
-
-/* 現況 세로 라벨 포함 섹션 */
-.certWrapper {
-  display: flex;
-  border-bottom: 1px solid #000;
-  flex-shrink: 0;
-}
-
-.certContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 수급자증 서브섹션 라벨 */
-.certSubLabel {
-  background: #efefef;
-  border-bottom: 1px solid #bbb;
-  border-right: 1px solid #bbb;
-  padding: 3px 5px;
-  font-weight: bold;
-  font-size: 7.5pt;
   white-space: nowrap;
-  min-width: 68px;
+}
+
+.historySubLabel {
+  width: 17%;
+  background: #fafafa;
+  border-right: 0.5px solid #ccc;
+  font-size: 7pt;
+  padding: 2px 5px;
+  color: #444;
   display: flex;
   align-items: center;
   flex-shrink: 0;
 }
 
-.certRow {
+/* ── 수급자증 라벨 ── */
+.certGroupLabel {
+  background: #f5f5f5;
+  border-right: 0.5px solid #ccc;
+  font-size: 7.5pt;
+  font-weight: bold;
+  padding: 4px 5px;
   display: flex;
-  border-bottom: 1px solid #d0d0d0;
-  min-height: 26px;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  font-size: 8.5pt;
-}
-
-.certRow:last-child {
-  border-bottom: none;
+  text-align: center;
+  min-width: 56px;
 }
 
 .certLabel {
-  background: #f7f7f7;
-  border-right: 1px solid #bbb;
-  padding: 4px 5px;
-  font-weight: 600;
-  white-space: nowrap;
+  background: #f5f5f5;
+  border-right: 0.5px solid #ccc;
   font-size: 7.5pt;
+  font-weight: 600;
+  padding: 2px 5px;
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .certValue {
-  padding: 4px 7px;
   flex: 1;
   font-size: 8.5pt;
+  padding: 2px 6px;
   display: flex;
   align-items: center;
   word-break: break-word;
 }
 
-/* 서비스 종별 테이블 */
-.serviceTable {
+/* ── 테이블 (의료·서비스) ── */
+.medTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 8pt;
 }
 
-.serviceTable th {
+.medTable th {
   background: #efefef;
-  border: 1px solid #bbb;
-  padding: 3px 5px;
+  border: 0.5px solid #bbb;
+  padding: 2px 4px;
+  font-size: 7.5pt;
   font-weight: bold;
   text-align: center;
-  font-size: 7.5pt;
+  height: 18px;
 }
 
-.serviceTable td {
-  border: 1px solid #d0d0d0;
-  padding: 4px 6px;
-  height: 26px;
+.medTable td {
+  border: 0.5px solid #ccc;
+  padding: 2px 5px;
+  height: 20px;
   vertical-align: middle;
 }
 
-/* ── 사회관계도 ── */
-.socialSection {
-  border-bottom: 1px solid #000;
-  flex: 1;
-  min-height: 100px;
-  padding: 4px 6px;
-  display: flex;
-  flex-direction: column;
-}
-
-.socialSectionLabel {
-  font-weight: bold;
-  font-size: 8pt;
-  border-bottom: 1px solid #d0d0d0;
-  padding-bottom: 3px;
-  margin-bottom: 4px;
-}
-
-.socialDiagramArea {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  min-height: 60px;
-}
-
-.mainOfficesRow {
-  font-size: 6.5pt;
-  padding: 3px 0;
-  border-top: 1px solid #d0d0d0;
-  margin-top: 3px;
-}
-
-/* ── 기타정보 ── */
-.otherInfoRow {
-  display: flex;
-  border-bottom: 1px solid #000;
-  min-height: 28px;
-  flex-shrink: 0;
-  font-size: 8.5pt;
-}
-
-/* ── 주訴 ── */
-.complaintSection {
-  border-bottom: 1px solid #000;
-  flex-shrink: 0;
-}
-
-.complaintHeaderRow {
-  background: #efefef;
-  border-bottom: 1px solid #bbb;
-  padding: 3px 7px;
-  font-weight: bold;
-  font-size: 8pt;
-}
-
-.complaintRow {
-  display: flex;
-  border-bottom: 1px solid #d0d0d0;
-  min-height: 26px;
-  font-size: 8.5pt;
-}
-
-.complaintRow:last-child {
-  border-bottom: none;
-}
-
-.complaintWho {
-  background: #f7f7f7;
-  border-right: 1px solid #bbb;
-  padding: 4px 5px;
-  font-size: 7.5pt;
-  display: flex;
-  align-items: center;
-  min-width: 32px;
-  flex-shrink: 0;
-}
-
-.complaintSub {
-  background: #fafafa;
-  border-right: 1px solid #d0d0d0;
-  padding: 4px 5px;
-  font-size: 7.5pt;
-  display: flex;
-  align-items: center;
-  min-width: 36px;
-  flex-shrink: 0;
-}
-
-.complaintValue {
-  padding: 4px 7px;
-  flex: 1;
-  font-size: 8.5pt;
-  word-break: break-word;
-  display: flex;
-  align-items: center;
-}
-
-/* ── 비고 ── */
-.remarksSection {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.remarksSectionLabel {
-  background: #efefef;
-  border-bottom: 1px solid #bbb;
-  padding: 3px 7px;
-  font-weight: bold;
-  font-size: 8pt;
-  flex-shrink: 0;
-}
-
-.remarksContent {
-  flex: 1;
-  padding: 6px 8px;
-  font-size: 8.5pt;
-  white-space: pre-wrap;
-  word-break: break-word;
+/* ── 선택 동그라미 ── */
+.circled {
+  border: 1px solid #000;
+  border-radius: 50%;
+  padding: 0 4px;
+  display: inline-block;
+  text-align: center;
+  line-height: 1.4;
+  min-width: 1.4em;
 }
 
 /* ── 인쇄 ── */
@@ -555,7 +291,7 @@
   .page {
     width: 420mm;
     height: 297mm;
-    padding: 7px 10px;
+    padding: 8mm;
     page-break-after: always;
     box-shadow: none;
   }
