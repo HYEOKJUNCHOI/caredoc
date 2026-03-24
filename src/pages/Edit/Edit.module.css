@@ -5,6 +5,34 @@
   padding-bottom: 80px;
 }
 
+/* 서류 타입 타이틀 바 */
+.docTypeBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: var(--primary, #3a6b3a);
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.docTypeBack {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.docTypeBack:hover {
+  color: #fff;
+}
+
 /* 이용자 정보 헤더 */
 .infoHeader {
   background: var(--bg-surface);
@@ -66,27 +94,42 @@
 
 /* 폼 본문 */
 .formBody {
-  padding: 0 20px;
+  padding: 12px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* 섹션 */
+/* 섹션 — 카드 박스 스타일 */
 .section {
-  padding: 20px 0;
-  border-bottom: 1px solid var(--divider);
+  border: 1px solid #c8cfc8;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .section:last-child {
-  border-bottom: none;
+  border-bottom: 1px solid #c8cfc8;
+}
+
+/* section 안의 내용 영역 패딩 */
+.section > div,
+.section > label,
+.section > p,
+.section > textarea {
+  padding: 12px 16px;
 }
 
 .sectionTitle {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 14px;
+  background: #f0f4f0;
+  border-bottom: 1px solid #c8cfc8;
+  padding: 9px 14px;
+  margin: 0;
 }
 
 .sectionNum {
@@ -599,6 +642,221 @@
   font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
+}
+
+/* ── 개별지원계획서 탭 네비게이션 ── */
+.tabBar {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 2px solid var(--primary, #217346);
+  background: var(--bg-surface);
+  flex-shrink: 0;
+}
+
+.tabBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.tabBtn:hover {
+  color: var(--primary, #217346);
+}
+
+.tabActive {
+  color: var(--primary, #217346);
+  border-bottom-color: var(--primary, #217346);
+  font-weight: 700;
+}
+
+.tabNum {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.tabLabel {
+  font-size: 10px;
+}
+
+.tabContent {
+  padding: 16px 20px;
+  flex: 1;
+}
+
+/* ── 섹션 박스 (실제 서류 스타일) ── */
+.spBox {
+  border: 1px solid #c0c0c0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.spBoxHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #f0f4f0;
+  border-bottom: 1px solid #c0c0c0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.spBoxNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary, #217346);
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.spBoxBody {
+  padding: 12px 14px;
+}
+
+/* 목표 선택 칩 그리드 */
+.goalChipGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.goalChipBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #c0c0c0;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.goalChipBtn:hover {
+  border-color: #217346;
+}
+
+.goalChipSelected {
+  border-color: #C8960C;
+  background: #FFF8E6;
+  color: #7A5C00;
+  font-weight: 600;
+}
+
+.goalChipNum {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.spBoxTextarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  border: none;
+  resize: vertical;
+  min-height: 120px;
+  outline: none;
+  font-family: inherit;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+/* 固定参加者チップ */
+.fixedChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: #e8f0e8;
+  border: 1px solid #a8c4a8;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2a4a2a;
+}
+
+/* 内部セクション仕切り */
+.innerSection {
+  border-top: 1px solid #d8d8d8;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.innerSectionLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  padding: 3px 8px;
+  background: #f5f5f5;
+  border-left: 3px solid var(--primary, #217346);
+  border-radius: 0 3px 3px 0;
+  display: inline-block;
+}
+
+.spNoteRow {
+  display: flex;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #333;
+  padding: 3px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.spNoteRow:last-child {
+  border-bottom: none;
+}
+
+.spNoteDot {
+  flex-shrink: 0;
+  color: var(--primary, #217346);
+  font-weight: bold;
+}
+
+/* 탭 이전/다음 버튼 */
+.tabNav {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-default);
+}
+
+.tabNavBtn {
+  padding: 8px 16px;
+  border: 1px solid var(--primary, #217346);
+  border-radius: 20px;
+  color: var(--primary, #217346);
+  font-size: 13px;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tabNavBtn:hover {
+  background: var(--primary, #217346);
+  color: #fff;
 }
 
 /* 하단 고정 미리보기 버튼 */

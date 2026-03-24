@@ -89,7 +89,7 @@
 
   "edit": {
     "phraseSelect": "문구 선택",
-    "customPlaceholder": "직접 입력하세요...",
+    "customPlaceholder": "여기에 입력하세요",
     "preview": "미리보기로 이동",
     "goalRow": "목표",
     "autoLinked": "개별지원계획서에서 자동 연동",

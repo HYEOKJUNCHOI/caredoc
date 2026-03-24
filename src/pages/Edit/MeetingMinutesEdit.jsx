@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getMergedPhrases, getItem, setItem, hidePhrase } from '../../utils/storage';
+import { getMergedPhrases, getItem, setItem, hidePhrase, getCurrentUser, getCurrentUserId, getDocument } from '../../utils/storage';
 import defaultPhrases from '../../data/phrases';
 import styles from './Edit.module.css';
 
@@ -128,38 +128,66 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   const linkedGoals = supportPlanData?.shortTermGoals || [];
   const visibleSat  = satisfaction.filter(item => item[lang]);
 
+  /* 고정 참가자: 이용자 + 담당자 */
+  const userId = getCurrentUserId();
+  const currentUser = getCurrentUser();
+  const basicInfoData = getDocument(userId, 'basicInfo');
+  const fixedParticipants = [basicInfoData?.nameKanji, currentUser?.name].filter(Boolean);
+
   return (
-    <div className={styles.formBody}>
+    <div className={styles.formBody} style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '12px 20px 80px' }}>
 
       {/* 참가자 */}
-      <section className={styles.section} data-qa="edit-meeting-participants">
-        <h2 className={styles.sectionTitle}>{t('doc.meeting.participants')}</h2>
-        <input className={styles.input} type="text"
-          placeholder="예) 본인・담당자 A・담당자 B"
-          value={data.participants || ''}
-          onChange={(e) => onChange('participants', e.target.value)} />
-      </section>
+      <div className={styles.spBox} data-qa="edit-meeting-participants">
+        <div className={styles.spBoxHeader}>{t('doc.meeting.participants')}</div>
+        <div className={styles.spBoxBody} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
+          {fixedParticipants.map((name, i) => (
+            <span key={i} className={styles.fixedChip}>{name}</span>
+          ))}
+          <input className={styles.input} type="text"
+            style={{ flex: 1, minWidth: 160 }}
+            placeholder={lang === 'ko' ? '추가 참가자 입력...' : '追加参加者を入力...'}
+            value={data.extraParticipants || ''}
+            onChange={(e) => onChange('extraParticipants', e.target.value)} />
+        </div>
+      </div>
 
       {/* 목표 행 1~2 */}
-      {Array.from({ length: GOAL_COUNT }, (_, idx) => (
-        <section key={idx} className={styles.section} data-qa={`edit-meeting-row-${idx + 1}`}>
-          <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionNum}>{idx + 1}</span>
+      {Array.from({ length: GOAL_COUNT }, (_, idx) => {
+        return (
+        <div key={idx} className={styles.spBox} data-qa={`edit-meeting-row-${idx + 1}`}>
+          <div className={styles.spBoxHeader}>
+            <span className={styles.spBoxNum}>{idx + 1}</span>
             {t('doc.meeting.supportGoalPlan')}
-          </h2>
+          </div>
+          <div className={styles.spBoxBody}>
 
-          {linkedGoals[idx] ? (
-            <div className={styles.autoLinked}>
-              <span className={styles.autoLinkedBadge}>{t('edit.autoLinked')}</span>
-              <p className={styles.autoLinkedText}>{linkedGoals[idx]}</p>
+          {/* 지원목표 ── 내부 섹션 */}
+          <span className={styles.innerSectionLabel} style={{ marginTop: 0 }}>{t('doc.meeting.supportGoalPlan')}</span>
+          {linkedGoals.length > 0 && (
+            <div className={styles.goalChipGrid}>
+              {linkedGoals.map((goal, gIdx) => {
+                const text = typeof goal === 'object' ? (goal[lang] || goal.ja || goal.ko || '') : (goal || '');
+                if (!text) return null;
+                const circled = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'][gIdx] || String(gIdx + 1);
+                const isSelected = rows[idx]?.goalText === text;
+                return (
+                  <button key={gIdx}
+                    className={`${styles.goalChipBtn} ${isSelected ? styles.goalChipSelected : ''}`}
+                    onClick={() => updateRow(idx, 'goalText', isSelected ? '' : text)}>
+                    <span className={styles.goalChipNum}>{circled}</span>
+                    {text}
+                  </button>
+                );
+              })}
             </div>
-          ) : (
-            <textarea className={styles.textarea} placeholder={t('edit.customPlaceholder')}
-              value={rows[idx]?.goalText || ''} onChange={(e) => updateRow(idx, 'goalText', e.target.value)} rows={2} />
           )}
+          <textarea className={styles.textarea} placeholder={t('edit.customPlaceholder')}
+            value={rows[idx]?.goalText || ''} onChange={(e) => updateRow(idx, 'goalText', e.target.value)} rows={2} />
 
-          {/* 감상 문구 그리드 */}
-          <p className={styles.subLabel}>{t('doc.meeting.opinion')}</p>
+          {/* 본인의 감상 ── 내부 섹션 */}
+          <div className={styles.innerSection}>
+          <span className={styles.innerSectionLabel}>{t('doc.meeting.opinion')}</span>
           <div className={styles.phraseGrid}>
             <div className={styles.gridLabel}>
               <span></span>
@@ -263,19 +291,27 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
 
           <textarea className={styles.textarea} placeholder={t('edit.customPlaceholder')}
             value={rows[idx]?.opinionCustom || ''} onChange={(e) => updateRow(idx, 'opinionCustom', e.target.value)} rows={2} />
+          </div>{/* /innerSection 본인의 감상 */}
 
-          <p className={styles.subLabel}>{t('doc.meeting.review')}</p>
+          {/* 검토내용·대응 ── 내부 섹션 */}
+          <div className={styles.innerSection}>
+          <span className={styles.innerSectionLabel}>{t('doc.meeting.review')}</span>
           <textarea className={styles.textarea} placeholder={t('edit.customPlaceholder')}
             value={rows[idx]?.review || ''} onChange={(e) => updateRow(idx, 'review', e.target.value)} rows={3} />
-        </section>
-      ))}
+          </div>{/* /innerSection 검토내용 */}
+          </div>
+        </div>
+        );
+      })}
 
       {/* 향후 과제 */}
-      <section className={styles.section} data-qa="edit-meeting-future">
-        <h2 className={styles.sectionTitle}>{t('doc.meeting.futureTask')}</h2>
-        <textarea className={styles.textarea} placeholder={t('edit.customPlaceholder')}
-          value={data.futureTask || ''} onChange={(e) => onChange('futureTask', e.target.value)} rows={4} />
-      </section>
+      <div className={styles.spBox} data-qa="edit-meeting-future">
+        <div className={styles.spBoxHeader}>{t('doc.meeting.futureTask')}</div>
+        <div className={styles.spBoxBody}>
+          <textarea className={styles.textarea} placeholder={t('edit.customPlaceholder')}
+            value={data.futureTask || ''} onChange={(e) => onChange('futureTask', e.target.value)} rows={4} />
+        </div>
+      </div>
 
     </div>
   );

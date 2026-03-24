@@ -1,6 +1,10 @@
 /* 작성회의록 A4 가로 렌더링 */
 
 import a4 from '../A4.module.css';
+import { getCurrentUserId, getDocument } from '../../../utils/storage';
+
+/* {ko, ja} 이중언어 객체 → 일본어 문자열로 변환 */
+const rt = (txt) => typeof txt === 'object' && txt !== null ? (txt.ja || txt.ko || '') : (txt || '');
 
 const toJaDate = (iso) => {
   if (!iso) return '年　　月　　日';
@@ -14,6 +18,15 @@ const toJaDate = (iso) => {
 
 const MeetingDoc = ({ data, user, writeDate }) => {
   const rows = data?.rows || Array.from({ length: 2 }, () => ({}));
+
+  /* 참가자: 이용자 이름 + 담당자 이름 + 추가 인원 */
+  const userId = getCurrentUserId();
+  const basicInfo = getDocument(userId, 'basicInfo');
+  const participantParts = [basicInfo?.nameKanji, user?.name, data?.extraParticipants].filter(Boolean);
+  /* 기존 data.participants 도 폴백으로 지원 */
+  const participantsText = participantParts.length > 0
+    ? participantParts.join('・')
+    : (data?.participants || '　');
 
   return (
     <div className={a4.a4Page} data-a4-page>
@@ -35,7 +48,7 @@ const MeetingDoc = ({ data, user, writeDate }) => {
           </tr>
           <tr>
             <th>参加者</th>
-            <td colSpan={5}>{data?.participants || '　'}</td>
+            <td colSpan={5}>{participantsText}</td>
           </tr>
         </tbody>
       </table>
@@ -57,9 +70,9 @@ const MeetingDoc = ({ data, user, writeDate }) => {
               <td>{row.goalText || ''}</td>
               <td>
                 {(row.opinionTexts || []).map((txt, i) => (
-                  <div key={i}>{txt}</div>
+                  <div key={i}>{rt(txt)}</div>
                 ))}
-                {row.opinionCustom && <div>{row.opinionCustom}</div>}
+                {(row.opinionCustom || row.customText) && <div>{rt(row.opinionCustom || row.customText)}</div>}
               </td>
               <td>{row.review || ''}</td>
             </tr>

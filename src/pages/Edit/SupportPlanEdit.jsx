@@ -190,93 +190,33 @@ const SupportPlanEdit = ({ data, onChange }) => {
     );
   };
 
-  /* 1회용 항목 칩 + 입력 영역 */
+  /* 직접 입력 textarea */
   const renderOneTimeArea = (field) => {
     const key = oneTimeKey(field);
-    const items = data[key] || [];
     return (
-      <div className={styles.oneTimeArea}>
-        {/* 추가된 1회용 칩 목록 */}
-        {items.map((text, i) => (
-          editingOneTime?.field === field && editingOneTime?.idx === i ? (
-            /* 편집 모드 */
-            <div key={i} className={styles.addInlineWrap} onClick={(e) => e.stopPropagation()}>
-              <input
-                autoFocus
-                className={styles.addInlineInput}
-                value={editOneTimeText}
-                onChange={(e) => setEditOneTimeText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') saveOneTimeEdit(field, i);
-                  if (e.key === 'Escape') setEditingOneTime(null);
-                }}
-                tabIndex={-1}
-              />
-              <button className={styles.addInlineConfirm} onClick={() => saveOneTimeEdit(field, i)} tabIndex={-1}>✓</button>
-              <button className={styles.addInlineCancel} onClick={() => setEditingOneTime(null)} tabIndex={-1}>✕</button>
-            </div>
-          ) : (
-            /* 칩 표시 */
-            <button
-              key={i}
-              className={`${styles.phraseBtn} ${styles.oneTimeChip}`}
-              onClick={() => startEditOneTime(field, i)}
-              tabIndex={-1}
-              title={lang === 'ko' ? '클릭하여 편집' : 'クリックして編集'}
-            >
-              ✏ {text}
-              <span
-                className={styles.deletePhraseBadge}
-                onClick={(e) => { e.stopPropagation(); deleteOneTimeItem(field, i); }}
-              >✕</span>
-            </button>
-          )
-        ))}
-
-        {/* 입력창 */}
-        {oneTimeField === field ? (
-          <div className={styles.addInlineWrap} onClick={(e) => e.stopPropagation()}>
-            <input
-              ref={oneTimeRef}
-              className={styles.addInlineInput}
-              placeholder={lang === 'ko' ? '이 분을 위한 내용 입력...' : 'この方のための内容を入力...'}
-              value={oneTimeText}
-              onChange={(e) => setOneTimeText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') addOneTimeItem(field);
-                if (e.key === 'Escape') { setOneTimeField(null); setOneTimeText(''); }
-              }}
-              tabIndex={-1}
-            />
-            <button className={styles.addInlineConfirm} onClick={() => addOneTimeItem(field)} tabIndex={-1}>✓</button>
-            <button className={styles.addInlineCancel} onClick={() => { setOneTimeField(null); setOneTimeText(''); }} tabIndex={-1}>✕</button>
-          </div>
-        ) : (
-          <button
-            className={styles.oneTimeInputTrigger}
-            onClick={(e) => { e.stopPropagation(); setOneTimeField(field); setOneTimeText(''); }}
-            tabIndex={-1}
-          >
-            {lang === 'ko' ? '+ 이 분을 위한 내용 직접 입력...' : '+ この方のための内容を直接入力...'}
-          </button>
-        )}
-      </div>
+      <textarea
+        className={styles.textarea}
+        placeholder={lang === 'ko' ? '직접 입력...' : '直接入力...'}
+        value={typeof data[key] === 'string' ? data[key] : ''}
+        onChange={(e) => onChange(key, e.target.value)}
+        rows={2}
+      />
     );
   };
 
   return (
-    <div className={styles.formBody}>
+    <div className={styles.formBody} style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '12px 20px 80px' }}>
 
       {/* 섹션 1: 본인 의향·니즈 */}
-      <section className={styles.section} data-qa="edit-section-needs">
-        <div className={styles.phraseGrid} onClick={() => needsRef.current?.focus()}>
-          <h2 className={`${styles.sectionTitle} ${styles.gridTitle}`}>
-            <span className={styles.sectionNum}>1</span>
-            {t('doc.supportPlan.needs')}
-          </h2>
+      <div className={styles.spBox} data-qa="edit-section-needs">
+        <div className={styles.spBoxHeader}>
+          <span className={styles.spBoxNum}>1</span>
+          {t('doc.supportPlan.needs')}
+        </div>
+        <div className={styles.spBoxBody}>
           <textarea
             ref={needsRef}
-            className={`${styles.textarea} ${styles.gridTextarea}`}
+            className={styles.textarea}
             placeholder={t('edit.customPlaceholder')}
             value={data.needs || ''}
             onChange={(e) => onChange('needs', e.target.value)}
@@ -284,18 +224,18 @@ const SupportPlanEdit = ({ data, onChange }) => {
             tabIndex={1}
           />
         </div>
-      </section>
+      </div>
 
       {/* 섹션 2: 장기목표 */}
-      <section className={styles.section} data-qa="edit-section-longterm">
-        <div className={styles.phraseGrid} onClick={() => longTermRef.current?.focus()}>
-          <h2 className={`${styles.sectionTitle} ${styles.gridTitle}`}>
-            <span className={styles.sectionNum}>2</span>
-            {t('doc.supportPlan.longTermGoal')}
-          </h2>
+      <div className={styles.spBox} data-qa="edit-section-longterm">
+        <div className={styles.spBoxHeader}>
+          <span className={styles.spBoxNum}>2</span>
+          {t('doc.supportPlan.longTermGoal')}
+        </div>
+        <div className={styles.spBoxBody}>
           <textarea
             ref={longTermRef}
-            className={`${styles.textarea} ${styles.gridTextarea}`}
+            className={styles.textarea}
             placeholder={t('edit.customPlaceholder')}
             value={data.longTermGoal || ''}
             onChange={(e) => onChange('longTermGoal', e.target.value)}
@@ -303,133 +243,130 @@ const SupportPlanEdit = ({ data, onChange }) => {
             tabIndex={2}
           />
         </div>
-      </section>
+      </div>
 
       {/* 섹션 3: 단기목표 + 구체적 지원내용 */}
-      <section className={styles.section} data-qa="edit-section-shortterm">
-        <h2 className={styles.sectionTitle}>
-          <span className={styles.sectionNum}>3</span>
+      <div className={styles.spBox} data-qa="edit-section-shortterm">
+        <div className={styles.spBoxHeader}>
+          <span className={styles.spBoxNum}>3</span>
           {t('doc.supportPlan.shortTermSection')}
-        </h2>
+        </div>
+        <div className={styles.spBoxBody}>
 
-        {/* 단기목표 그리드 */}
-        <div
-          className={styles.phraseGrid}
-          data-qa="edit-goals-grid"
-          tabIndex={3}
-          onKeyDown={(e) => handleGridKeyDown(e, 'shortTermGoals', visibleGoals)}
-        >
-          <div className={styles.gridLabel}>
-            <span>{t('doc.supportPlan.shortTermGoal')}</span>
-            {renderAddButton('shortTermGoals')}
+          {/* 단기목표 그리드 */}
+          <p className={styles.subLabel}>{t('doc.supportPlan.shortTermGoal')}</p>
+          <div
+            className={styles.phraseGrid}
+            data-qa="edit-goals-grid"
+            tabIndex={3}
+            onKeyDown={(e) => handleGridKeyDown(e, 'shortTermGoals', visibleGoals)}
+          >
+            <div className={styles.gridLabel}>
+              <span></span>
+              {renderAddButton('shortTermGoals')}
+            </div>
+            {visibleGoals.map((item, idx) => {
+              const isSelected = (data.shortTermGoals || []).some((p) => p.ko === item.ko && p.ja === item.ja);
+              return (
+                <button
+                  key={idx}
+                  className={`${styles.phraseBtn} ${isSelected ? styles.selected : ''}`}
+                  onClick={() => togglePhrase('shortTermGoals', item)}
+                  tabIndex={-1}
+                >
+                  <span className={styles.phraseNum}>{CIRCLE_NUMS[idx]}</span> {item[lang]}
+                  <span
+                    className={styles.deletePhraseBadge}
+                    onClick={(e) => { e.stopPropagation(); deletePhrase('shortTermGoals', 'goals', item); }}
+                  >✕</span>
+                </button>
+              );
+            })}
           </div>
-          {visibleGoals.map((item, idx) => {
-            const isSelected = (data.shortTermGoals || []).some((p) => p.ko === item.ko && p.ja === item.ja);
-            return (
-              <button
-                key={idx}
-                className={`${styles.phraseBtn} ${isSelected ? styles.selected : ''}`}
-                onClick={() => togglePhrase('shortTermGoals', item)}
-                tabIndex={-1}
-              >
-                <span className={styles.phraseNum}>{CIRCLE_NUMS[idx]}</span> {item[lang]}
-                <span
-                  className={styles.deletePhraseBadge}
-                  onClick={(e) => { e.stopPropagation(); deletePhrase('shortTermGoals', 'goals', item); }}
-                >✕</span>
-              </button>
-            );
-          })}
-          {/* 1회용 항목 영역 */}
           {renderOneTimeArea('shortTermGoals')}
-        </div>
 
-        {/* 구체적 지원내용 그리드 */}
-        <div
-          className={styles.phraseGrid}
-          data-qa="edit-support-grid"
-          tabIndex={5}
-          onKeyDown={(e) => handleGridKeyDown(e, 'supportContent', visibleSupport)}
-        >
-          <div className={styles.gridLabel}>
-            <span>{t('doc.supportPlan.supportContent')}</span>
-            {renderAddButton('supportContent')}
+          {/* 구체적 지원내용 그리드 */}
+          <p className={styles.subLabel} style={{ marginTop: 12 }}>{t('doc.supportPlan.supportContent')}</p>
+          <div
+            className={styles.phraseGrid}
+            data-qa="edit-support-grid"
+            tabIndex={5}
+            onKeyDown={(e) => handleGridKeyDown(e, 'supportContent', visibleSupport)}
+          >
+            <div className={styles.gridLabel}>
+              <span></span>
+              {renderAddButton('supportContent')}
+            </div>
+            {visibleSupport.map((item, idx) => {
+              const isSelected = (data.supportContent || []).some((p) => p.ko === item.ko && p.ja === item.ja);
+              return (
+                <button
+                  key={idx}
+                  className={`${styles.phraseBtn} ${isSelected ? styles.selected : ''}`}
+                  onClick={() => togglePhrase('supportContent', item)}
+                  tabIndex={-1}
+                >
+                  <span className={styles.phraseNum}>{CIRCLE_NUMS[idx]}</span> {item[lang]}
+                  <span
+                    className={styles.deletePhraseBadge}
+                    onClick={(e) => { e.stopPropagation(); deletePhrase('supportContent', 'support', item); }}
+                  >✕</span>
+                </button>
+              );
+            })}
           </div>
-          {visibleSupport.map((item, idx) => {
-            const isSelected = (data.supportContent || []).some((p) => p.ko === item.ko && p.ja === item.ja);
-            return (
-              <button
-                key={idx}
-                className={`${styles.phraseBtn} ${isSelected ? styles.selected : ''}`}
-                onClick={() => togglePhrase('supportContent', item)}
-                tabIndex={-1}
-              >
-                <span className={styles.phraseNum}>{CIRCLE_NUMS[idx]}</span> {item[lang]}
-                <span
-                  className={styles.deletePhraseBadge}
-                  onClick={(e) => { e.stopPropagation(); deletePhrase('supportContent', 'support', item); }}
-                >✕</span>
-              </button>
-            );
-          })}
-          {/* 1회용 항목 영역 */}
           {renderOneTimeArea('supportContent')}
-        </div>
-      </section>
 
-      {/* 섹션 4: 특기사항 — 기본값 고정, CRUD 없음, 탭 제외 */}
-      <section className={styles.section} data-qa="edit-section-notes">
-        <div className={styles.phraseGrid} tabIndex={-1}>
-          <div className={`${styles.sectionTitle} ${styles.gridTitle} ${styles.gridLabel}`}>
-            <span>
-              <span className={styles.sectionNum}>4</span>
-              {' '}{t('doc.supportPlan.specialNotes')}
-            </span>
-          </div>
+        </div>
+      </div>
+
+      {/* 섹션 4: 특기사항 */}
+      <div className={styles.spBox} data-qa="edit-section-notes">
+        <div className={styles.spBoxHeader}>
+          <span className={styles.spBoxNum}>4</span>
+          {t('doc.supportPlan.specialNotes')}
+        </div>
+        <div className={styles.spBoxBody}>
           {noteKeys.map((key, idx) => (
             <label key={idx} className={styles.checkItem} tabIndex={-1}>
-              <input
-                type="checkbox"
-                checked={true}
-                readOnly
-                className={styles.checkbox}
-                tabIndex={-1}
-              />
+              <input type="checkbox" checked={true} readOnly className={styles.checkbox} tabIndex={-1} />
               <span>{t(`doc.supportPlan.${key}`)}</span>
             </label>
           ))}
         </div>
-      </section>
+      </div>
 
       {/* 동의 일자 / 서명 */}
-      <section className={styles.section} data-qa="edit-section-consent">
-        <h2 className={styles.sectionTitle}>{t('doc.supportPlan.consentSection')}</h2>
-        <div className={styles.consentRow}>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>{t('doc.supportPlan.consentDate')}</label>
-            <input
-              className={styles.input}
-              type="date"
-              value={consentDate}
-              onChange={(e) => onChange('consentDate', e.target.value)}
-              tabIndex={-1}
-              onFocus={(e) => { try { e.target.showPicker(); } catch (_) {} }}
-            />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.fieldLabel}>{t('doc.supportPlan.consentSign')}</label>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="　"
-              value={data.consentSign || ''}
-              onChange={(e) => onChange('consentSign', e.target.value)}
-              tabIndex={-1}
-              readOnly
-            />
+      <div className={styles.spBox} data-qa="edit-section-consent">
+        <div className={styles.spBoxHeader}>{t('doc.supportPlan.consentSection')}</div>
+        <div className={styles.spBoxBody}>
+          <div className={styles.consentRow}>
+            <div className={styles.field}>
+              <label className={styles.fieldLabel}>{t('doc.supportPlan.consentDate')}</label>
+              <input
+                className={styles.input}
+                type="date"
+                value={consentDate}
+                onChange={(e) => onChange('consentDate', e.target.value)}
+                tabIndex={-1}
+                onFocus={(e) => { try { e.target.showPicker(); } catch (_) {} }}
+              />
+            </div>
+            <div className={styles.field}>
+              <label className={styles.fieldLabel}>{t('doc.supportPlan.consentSign')}</label>
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="　"
+                value={data.consentSign || ''}
+                onChange={(e) => onChange('consentSign', e.target.value)}
+                tabIndex={-1}
+                readOnly
+              />
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
     </div>
   );

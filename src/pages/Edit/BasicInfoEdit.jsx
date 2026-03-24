@@ -2,10 +2,13 @@
    좌측: 프로필·가족·장애·의료·기왕력·과거서비스
    우측: 수급자증·사회관계·주訴·비고 */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Edit.module.css';
 import GenogramSVG from '../../components/common/GenogramSVG';
+
+/* 시설명 선택지 */
+const FACILITY_OPTIONS = ['生馬ホーム', '奥平ホーム'];
 
 /* 가족 관계 선택지 */
 const RELATION_OPTIONS = ['父', '母', '兄', '姉', '弟', '妹', '夫', '妻', '子', 'カスタム'];
@@ -58,6 +61,63 @@ const ToggleOptions = ({ options, value, onChange }) => (
 const BasicInfoEdit = ({ data, onChange }) => {
   const { i18n } = useTranslation();
   const isJa = i18n.language === 'ja';
+
+  /* 시설명 직접 입력 모드 */
+  const [facilityCustomMode, setFacilityCustomMode] = useState(
+    () => !!data.facilityName && !FACILITY_OPTIONS.includes(data.facilityName)
+  );
+
+  /* ── 장애·질병명 CRUD ── */
+  const [disabilityNames, setDisabilityNames] = useState(() => {
+    if (data.disabilityNames?.length) return data.disabilityNames;
+    return ['精神障害'];
+  });
+  const [addingDisability, setAddingDisability] = useState(false);
+  const [addDisabilityText, setAddDisabilityText] = useState('');
+  const [editingDisabilityIdx, setEditingDisabilityIdx] = useState(null);
+  const [editDisabilityText, setEditDisabilityText] = useState('');
+  const disabilityAddRef = useRef(null);
+
+  /* 장애명 변경 시 부모에 동기화 */
+  useEffect(() => {
+    onChange('disabilityNames', disabilityNames);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [disabilityNames]);
+
+  useEffect(() => {
+    if (addingDisability) setTimeout(() => disabilityAddRef.current?.focus(), 30);
+  }, [addingDisability]);
+
+  const addDisabilityName = () => {
+    const text = addDisabilityText.trim();
+    if (!text) { setAddingDisability(false); return; }
+    const updated = [...disabilityNames, text];
+    setDisabilityNames(updated);
+    setAddDisabilityText('');
+    setAddingDisability(false);
+  };
+
+  const deleteDisabilityName = (idx) => {
+    setDisabilityNames(disabilityNames.filter((_, i) => i !== idx));
+    if (editingDisabilityIdx === idx) setEditingDisabilityIdx(null);
+  };
+
+  const startEditDisability = (idx) => {
+    setEditingDisabilityIdx(idx);
+    setEditDisabilityText(disabilityNames[idx] || '');
+  };
+
+  const saveDisabilityEdit = (idx) => {
+    const text = editDisabilityText.trim();
+    if (!text) {
+      deleteDisabilityName(idx);
+    } else {
+      const updated = [...disabilityNames];
+      updated[idx] = text;
+      setDisabilityNames(updated);
+    }
+    setEditingDisabilityIdx(null);
+  };
 
   /* ── 후리가나 후보 생성 ──
      1) IME 입력 시 한자 변환 전 히라가나를 캡처 (사용자 의도 독음)
@@ -142,6 +202,107 @@ const BasicInfoEdit = ({ data, onChange }) => {
   const serviceTypeLaw  = initRows(data, 'serviceTypeLaw',  3, { type: '', amount: '' });
   const serviceTypeLocal= initRows(data, 'serviceTypeLocal',3, { type: '', amount: '' });
 
+  /* ── 테스트 데이터 일괄 입력 ──
+     개인정보(이름·생년월일·전화)는 무작위, 나머지는 공통값 사용 */
+  const fillTestData = () => {
+    const pool = [
+      ['田中　一郎', 'たなか　いちろう', '男性'],
+      ['山田　太郎', 'やまだ　たろう',   '男性'],
+      ['佐藤　健二', 'さとう　けんじ',   '男性'],
+      ['鈴木　正志', 'すずき　まさし',   '男性'],
+      ['中村　浩三', 'なかむら　こうぞう','男性'],
+      ['山本　花子', 'やまもと　はなこ', '女性'],
+      ['小林　由美', 'こばやし　ゆみ',   '女性'],
+      ['加藤　幸子', 'かとう　さちこ',   '女性'],
+      ['伊藤　雅子', 'いとう　まさこ',   '女性'],
+      ['渡辺　里美', 'わたなべ　さとみ', '女性'],
+    ];
+    const emPool = [
+      ['父', '田中　次郎'], ['母', '山本　幸子'], ['兄', '佐藤　一男'],
+      ['姉', '鈴木　和子'], ['夫', '中村　博'],   ['妻', '加藤　美智子'],
+    ];
+    const rnd = (max) => Math.floor(Math.random() * max);
+    const rndPhone = (prefix = '0') =>
+      `${prefix}${String(rnd(90) + 10)}-${String(rnd(9000) + 1000)}-${String(rnd(9000) + 1000)}`;
+
+    const [kanji, kana, gender] = pool[rnd(pool.length)];
+    const [emRelation, emName]  = emPool[rnd(emPool.length)];
+    const year  = 1960 + rnd(35);
+    const month = String(rnd(12) + 1).padStart(2, '0');
+    const day   = String(rnd(28) + 1).padStart(2, '0');
+
+    /* 개인정보 — 무작위 */
+    onChange('nameKanji',        kanji);
+    onChange('nameKana',         kana);
+    onChange('gender',           gender);
+    onChange('birthDate',        `${year}-${month}-${day}`);
+    onChange('phoneMobile',      `080-${String(rnd(9000) + 1000)}-${String(rnd(9000) + 1000)}`);
+    onChange('phoneOffice',      rndPhone());
+    onChange('emergencyName',    emName);
+    onChange('emergencyRelation',emRelation);
+    onChange('emergencyPhone',   `090-${String(rnd(9000) + 1000)}-${String(rnd(9000) + 1000)}`);
+
+    /* 공통 고정값 */
+    onChange('facilityName',     '生馬ホーム');
+    onChange('address',          '白浜町中嶋44');
+    onChange('residenceType',    'グループホーム等');
+    onChange('disabilityName',   '両下肢機能全廃（1級）、二分脊椎排便排尿障害（4級）');
+    onChange('notebookType',     '療育手帳');
+    onChange('notebookLevel',    'B2');
+    onChange('disabilityPension','1級');
+    onChange('careInsurance',    '無');
+    onChange('medicalRows', [
+      { hospital: 'こころの医療センター', disease: '',         medication: '3食後、寝る前' },
+      { hospital: '紀南病院泌尿器科',   disease: '排尿障害',   medication: '' },
+      { hospital: '南和歌山皮膚科',     disease: '',           medication: '' },
+    ]);
+    onChange('historyBirth',       '大阪府堺市で生まれる');
+    onChange('historyKindergarten','南紀福祉センター療育園');
+    onChange('historyElementary',  '安居小学校ー愛徳整肢園ー南紀養護学校（小4から）');
+    onChange('historyJuniorHigh',  '南紀養護学校');
+    onChange('historySeniorHigh',  '〃');
+    onChange('historyAdult',       'いきいき作業所ーふたば作業所（H.28.4〜）');
+    onChange('pastServiceRows', [
+      { serviceName: '移動支援', facility: '', period: '' },
+      { serviceName: '',         facility: '', period: '' },
+      { serviceName: '',         facility: '', period: '' },
+    ]);
+    onChange('supportLevel',    '4');
+    onChange('certValidFrom',   '2022-09-01');
+    onChange('certValidTo',     '2025-08-31');
+    onChange('paymentCity',     '白浜町');
+    onChange('certIssuedDate',  '2022-09-20');
+    onChange('certNumber',      `401${String(rnd(90000000) + 10000000)}`);
+    onChange('serviceTypeLaw', [
+      { type: '共同生活援助（グループホーム）', amount: '' },
+      { type: '生活介護',                       amount: '' },
+      { type: '居宅介護',                       amount: '36h/月（1回2hまで）' },
+    ]);
+    onChange('serviceTypeLocal', [
+      { type: '日中一時支援（デイサービス）', amount: '2日/月' },
+      { type: '移動支援（身体介護有）',       amount: '7h/月' },
+      { type: '',                               amount: '' },
+    ]);
+    onChange('consultationOffice',   '西牟婁障害者支援センター　リーふ');
+    onChange('socialRelationNodes',  'ヘルパー\nふたば作業所\n奥平マンション\n訪着すてっぷ');
+    onChange('mainOffices',          'ふたば作業所　奥平マンション');
+    onChange('otherInfo',            '田辺市社協権利擁護事業利用（金銭管理）2か月に1回');
+    onChange('chiefComplaintGeneral','いろいろなことを経験したい');
+    onChange('chiefComplaintWork',   '給料をたくさん稼ぎたい');
+    onChange('chiefComplaintLife',   '奥平マンションで良い。できることは自分でやる');
+    onChange('chiefComplaintOther',  '長期休暇には実家に帰省するのを楽しみにしている');
+    onChange('chiefComplaintFamily', '家族が定期的に様子を見にきてくれる。');
+    onChange('bloodType', ['A','B','O','AB'][rnd(4)]);
+    onChange('familyMembers', [
+      { id: '1', relation: '父', name: '', customRelation: '' },
+      { id: '2', relation: '母', name: '', customRelation: '' },
+    ]);
+
+    /* 로컬 상태 동기화 */
+    setDisabilityNames(['両下肢機能全廃（1級）', '二分脊椎排便排尿障害（4級）']);
+    setFacilityCustomMode(false);
+  };
+
   const inp = (field, placeholder = '', rows = 0) => rows > 0 ? (
     <textarea
       className={styles.textarea}
@@ -176,13 +337,55 @@ const BasicInfoEdit = ({ data, onChange }) => {
   return (
     <div className={styles.formBody}>
 
+      {/* ── 테스트 데이터 입력 체크박스 ── */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '6px 16px 0' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#888', cursor: 'pointer', userSelect: 'none' }}>
+          <input
+            type="checkbox"
+            tabIndex={-1}
+            onChange={(e) => { if (e.target.checked) { fillTestData(); e.target.checked = false; } }}
+            style={{ width: 14, height: 14, cursor: 'pointer' }}
+          />
+          {isJa ? 'テストデータを入力' : '테스트 데이터 입력'}
+        </label>
+      </div>
+
       {/* ── 상단 공통 ── */}
       <section className={styles.section} data-qa="edit-section-basic-top">
         <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '基本 / 緊急連絡先' : '基本 / 긴급연락처'}</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('시설명', '施設名')}</label>
-            {inp('facilityName', '○○ホーム')}
+            <select
+              className={styles.input}
+              value={facilityCustomMode ? '__custom__' : (data.facilityName || '')}
+              onChange={(e) => {
+                if (e.target.value === '__custom__') {
+                  setFacilityCustomMode(true);
+                  onChange('facilityName', '');
+                } else {
+                  setFacilityCustomMode(false);
+                  onChange('facilityName', e.target.value);
+                }
+              }}
+              tabIndex={-1}
+            >
+              <option value="" disabled hidden>{isJa ? '選択してください' : '선택해주세요'}</option>
+              {FACILITY_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+              <option value="__custom__">{isJa ? '直接入力' : '직접 입력'}</option>
+            </select>
+            {facilityCustomMode && (
+              <input
+                className={styles.input}
+                style={{ marginTop: 6 }}
+                placeholder={isJa ? '施設名を入力...' : '시설명 입력...'}
+                value={data.facilityName || ''}
+                onChange={(e) => onChange('facilityName', e.target.value)}
+                autoFocus
+              />
+            )}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('혈액형', '血液型')}</label>
@@ -194,15 +397,15 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('긴급연락처 성명', '緊急時の連絡先')}</label>
-            {inp('emergencyName', isJa ? '山田 花子' : '홍길동')}
+            {inp('emergencyName', isJa ? '氏名を入力' : '성명 입력')}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('관계', '関係')}</label>
-            {inp('emergencyRelation', '例）親戚')}
+            {inp('emergencyRelation', isJa ? '続柄を入力' : '관계 입력')}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('전화번호', '電話番号')}</label>
-            {inp('emergencyPhone', '000-0000-0000')}
+            {inp('emergencyPhone', isJa ? '電話番号を入力' : '전화번호 입력')}
           </div>
         </div>
       </section>
@@ -216,7 +419,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
             <input
               className={styles.input}
               type="text"
-              placeholder="山田 太郎"
+              placeholder={isJa ? '氏名（漢字）を入力' : '성명(한자) 입력'}
               value={data.nameKanji || ''}
               onChange={(e) => onChange('nameKanji', e.target.value)}
               onBlur={(e) => handleKanjiBlur(e.target.value)}
@@ -249,7 +452,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('성명 후리가나', 'ふりがな')}</label>
-            {inp('nameKana', 'やまだ たろう')}
+            {inp('nameKana', isJa ? 'ふりがなを入力' : '후리가나 입력')}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('생년월일', '生年月日')}</label>
@@ -265,7 +468,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field} style={{ gridColumn: '1 / -1' }}>
             <label className={styles.fieldLabel}>{lbl('주소', '住所')}</label>
-            {inp('address', '例）○○市 ○○町 1-1-1')}
+            {inp('address', isJa ? '住所を入力' : '주소 입력')}
           </div>
           <div className={styles.field} style={{ gridColumn: '1 / -1' }}>
             <label className={styles.fieldLabel}>{lbl('주거상황', '住居状況')}</label>
@@ -281,7 +484,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('전화 홈', 'ホーム電話')}</label>
-            {inp('phoneOffice', '000-0000')}
+            {inp('phoneOffice', isJa ? '番号を入力' : '번호 입력')}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('휴대전화', '携帯電話')}</label>
@@ -305,6 +508,16 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
         {familyMembers.map((m) => (
           <div key={m.id} style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
+            {/* 고인 체크박스 — 체크 시 제노그램 심볼이 채워짐 */}
+            <input
+              type="checkbox"
+              checked={!!m.deceased}
+              onChange={(e) => updateMember(m.id, 'deceased', e.target.checked)}
+              tabIndex={-1}
+              title={isJa ? '故人' : '고인'}
+              style={{ width: 16, height: 16, accentColor: '#555', cursor: 'pointer', flexShrink: 0 }}
+            />
+
             {/* 관계 드롭다운 — 이미 추가된 중복 불가 관계는 숨김 */}
             <select
               value={m.relation}
@@ -355,16 +568,12 @@ const BasicInfoEdit = ({ data, onChange }) => {
           type="button"
           tabIndex={-1}
           onClick={addMember}
-          style={{ padding: '6px 18px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4, background: '#f9f9f9', cursor: 'pointer', marginBottom: 10 }}
+          style={{ padding: '6px 18px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4, background: '#f9f9f9', cursor: 'pointer', marginBottom: 10, marginLeft: 30 }}
         >{isJa ? '＋ 追加' : '＋ 추가'}</button>
 
-        {/* 실시간 미리보기 — normal 모드: width 100% 사용, 컨테이너 높이 명시 필요 없음 */}
         {familyMembers.length > 0 && (
-          <div style={{ border: '1px solid #eee', borderRadius: 6, padding: '12px 10px', background: '#fafafa', marginTop: 6, height: 220 }}>
-            <div style={{ fontSize: 11, color: '#aaa', marginBottom: 6 }}>{isJa ? 'プレビュー' : '미리보기'}</div>
-            <div style={{ height: 188 }}>
-              <GenogramSVG members={familyMembers} selfGender={data.gender || '女性'} />
-            </div>
+          <div style={{ border: '1px solid #eee', borderRadius: 6, padding: '10px', background: '#fafafa', marginTop: 4, height: 210 }}>
+            <GenogramSVG members={familyMembers} selfGender={data.gender || '女性'} />
           </div>
         )}
       </section>
@@ -375,7 +584,65 @@ const BasicInfoEdit = ({ data, onChange }) => {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div className={styles.field} style={{ gridColumn: '1 / -1' }}>
             <label className={styles.fieldLabel}>{lbl('장애·질병명', '障害・疾病名')}</label>
-            {inp('disabilityName', '例）知的障害')}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
+              {disabilityNames.map((name, idx) => (
+                editingDisabilityIdx === idx ? (
+                  <div key={idx} style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                    <input
+                      autoFocus
+                      className={styles.input}
+                      value={editDisabilityText}
+                      onChange={(e) => setEditDisabilityText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveDisabilityEdit(idx);
+                        if (e.key === 'Escape') setEditingDisabilityIdx(null);
+                      }}
+                      tabIndex={-1}
+                      style={{ minWidth: 120 }}
+                    />
+                    <button type="button" tabIndex={-1} onClick={() => saveDisabilityEdit(idx)}
+                      style={{ padding: '4px 8px', fontSize: 12, border: '1px solid #5a9', borderRadius: 4, background: '#f2faf6', cursor: 'pointer' }}>✓</button>
+                    <button type="button" tabIndex={-1} onClick={() => setEditingDisabilityIdx(null)}
+                      style={{ padding: '4px 8px', fontSize: 12, border: '1px solid #ddd', borderRadius: 4, background: '#fff', cursor: 'pointer' }}>✕</button>
+                  </div>
+                ) : (
+                  <span key={idx} style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    padding: '3px 10px', border: '1px solid #bbb', borderRadius: 14,
+                    background: '#f7f7f7', fontSize: 13, cursor: 'pointer',
+                  }}>
+                    <span onClick={() => startEditDisability(idx)} style={{ cursor: 'text' }}>{name}</span>
+                    <span onClick={() => deleteDisabilityName(idx)} style={{ color: '#aaa', cursor: 'pointer', marginLeft: 2 }}>✕</span>
+                  </span>
+                )
+              ))}
+            </div>
+            {addingDisability ? (
+              <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                <input
+                  ref={disabilityAddRef}
+                  className={styles.input}
+                  placeholder={isJa ? '疾病名を入力...' : '질병명 입력...'}
+                  value={addDisabilityText}
+                  onChange={(e) => setAddDisabilityText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') addDisabilityName();
+                    if (e.key === 'Escape') { setAddingDisability(false); setAddDisabilityText(''); }
+                  }}
+                  tabIndex={-1}
+                  style={{ minWidth: 140 }}
+                />
+                <button type="button" tabIndex={-1} onClick={addDisabilityName}
+                  style={{ padding: '4px 8px', fontSize: 12, border: '1px solid #5a9', borderRadius: 4, background: '#f2faf6', cursor: 'pointer' }}>✓</button>
+                <button type="button" tabIndex={-1} onClick={() => { setAddingDisability(false); setAddDisabilityText(''); }}
+                  style={{ padding: '4px 8px', fontSize: 12, border: '1px solid #ddd', borderRadius: 4, background: '#fff', cursor: 'pointer' }}>✕</button>
+              </div>
+            ) : (
+              <button type="button" tabIndex={-1} onClick={() => { setAddingDisability(true); setAddDisabilityText(''); }}
+                style={{ padding: '4px 14px', fontSize: 12, border: '1px solid #ccc', borderRadius: 4, background: '#fff', cursor: 'pointer' }}>
+                + {isJa ? '追加' : '추가'}
+              </button>
+            )}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('수첩 종류', '手帳種別')}</label>
@@ -387,7 +654,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('수첩 등급', '等級')}</label>
-            {inp('notebookLevel', 'B2')}
+            {inp('notebookLevel', isJa ? '等級を入力（例：B2）' : '등급 입력')}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('장애연금', '障害年金')}</label>
@@ -439,13 +706,13 @@ const BasicInfoEdit = ({ data, onChange }) => {
               {medicalRows.map((row, i) => (
                 <tr key={i}>
                   <td style={tdStyle}>
-                    <input className={styles.input} value={row.hospital || ''} onChange={(e) => updateRow('medicalRows', i, 'hospital', e.target.value)} tabIndex={-1} placeholder={i === 0 ? '例）○○クリニック' : ''} />
+                    <input className={styles.input} value={row.hospital || ''} onChange={(e) => updateRow('medicalRows', i, 'hospital', e.target.value)} tabIndex={-1} placeholder={isJa ? '病院名を入力' : '병원명 입력'} />
                   </td>
                   <td style={tdStyle}>
                     <input className={styles.input} value={row.disease || ''} onChange={(e) => updateRow('medicalRows', i, 'disease', e.target.value)} tabIndex={-1} />
                   </td>
                   <td style={tdStyle}>
-                    <input className={styles.input} value={row.medication || ''} onChange={(e) => updateRow('medicalRows', i, 'medication', e.target.value)} tabIndex={-1} placeholder={i === 0 ? '例）毎食後' : ''} />
+                    <input className={styles.input} value={row.medication || ''} onChange={(e) => updateRow('medicalRows', i, 'medication', e.target.value)} tabIndex={-1} placeholder={isJa ? '服薬情報を入力' : '복약 정보 입력'} />
                   </td>
                 </tr>
               ))}
@@ -499,7 +766,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
               {pastServiceRows.map((row, i) => (
                 <tr key={i}>
                   <td style={tdStyle}><input className={styles.input} value={row.serviceName || ''} onChange={(e) => updateRow('pastServiceRows', i, 'serviceName', e.target.value)} tabIndex={-1} /></td>
-                  <td style={tdStyle}><input className={styles.input} value={row.facility || ''} onChange={(e) => updateRow('pastServiceRows', i, 'facility', e.target.value)} tabIndex={-1} placeholder={i === 0 ? '例）○○事業所' : ''} /></td>
+                  <td style={tdStyle}><input className={styles.input} value={row.facility || ''} onChange={(e) => updateRow('pastServiceRows', i, 'facility', e.target.value)} tabIndex={-1} placeholder={isJa ? '事業所名を入力' : '사업소명 입력'} /></td>
                   <td style={tdStyle}><input className={styles.input} value={row.period || ''} onChange={(e) => updateRow('pastServiceRows', i, 'period', e.target.value)} tabIndex={-1} /></td>
                 </tr>
               ))}
@@ -522,7 +789,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('번호', '番号')}</label>
-            {inp('certNumber', '0000000000')}
+            {inp('certNumber', isJa ? '受給者証番号を入力' : '수급자증 번호 입력')}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('인정유효기간 시작', '認定有効期間 開始')}</label>
@@ -534,7 +801,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('지급 시정촌', '支給市町村')}</label>
-            {inp('paymentCity', '例）○○市町村')}
+            {inp('paymentCity', isJa ? '市町村名を入力' : '시정촌명 입력')}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('교부 연월일', '交付年月日')}</label>
@@ -554,7 +821,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           <tbody>
             {serviceTypeLaw.map((row, i) => (
               <tr key={i}>
-                <td style={tdStyle}><input className={styles.input} value={row.type || ''} onChange={(e) => updateRow('serviceTypeLaw', i, 'type', e.target.value)} tabIndex={-1} placeholder={i === 0 ? '例）共同生活援助' : ''} /></td>
+                <td style={tdStyle}><input className={styles.input} value={row.type || ''} onChange={(e) => updateRow('serviceTypeLaw', i, 'type', e.target.value)} tabIndex={-1} placeholder={isJa ? 'サービス種別を入力' : '서비스 종별 입력'} /></td>
                 <td style={tdStyle}><input className={styles.input} value={row.amount || ''} onChange={(e) => updateRow('serviceTypeLaw', i, 'amount', e.target.value)} tabIndex={-1} /></td>
               </tr>
             ))}
@@ -586,7 +853,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
         <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>相談支援事業所</h2>
         <div className={styles.field}>
           <label className={styles.fieldLabel}>{lbl('상담지원사업소명', '事業所名')}</label>
-          {inp('consultationOffice', '例）○○障害者支援センター')}
+          {inp('consultationOffice', isJa ? '事業所名を入力' : '사업소명 입력')}
         </div>
       </section>
 
@@ -596,16 +863,16 @@ const BasicInfoEdit = ({ data, onChange }) => {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('관계 기관명 (한 줄에 하나씩)', '関係機関名（1行に1つ）')}</label>
-            {inp('socialRelationNodes', '例）○○作業所\n○○マンション\n○○社協', 4)}
+            {inp('socialRelationNodes', isJa ? '関係機関名を入力（1行に1つ）' : '관계기관명 입력（한 줄에 하나씩）', 4)}
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('주요 사업소·기관', '主たる事業所・機関')}</label>
-            {inp('mainOffices', '例）○○作業所 ○○マンション', 4)}
+            {inp('mainOffices', isJa ? '主たる事業所・機関名を入力' : '주요 사업소·기관명 입력', 4)}
           </div>
         </div>
         <div className={styles.field} style={{ marginTop: '10px' }}>
           <label className={styles.fieldLabel}>{lbl('기타 정보', 'その他情報')}</label>
-          {inp('otherInfo', '例）○○事業利用中', 2)}
+          {inp('otherInfo', isJa ? 'その他の情報を入力' : '기타 정보 입력', 2)}
         </div>
       </section>
 
@@ -628,7 +895,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('가족', '家族')}</label>
-            {inp('chiefComplaintFamily', '例）○○（続柄）の希望')}
+            {inp('chiefComplaintFamily', isJa ? '家族の主訴を入力' : '가족 주訴 입력')}
           </div>
         </div>
       </section>

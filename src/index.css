@@ -93,6 +93,16 @@ button {
   font-family: var(--font);
   border: none;
   background: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* 커서가 손가락인 버튼 — 호버 시 살짝 확대 */
+button:hover:not(:disabled) {
+  transform: scale(1.04);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 /* 인쇄 방향 강제 가로 — CSS Modules 스코프 밖에서도 적용되도록 전역에 선언 */

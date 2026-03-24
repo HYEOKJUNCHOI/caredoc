@@ -89,7 +89,7 @@
 
   "edit": {
     "phraseSelect": "文言選択",
-    "customPlaceholder": "直接入力してください...",
+    "customPlaceholder": "ここに入力してください",
     "preview": "プレビューへ",
     "goalRow": "目標",
     "autoLinked": "個別支援計画書から自動連動",

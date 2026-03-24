@@ -20,23 +20,25 @@ const genderOf = (relation, explicit) => {
   return 'female'; // 기본값
 };
 
-/* 노드 모양: 男=□ 女=○ 本人=이중 */
-const NodeShape = ({ cx, cy, gender, isSelf, r }) => {
+/* 노드 모양: 男=□ 女=○ 本人=이중 원(성별 무관) / 고인=채움 */
+const NodeShape = ({ cx, cy, gender, isSelf, r, deceased }) => {
+  const deadFill = '#555';
+
+  /* 본인은 성별 무관하게 이중 원 */
+  if (isSelf) {
+    return (
+      <g>
+        <ellipse cx={cx} cy={cy} rx={r + 2.5} ry={r + 2.5} fill="none" stroke="#000" strokeWidth="0.9" />
+        <ellipse cx={cx} cy={cy} rx={r} ry={r} fill="#fff" stroke="#000" strokeWidth="0.9" />
+      </g>
+    );
+  }
+
   if (gender === 'male') {
     const x = cx - r, y = cy - r, s = r * 2;
-    return isSelf
-      ? <g>
-          <rect x={x - 2.5} y={y - 2.5} width={s + 5} height={s + 5} fill="none" stroke="#000" strokeWidth="0.9" />
-          <rect x={x} y={y} width={s} height={s} fill="#e6e6e6" stroke="#000" strokeWidth="0.9" />
-        </g>
-      : <rect x={x} y={y} width={s} height={s} fill="#fff" stroke="#000" strokeWidth="0.9" />;
+    return <rect x={x} y={y} width={s} height={s} fill={deceased ? deadFill : '#fff'} stroke="#000" strokeWidth="0.9" />;
   }
-  return isSelf
-    ? <g>
-        <ellipse cx={cx} cy={cy} rx={r + 2.5} ry={r + 2.5} fill="none" stroke="#000" strokeWidth="0.9" />
-        <ellipse cx={cx} cy={cy} rx={r} ry={r} fill="#e6e6e6" stroke="#000" strokeWidth="0.9" />
-      </g>
-    : <ellipse cx={cx} cy={cy} rx={r} ry={r} fill="#fff" stroke="#000" strokeWidth="0.9" />;
+  return <ellipse cx={cx} cy={cy} rx={r} ry={r} fill={deceased ? deadFill : '#fff'} stroke="#000" strokeWidth="0.9" />;
 };
 
 const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) => {
@@ -164,7 +166,7 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
       {/* ── 부모 노드 ── */}
       {parents.map((m, i) => (
         <g key={i}>
-          <NodeShape cx={parentXs[i]} cy={yParent} gender={genderOf(m.relation)} isSelf={false} r={R} />
+          <NodeShape cx={parentXs[i]} cy={yParent} gender={genderOf(m.relation)} isSelf={false} r={R} deceased={!!m.deceased} />
           <text x={parentXs[i]} y={yParent + R + (compact ? 8 : 10)} textAnchor="middle" fontSize={fs} fill="#000">
             {m.relation}{m.name ? `(${m.name})` : ''}
           </text>
@@ -177,7 +179,7 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
         const label = m.isSelf ? '本人' : `${m.relation}${m.name ? `(${m.name})` : ''}`;
         return (
           <g key={i}>
-            <NodeShape cx={midXs[i]} cy={ySibling} gender={gdr} isSelf={!!m.isSelf} r={R} />
+            <NodeShape cx={midXs[i]} cy={ySibling} gender={gdr} isSelf={!!m.isSelf} r={R} deceased={!!m.deceased} />
             <text x={midXs[i]} y={ySibling + R + (compact ? 8 : 10)} textAnchor="middle" fontSize={fs} fill="#000">
               {label}
             </text>
@@ -193,9 +195,9 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
       {/* ── 자녀 노드 ── */}
       {children.map((m, i) => (
         <g key={i}>
-          <NodeShape cx={childXs[i]} cy={yChild} gender={genderOf(m.relation, m.gender)} isSelf={false} r={R} />
+          <NodeShape cx={childXs[i]} cy={yChild} gender={genderOf(m.relation, m.gender)} isSelf={false} r={R} deceased={!!m.deceased} />
           <text x={childXs[i]} y={yChild + R + (compact ? 8 : 10)} textAnchor="middle" fontSize={fs} fill="#000">
-            {m.name || '子'}
+            {'子'}{m.name ? `(${m.name})` : ''}
           </text>
         </g>
       ))}

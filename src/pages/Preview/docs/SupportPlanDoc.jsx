@@ -26,14 +26,17 @@ const NOTE_TEXTS = [
 const DISCLAIMER =
   '※本計画書は、記入年月日現在における契約期間満了時までの目標と支援計画を示したものであり、状況により計画の変更及び見直しが生じる場合があります。計画の変更及び見直しが生じた場合は、再度利用者に説明し同意を得るものです。';
 
+/* {ko, ja} 이중언어 객체 → 일본어 문자열로 변환 */
+const rt = (txt) => typeof txt === 'object' && txt !== null ? (txt.ja || txt.ko || '') : (txt || '');
+
 const SupportPlanDoc = ({ data, user, writeDate }) => {
   const goals   = data?.shortTermGoals  || [];
   const support = data?.supportContent  || [];
   const notes   = data?.specialNotes    ?? [true, true, true, true];
 
   /* 단기목표·지원내용: 각 항목을 줄바꿈으로 합쳐 단일 셀에 표시 */
-  const goalText    = goals.join('\n');
-  const supportText = support.join('\n') || (data?.supportContentCustom || '');
+  const goalText    = goals.map(rt).join('\n');
+  const supportText = support.map(rt).join('\n') || (data?.supportContentCustom || '');
 
   return (
     <div className={`${a4.a4Page} page`} data-a4-page>
@@ -110,9 +113,6 @@ const SupportPlanDoc = ({ data, user, writeDate }) => {
         <div className={a4.notesContent}>
           {NOTE_TEXTS.map((text, idx) => (
             <div key={idx} className={a4.noteItem}>
-              <span className={`${a4.noteCheck} ${notes[idx] ? a4.noteCheckOn : ''}`}>
-                {notes[idx] ? '✓' : ''}
-              </span>
               {text}
             </div>
           ))}

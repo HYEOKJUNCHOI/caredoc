@@ -20,6 +20,7 @@ const FORMS = {
   basicInfo: BasicInfoEdit,
 };
 
+
 const Edit = () => {
   const { type } = useParams();
   const { t, i18n } = useTranslation();

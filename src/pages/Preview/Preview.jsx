@@ -1,6 +1,6 @@
 /* 미리보기 + 출력
-   - A4 가로 양식을 화면 너비에 맞게 scale 해서 표시
-   - 프린트 출력 버튼 */
+   - 서류 타입에 따라 A4 가로 / A3 가로 자동 전환
+   - 화면 너비에 맞게 scale 해서 표시 */
 
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
@@ -12,25 +12,28 @@ import MeetingDoc     from './docs/MeetingDoc';
 import BasicInfoDoc   from './docs/BasicInfoDoc';
 import styles from './Preview.module.css';
 
-/* A4 가로 기준 너비/높이 (px, 96dpi) */
-const A4_WIDTH  = 1122;
-const A4_HEIGHT = 794;
+/* 서류 타입별 페이지 크기 (px @ 96dpi) */
+const PAGE_SIZES = {
+  basicInfo: { width: 1587, height: 1122, pageCSS: 'A3 landscape' }, /* A3 가로 */
+};
+const DEFAULT_SIZE = { width: 1122, height: 794, pageCSS: '297mm 210mm' }; /* A4 가로 */
+const getPageSize = (type) => PAGE_SIZES[type] || DEFAULT_SIZE;
 
-/* 컨테이너 너비 변화에 따라 A4 스케일 계산 */
-const useA4Scale = (ref) => {
+/* 컨테이너 너비 변화에 따라 스케일 계산 */
+const usePageScale = (ref, pageWidth) => {
   const [scale, setScale] = useState(1);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const update = () => {
       const available = el.offsetWidth - 32;
-      setScale(Math.min(1, available / A4_WIDTH));
+      setScale(Math.min(1, available / pageWidth));
     };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [ref]);
+  }, [ref, pageWidth]);
   return scale;
 };
 
@@ -48,8 +51,10 @@ const Preview = () => {
   const user   = getCurrentUser();
   const [data, setData] = useState(null);
 
+  const { width: pageWidth, height: pageHeight, pageCSS } = getPageSize(type);
+
   const viewportRef = useRef(null);
-  const scale = useA4Scale(viewportRef);
+  const scale = usePageScale(viewportRef, pageWidth);
 
   useEffect(() => {
     if (!userId) return;
@@ -58,26 +63,24 @@ const Preview = () => {
 
   const writeDate = data?.writeDate;
 
-  /* A4 페이지 DOM 요소 가져오기 */
+  /* A4/A3 페이지 DOM 요소 가져오기 */
   const getA4El = () => document.querySelector('[data-a4-page]');
 
-  /* ── 인쇄: A4 가로 강제 + 1페이지 자동 스케일 ── */
+  /* ── 인쇄: 타입별 페이지 크기 강제 + 넘침 시 자동 스케일 ── */
   const handlePrint = () => {
     const el = getA4El();
 
-    /* @page 직접 주입 — CSS Modules 로딩 타이밍 불일치 방지 */
     let pageStyle = document.getElementById('__print_page__');
     if (!pageStyle) {
       pageStyle = document.createElement('style');
       pageStyle.id = '__print_page__';
       document.head.appendChild(pageStyle);
     }
-    /* 297mm × 210mm 로 직접 명시 — "A4 landscape" 키워드는 Chrome에서 무시될 수 있음 */
-    pageStyle.textContent = '@page { size: 297mm 210mm; margin: 0; }';
+    pageStyle.textContent = `@page { size: ${pageCSS}; margin: 0; }`;
 
-    /* 내용이 794px 초과 시 zoom으로 1페이지 맞춤 */
-    if (el && el.scrollHeight > A4_HEIGHT) {
-      const zoom = ((A4_HEIGHT / el.scrollHeight) * 100).toFixed(1);
+    /* 내용이 페이지 높이 초과 시 zoom으로 1페이지 맞춤 */
+    if (el && el.scrollHeight > pageHeight) {
+      const zoom = ((pageHeight / el.scrollHeight) * 100).toFixed(1);
       let fitStyle = document.getElementById('__print_fit__');
       if (!fitStyle) {
         fitStyle = document.createElement('style');
@@ -102,19 +105,19 @@ const Preview = () => {
         </button>
       </div>
 
-      {/* A4 뷰어 영역 */}
+      {/* 뷰어 영역 */}
       <div className={styles.a4Viewport} ref={viewportRef}>
         {data && DocComponent ? (
           <div
             className={styles.a4ScaleOuter}
-            style={{ height: Math.ceil(A4_HEIGHT * scale) }}
+            style={{ height: Math.ceil(pageHeight * scale) }}
           >
             <div
               className={styles.a4ScaleInner}
               style={{
                 transform: `scale(${scale})`,
                 transformOrigin: 'top left',
-                width: A4_WIDTH,
+                width: pageWidth,
               }}
             >
               <DocComponent data={data} user={user} writeDate={writeDate} />

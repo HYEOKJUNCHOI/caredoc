@@ -16,6 +16,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 80px;
 }
 
 /* 로고 */
@@ -59,10 +60,26 @@
   line-height: 1;
 }
 
+.center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.docTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
 .right {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 80px;
+  justify-content: flex-end;
 }
 
 @media print {
