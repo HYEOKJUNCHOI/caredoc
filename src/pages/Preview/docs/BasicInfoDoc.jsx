@@ -329,8 +329,8 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
             </div>
           </div>
 
-          {/* ⑥ 介護保険: 22px */}
-          <div className={s.section} style={{ minHeight: 22 }}>
+          {/* ⑥ 介護保険: "介護保険" 4글자 세로 표시 최소 44px */}
+          <div className={s.section} style={{ minHeight: 44 }}>
             <div className={s.sideLabel}>介護保険</div>
             <div className={s.sectionBody}>
               <div className={s.row} style={{ borderBottom: 'none' }}>
@@ -506,12 +506,12 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
                 <div className={s.certValue}>{d?.consultationOffice || '　'}</div>
               </div>
 
-              {/* 社会関係図: 160px ★ */}
-              <div style={{ height: 160, flexShrink: 0, display: 'flex', flexDirection: 'column', ...innerBorder, padding: '4px 6px' }}>
-                <div style={{ fontSize: '7.5pt', fontWeight: 'bold', borderBottom: '0.5px solid #000', paddingBottom: 2, marginBottom: 3 }}>
+              {/* 社会関係図: 160px ★ — 세로 라벨 + 다이어그램 */}
+              <div style={{ height: 160, flexShrink: 0, display: 'flex', ...innerBorder }}>
+                <div style={{ minWidth: 22, writingMode: 'vertical-rl', background: '#f5f5f5', borderRight: '0.5px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7.5pt', fontWeight: 'bold', flexShrink: 0, padding: '2px 3px' }}>
                   社会関係図
                 </div>
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4 }}>
                   <SocialDiagramSVG nodes={d?.socialRelationNodes} />
                 </div>
               </div>
@@ -531,29 +531,29 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
             </div>
           </div>{/* /現況 */}
 
-          {/* ② 主訴: 5행 × 22px */}
+          {/* ② 主訴: 5행 × 28px (13글자 라벨 = 143px 필요) */}
           <div className={s.section}>
-            <div className={s.sideLabel}>当該事業所利用時の主訴</div>
+            <div className={s.sideLabelSm}>当該事業所利用時の主訴</div>
             <table style={{ flex: 1, borderCollapse: 'collapse', fontSize: '8.5pt', tableLayout: 'fixed' }}>
               <tbody>
-                <tr>
+                <tr style={{ height: 28 }}>
                   <td rowSpan={4} style={{ width: 28, textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #000', verticalAlign: 'middle', fontSize: '7.5pt', padding: '2px 3px' }}>本人</td>
                   <td style={{ width: 34, textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #000', borderBottom: '0.5px solid #000', padding: '2px 3px', fontSize: '7.5pt' }}>全般</td>
                   <td style={{ padding: '2px 6px', borderBottom: '0.5px solid #000' }}>{d?.chiefComplaintGeneral || '　'}</td>
                 </tr>
-                <tr>
+                <tr style={{ height: 28 }}>
                   <td style={{ textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #000', borderBottom: '0.5px solid #000', padding: '2px 3px', fontSize: '7.5pt' }}>就労</td>
                   <td style={{ padding: '2px 6px', borderBottom: '0.5px solid #000' }}>{d?.chiefComplaintWork || '　'}</td>
                 </tr>
-                <tr>
+                <tr style={{ height: 28 }}>
                   <td style={{ textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #000', borderBottom: '0.5px solid #000', padding: '2px 3px', fontSize: '7.5pt' }}>生活</td>
                   <td style={{ padding: '2px 6px', borderBottom: '0.5px solid #000' }}>{d?.chiefComplaintLife || '　'}</td>
                 </tr>
-                <tr>
+                <tr style={{ height: 28 }}>
                   <td style={{ textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #000', borderBottom: '0.5px solid #000', padding: '2px 3px', fontSize: '7.5pt' }}>その他</td>
                   <td style={{ padding: '2px 6px', borderBottom: '0.5px solid #000' }}>{d?.chiefComplaintOther || '　'}</td>
                 </tr>
-                <tr>
+                <tr style={{ height: 28 }}>
                   <td colSpan={2} style={{ textAlign: 'center', background: '#f5f5f5', borderRight: '0.5px solid #000', padding: '2px 3px', fontSize: '7.5pt' }}>家族</td>
                   <td style={{ padding: '2px 6px' }}>{d?.chiefComplaintFamily || '　'}</td>
                 </tr>

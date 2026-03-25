@@ -272,6 +272,22 @@
   vertical-align: middle;
 }
 
+/* ── 긴 세로 라벨 (letter-spacing 제거로 압축) ── */
+.sideLabelSm {
+  width: 10%;
+  writing-mode: vertical-rl;
+  text-align: center;
+  background: #efefef;
+  border-right: 1px solid #000;
+  font-weight: bold;
+  font-size: 6.5pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0;
+}
+
 /* ── 선택 동그라미 ── */
 .circled {
   border: 1px solid #000;
