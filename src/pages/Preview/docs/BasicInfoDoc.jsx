@@ -139,7 +139,6 @@ const SAMPLE_DATA = {
     { hospital: '紀南病院泌尿器科', disease: '排尿障害', medication: '' },
     { hospital: '南和歌山皮膚科', disease: '真寿苑クリニック', medication: '南紀医療センター 歯科' },
     { hospital: '整形外科', disease: '高血圧', medication: 'リハビリ' },
-    {},
   ],
   historyBirth: '大阪府堺市で生まれる',
   historyKindergarten: '南紀福祉センター療育園',
@@ -188,7 +187,7 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
   const date      = writeDate       || d?.writeDate || '';
 
   const pad = (arr, n) => { const a = arr || []; return a.length >= n ? a : [...a, ...Array(n - a.length).fill({})]; };
-  const medicalRows     = pad(d?.medicalRows,      5);  /* 원본 5행 */
+  const medicalRows     = pad(d?.medicalRows,      4);  /* 원본 4행 */
   const pastServiceRows = pad(d?.pastServiceRows,  3);  /* 원본 3행 */
   const serviceTypeLaw  = pad(d?.serviceTypeLaw,   4);  /* 원본 4행: 共同生活援助・生活介護・居宅介護・空 */
   const serviceTypeLocal= pad(d?.serviceTypeLocal, 3);  /* 원본 3행: 日中一時支援・移動支援・空 */
