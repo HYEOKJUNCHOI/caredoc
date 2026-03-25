@@ -203,7 +203,6 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
 
   /* 셀 공통 인라인 스타일 */
   const innerBorder = { borderBottom: '0.5px solid #000' };
-  const innerBorderR = { borderRight: '0.5px solid #000' };
 
   return (
     <div className={`${s.page} page`} data-a4-page>
@@ -438,39 +437,45 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
             <div className={s.sideLabel}>現　況</div>
             <div className={s.sectionBody}>
 
-              {/* 受給者証 그룹 */}
+              {/* 受給者証 그룹 — table로 열 너비 정밀 제어 */}
               <div style={{ display: 'flex', ...innerBorder, flexShrink: 0 }}>
                 <div className={s.certGroupLabel}>受給者証</div>
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  {/* 지원구분 + 인정유효기간 */}
-                  <div className={s.row} style={{ minHeight: 22 }}>
-                    <div className={s.certLabel} style={{ minWidth: 52 }}>支援区分</div>
-                    <div className={s.certValue} style={{ minWidth: 28, ...innerBorderR }}>{d?.supportLevel || '　'}</div>
-                    <div className={s.certLabel}>認定有効期間</div>
-                    <div className={s.certValue} style={{ fontSize: '7.5pt' }}>{certPeriod(d?.certValidFrom, d?.certValidTo)}</div>
-                  </div>
-                  {/* 지급시정촌 + 교부일 */}
-                  <div className={s.row} style={{ minHeight: 22 }}>
-                    <div className={s.certLabel}>支給市町村</div>
-                    <div className={s.certValue} style={{ ...innerBorderR }}>{d?.paymentCity || '　'}</div>
-                    <div className={s.certLabel}>交付年月日</div>
-                    <div className={s.certValue}>{toJaShort(d?.certIssuedDate)}</div>
-                  </div>
-                  {/* 번호 */}
-                  <div className={s.row} style={{ minHeight: 22, borderBottom: 'none' }}>
-                    <div className={s.certLabel}>番　号</div>
-                    <div className={s.certValue}>{d?.certNumber || '　'}</div>
-                  </div>
-                </div>
+                <table style={{ flex: 1, borderCollapse: 'collapse', fontSize: '8pt', tableLayout: 'fixed' }}>
+                  <colgroup>
+                    <col style={{ width: '22%' }} />{/* 필드라벨1 */}
+                    <col style={{ width: '9%'  }} />{/* 값1 (4 같은 짧은 값) */}
+                    <col style={{ width: '22%' }} />{/* 필드라벨2 */}
+                    <col />{/* 값2 (나머지) */}
+                  </colgroup>
+                  <tbody>
+                    <tr style={{ height: 22, borderBottom: '0.5px solid #000' }}>
+                      <td style={{ background: '#f5f5f5', borderRight: '0.5px solid #000', padding: '2px 5px', fontWeight: 600, fontSize: '7.5pt', whiteSpace: 'nowrap' }}>支援区分</td>
+                      <td style={{ borderRight: '0.5px solid #000', padding: '2px 6px' }}>{d?.supportLevel || '　'}</td>
+                      <td style={{ background: '#f5f5f5', borderRight: '0.5px solid #000', padding: '2px 5px', fontWeight: 600, fontSize: '7.5pt', whiteSpace: 'nowrap' }}>認定有効期間</td>
+                      <td style={{ padding: '2px 6px', fontSize: '7.5pt' }}>{certPeriod(d?.certValidFrom, d?.certValidTo)}</td>
+                    </tr>
+                    <tr style={{ height: 22, borderBottom: '0.5px solid #000' }}>
+                      <td style={{ background: '#f5f5f5', borderRight: '0.5px solid #000', padding: '2px 5px', fontWeight: 600, fontSize: '7.5pt', whiteSpace: 'nowrap' }}>支給市町村</td>
+                      <td style={{ borderRight: '0.5px solid #000', padding: '2px 6px' }}>{d?.paymentCity || '　'}</td>
+                      <td style={{ background: '#f5f5f5', borderRight: '0.5px solid #000', padding: '2px 5px', fontWeight: 600, fontSize: '7.5pt', whiteSpace: 'nowrap' }}>交付年月日</td>
+                      <td style={{ padding: '2px 6px', fontSize: '7.5pt' }}>{toJaShort(d?.certIssuedDate)}</td>
+                    </tr>
+                    <tr style={{ height: 22 }}>
+                      <td style={{ background: '#f5f5f5', borderRight: '0.5px solid #000', padding: '2px 5px', fontWeight: 600, fontSize: '7.5pt', whiteSpace: 'nowrap' }}>番　号</td>
+                      <td colSpan={3} style={{ padding: '2px 6px' }}>{d?.certNumber || '　'}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
-              {/* 支給決定（支援法） */}
+              {/* 支給決定（支援法）— 열 너비 60/40 */}
               <div style={{ display: 'flex', ...innerBorder, flexShrink: 0 }}>
                 <div className={s.certGroupLabel} style={{ fontSize: '6.5pt', whiteSpace: 'normal', lineHeight: 1.3 }}>
                   支給決定<br/>（支援法）
                 </div>
                 <div style={{ flex: 1 }}>
                   <table className={s.medTable}>
+                    <colgroup><col style={{ width: '60%' }} /><col /></colgroup>
                     <thead><tr><th>サービス種別</th><th>支給量（当該月の日数/月）</th></tr></thead>
                     <tbody>
                       {serviceTypeLaw.map((row, i) => (
@@ -484,13 +489,14 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
                 </div>
               </div>
 
-              {/* 支給決定（地域生活支援事業） */}
+              {/* 支給決定（地域生活支援事業）— 열 너비 60/40 */}
               <div style={{ display: 'flex', ...innerBorder, flexShrink: 0 }}>
                 <div className={s.certGroupLabel} style={{ fontSize: '6.5pt', whiteSpace: 'normal', lineHeight: 1.3 }}>
                   支給決定<br/>（地域生活<br/>支援事業）
                 </div>
                 <div style={{ flex: 1 }}>
                   <table className={s.medTable}>
+                    <colgroup><col style={{ width: '60%' }} /><col /></colgroup>
                     <tbody>
                       {serviceTypeLocal.map((row, i) => (
                         <tr key={i} style={{ height: 22 }}>
