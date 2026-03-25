@@ -233,7 +233,7 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
             <span className={s.bloodValue}>{d?.bloodType || '　'}</span>
           </div>
 
-          {/* ③ プロフィール */}
+          {/* ③ プロフィール: 프로필 필드 + 家族状況(제노그램) 전체를 하나의 큰 섹션으로 */}
           <div className={s.section}>
             <div className={s.sideLabel}>プロフィール</div>
             <div className={s.sectionBody}>
@@ -281,24 +281,27 @@ const BasicInfoDoc = ({ data, user, writeDate }) => {
                 </div>
               </div>
               {/* 電話: 22px */}
-              <div className={s.row} style={{ borderBottom: 'none' }}>
+              <div className={s.row}>
                 <div className={s.fieldLabel}>電　話</div>
                 <div className={s.fieldValue}>
                   自宅・ホーム：{d?.phoneOffice || d?.phoneHome || '　'}
                   携帯：（本人）：{d?.phoneMobile || '　'}
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* ④ 家族状況: 180px ★ */}
-          <div className={s.section} style={{ height: 180, flexShrink: 0 }}>
-            <div className={s.sideLabel}>家族状況</div>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 4 }}>
-              <div style={{ textAlign: 'right', fontSize: '7pt', color: '#000', paddingRight: 2 }}>ジェノグラム</div>
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                <GenogramSVG members={d?.familyMembers || []} selfGender={d?.gender || '女性'} compact />
+              {/* ④ 家族状況: 프로필 안의 서브 섹션, 180px ★ */}
+              <div style={{ display: 'flex', height: 180, flexShrink: 0 }}>
+                <div className={s.fieldLabel} style={{ writingMode: 'vertical-rl', width: '14.5%', fontWeight: 'bold', fontSize: '7.5pt', letterSpacing: 2, justifyContent: 'center', alignSelf: 'stretch' }}>
+                  家族状況
+                </div>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 4 }}>
+                  <div style={{ textAlign: 'right', fontSize: '7pt', paddingRight: 2 }}>ジェノグラム</div>
+                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <GenogramSVG members={d?.familyMembers || []} selfGender={d?.gender || '女性'} compact />
+                  </div>
+                </div>
               </div>
+
             </div>
           </div>
 
