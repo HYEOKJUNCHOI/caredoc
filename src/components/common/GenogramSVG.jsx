@@ -71,7 +71,7 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
   /* ── 행 Y 좌표 ── */
   const hasParents  = parents.length > 0;
   const hasChildren = children.length > 0;
-  const yParent  = R + 2;
+  const yParent  = compact ? R + 18 : R + 2;
   const ySibling = hasParents ? yParent + VG : R + 2;
   const yChild   = hasChildren ? ySibling + VG : ySibling;
   const yCustom  = yChild + (hasChildren ? VG * 0.8 : 0);
@@ -103,6 +103,11 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
   /* 선 y 중간점 (본인→자녀) */
   const midLineY = (ySibling + R + yChild - R) / 2;
 
+  /* 부모→자녀 브래킷 Y (ㄱ자 꺾임 지점) */
+  const bracketY = (yParent + ySibling) / 2;
+  const bLeft    = midRow.length > 0 ? Math.min(midXs[0], pCx) : pCx;
+  const bRight   = midRow.length > 0 ? Math.max(midXs[midXs.length - 1], pCx) : pCx;
+
   const fs = compact ? '6.5' : '8';   // 텍스트 폰트 크기
   const selfGdr = selfGender === '男性' ? 'male' : 'female';
 
@@ -126,15 +131,20 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
         <line x1={parentXs[0]} y1={yParent} x2={parentXs[1]} y2={yParent} stroke="#000" strokeWidth="0.8" />
       )}
 
-      {/* ── 부모 → 형제 수직선 ── */}
+      {/* ── 부모 → 브래킷 수직선 ── */}
       {hasParents && (
-        <line x1={pCx} y1={yParent + R} x2={pCx} y2={ySibling} stroke="#000" strokeWidth="0.8" />
+        <line x1={pCx} y1={yParent} x2={pCx} y2={bracketY} stroke="#000" strokeWidth="0.8" />
       )}
 
-      {/* ── 형제 가로선 ── */}
-      {midRow.length > 1 && (
-        <line x1={midXs[0]} y1={ySibling} x2={midXs[midXs.length - 1]} y2={ySibling} stroke="#000" strokeWidth="0.8" />
+      {/* ── 브래킷 가로선 (ㄱ자 꺾임) ── */}
+      {hasParents && bLeft !== bRight && (
+        <line x1={bLeft} y1={bracketY} x2={bRight} y2={bracketY} stroke="#000" strokeWidth="0.8" />
       )}
+
+      {/* ── 브래킷 → 각 노드 수직 드롭 ── */}
+      {hasParents && midRow.map((m, i) => (
+        <line key={`drop-${i}`} x1={midXs[i]} y1={bracketY} x2={midXs[i]} y2={ySibling - R - (m.isSelf ? 2.5 : 0)} stroke="#000" strokeWidth="0.8" />
+      ))}
 
       {/* ── 妻 이중선 ── */}
       {wife && wifeIdx >= 0 && (
@@ -167,7 +177,7 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
       {parents.map((m, i) => (
         <g key={i}>
           <NodeShape cx={parentXs[i]} cy={yParent} gender={genderOf(m.relation)} isSelf={false} r={R} deceased={!!m.deceased} />
-          <text x={parentXs[i]} y={yParent + R + (compact ? 8 : 10)} textAnchor="middle" fontSize={fs} fill="#000">
+          <text x={parentXs[i]} y={compact ? yParent - R - 3 : yParent + R + 10} textAnchor="middle" fontSize={fs} fill="#000">
             {m.relation}{m.name ? `(${m.name})` : ''}
           </text>
         </g>

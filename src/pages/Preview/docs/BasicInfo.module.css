@@ -16,21 +16,30 @@
   box-sizing: border-box;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── 본문 그리드 (48:52) ── */
 .body {
   display: grid;
-  grid-template-columns: 48fr 52fr;
-  height: 100%;
+  grid-template-columns: 48fr 3px 52fr;  /* A | 구분선 | B */
+  flex: 1;
+  min-height: 0;
   border: 1px solid #000;
   overflow: hidden;
+}
+
+/* A-B 구분선 */
+.colDivider {
+  background: #000;
+  width: 3px;
+  align-self: stretch;
 }
 
 .leftCol {
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #000;
   overflow: hidden;
 }
 
@@ -40,14 +49,13 @@
   overflow: hidden;
 }
 
-/* ── 문서 헤더 ── */
+/* ── 문서 헤더 (테두리 밖 상단) ── */
 .header {
   display: flex;
   align-items: flex-end;
-  padding: 0 6px 4px;
-  height: 52px;
+  padding: 0 6px 6px;
+  height: 44px;
   flex-shrink: 0;
-  border-bottom: 1px solid #000;
 }
 
 .headerTitle {
@@ -76,6 +84,8 @@
 }
 
 .emLabel {
+  width: 23%;  /* sideLabel(10%) + fieldLabel(14.5%×90%) ≈ 23% → ふりがな 선과 정렬 */
+  flex-shrink: 0;
   background: #efefef;
   border-right: 1px solid #000;
   padding: 2px 6px;
@@ -84,11 +94,13 @@
   align-self: stretch;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .emValue {
   flex: 1;
-  padding: 2px 8px;
+  padding: 2px 8px 2px 13px;
   font-size: 8.5pt;
 }
 
@@ -102,11 +114,13 @@
   align-self: stretch;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .bloodValue {
-  padding: 2px 8px;
-  min-width: 28px;
+  padding: 2px 8px 2px 13px;
+  min-width: 52px;
   font-size: 8.5pt;
 }
 
@@ -173,6 +187,8 @@
   padding: 2px 5px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -180,7 +196,7 @@
 .fieldValue {
   flex: 1;
   font-size: 8.5pt;
-  padding: 2px 6px;
+  padding: 2px 6px 2px 11px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -196,7 +212,9 @@
   font-size: 7.5pt;
   padding: 3px 5px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -209,6 +227,8 @@
   padding: 2px 5px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   flex-shrink: 0;
 }
 
@@ -235,6 +255,8 @@
   padding: 2px 5px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -242,7 +264,7 @@
 .certValue {
   flex: 1;
   font-size: 8.5pt;
-  padding: 2px 6px;
+  padding: 2px 6px 2px 11px;
   display: flex;
   align-items: center;
   word-break: break-word;

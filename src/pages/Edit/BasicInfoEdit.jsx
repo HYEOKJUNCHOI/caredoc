@@ -579,8 +579,9 @@ const BasicInfoEdit = ({ data, onChange }) => {
       </section>
 
       {/* ── 장애 상황 ── */}
-      <section className={styles.section} data-qa="edit-section-disability">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>障害の状況</h2>
+      <div className={styles.spBox} data-qa="edit-section-disability">
+        <div className={styles.spBoxHeader}>障害の状況</div>
+        <div className={styles.spBoxBody}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div className={styles.field} style={{ gridColumn: '1 / -1' }}>
             <label className={styles.fieldLabel}>{lbl('장애·질병명', '障害・疾病名')}</label>
@@ -669,7 +670,8 @@ const BasicInfoEdit = ({ data, onChange }) => {
             {inp('disabilityOverview', '', 3)}
           </div>
         </div>
-      </section>
+        </div>
+      </div>
 
       {/* ── 개호보험 ── */}
       <section className={styles.section} data-qa="edit-section-care">
