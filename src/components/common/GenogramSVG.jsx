@@ -10,7 +10,7 @@ const R_C  = 9;    // compact 반지름 (A4 문서 내)
 const HG_N = 64;   // 일반 가로 간격
 const HG_C = 38;   // compact 가로 간격
 const VG_N = 66;   // 일반 세로 간격
-const VG_C = 38;   // compact 세로 간격
+const VG_C = 50;   // compact 세로 간격
 
 /* 관계 → 성별 자동 결정 */
 const genderOf = (relation, explicit) => {
@@ -190,7 +190,7 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
         return (
           <g key={i}>
             <NodeShape cx={midXs[i]} cy={ySibling} gender={gdr} isSelf={!!m.isSelf} r={R} deceased={!!m.deceased} />
-            <text x={midXs[i]} y={ySibling + R + (compact ? 8 : 10)} textAnchor="middle" fontSize={fs} fill="#000">
+            <text x={midXs[i]} y={ySibling + R + (compact ? 10 : 10)} textAnchor="middle" fontSize={fs} fill="#000">
               {label}
             </text>
             {m.note && (

@@ -72,6 +72,8 @@ const BasicInfoEdit = ({ data, onChange }) => {
     if (data.disabilityNames?.length) return data.disabilityNames;
     return ['精神障害'];
   });
+  const [testLoading, setTestLoading] = useState(false);
+  const [testMode, setTestMode] = useState(false);
   const [addingDisability, setAddingDisability] = useState(false);
   const [addDisabilityText, setAddDisabilityText] = useState('');
   const [editingDisabilityIdx, setEditingDisabilityIdx] = useState(null);
@@ -251,21 +253,25 @@ const BasicInfoEdit = ({ data, onChange }) => {
     onChange('notebookLevel',    'B2');
     onChange('disabilityPension','1級');
     onChange('careInsurance',    '無');
+    onChange('disabilityOverview',   '車椅子を使用しており、日常生活全般に介助が必要。意思疎通は良好で、自分の意見をしっかりと伝えられる。');
+    onChange('careLevel',            '');
     onChange('medicalRows', [
-      { hospital: 'こころの医療センター', disease: '',         medication: '3食後、寝る前' },
-      { hospital: '紀南病院泌尿器科',   disease: '排尿障害',   medication: '' },
-      { hospital: '南和歌山皮膚科',     disease: '',           medication: '' },
+      { hospital: 'こころの医療センター', disease: '統合失調症',   medication: '3食後、寝る前' },
+      { hospital: '紀南病院泌尿器科',     disease: '排尿障害',     medication: '導尿（自己）' },
+      { hospital: '南和歌山医療センター', disease: '高血圧',       medication: '朝1錠' },
+      { hospital: '南紀整形外科',         disease: '脊椎側弯症',   medication: 'リハビリ週1回' },
     ]);
-    onChange('historyBirth',       '大阪府堺市で生まれる');
-    onChange('historyKindergarten','南紀福祉センター療育園');
-    onChange('historyElementary',  '安居小学校ー愛徳整肢園ー南紀養護学校（小4から）');
-    onChange('historyJuniorHigh',  '南紀養護学校');
-    onChange('historySeniorHigh',  '〃');
-    onChange('historyAdult',       'いきいき作業所ーふたば作業所（H.28.4〜）');
+    onChange('historyBirth',         '大阪府堺市にて出生。出生時より二分脊椎の診断を受ける。');
+    onChange('historyKindergarten',  '南紀福祉センター療育園（3歳〜6歳）');
+    onChange('historyElementary',    '安居小学校入学後、愛徳整肢園へ転院。小4より南紀養護学校へ転校。');
+    onChange('historyJuniorHigh',    '南紀養護学校中学部');
+    onChange('historySeniorHigh',    '南紀養護学校高等部');
+    onChange('historyOtherSchool',   '');
+    onChange('historyAdult',         'いきいき作業所（H.20〜H.27）→ふたば作業所（H.28.4〜現在）');
     onChange('pastServiceRows', [
-      { serviceName: '移動支援', facility: '', period: '' },
-      { serviceName: '',         facility: '', period: '' },
-      { serviceName: '',         facility: '', period: '' },
+      { serviceName: '移動支援',   facility: 'すてっぷ',       period: 'H.28〜現在' },
+      { serviceName: '日中一時支援', facility: '奥平デイサービス', period: 'R.2〜現在' },
+      { serviceName: '居宅介護',   facility: 'ヘルパーステーション白浜', period: 'R.3〜現在' },
     ]);
     onChange('supportLevel',    '4');
     onChange('certValidFrom',   '2022-09-01');
@@ -292,6 +298,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
     onChange('chiefComplaintLife',   '奥平マンションで良い。できることは自分でやる');
     onChange('chiefComplaintOther',  '長期休暇には実家に帰省するのを楽しみにしている');
     onChange('chiefComplaintFamily', '家族が定期的に様子を見にきてくれる。');
+    onChange('remarks',              '毎月第3木曜日にケース会議を実施。緊急時は施設長へ連絡すること。');
     onChange('bloodType', ['A','B','O','AB'][rnd(4)]);
     onChange('familyMembers', [
       { id: '1', relation: '父', name: '', customRelation: '' },
@@ -300,6 +307,30 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
     /* 로컬 상태 동기화 */
     setDisabilityNames(['両下肢機能全廃（1級）', '二分脊椎排便排尿障害（4級）']);
+    setFacilityCustomMode(false);
+  };
+
+  /* 테스트 데이터 전체 초기화 */
+  const clearTestData = () => {
+    const fields = [
+      'nameKanji','nameKana','gender','birthDate','phoneMobile','phoneOffice',
+      'emergencyName','emergencyRelation','emergencyPhone','facilityName',
+      'address','residenceType','disabilityName','disabilityOverview',
+      'notebookType','notebookLevel','disabilityPension','careInsurance','careLevel',
+      'historyBirth','historyKindergarten','historyElementary','historyJuniorHigh',
+      'historySeniorHigh','historyOtherSchool','historyAdult',
+      'supportLevel','certValidFrom','certValidTo','paymentCity','certIssuedDate','certNumber',
+      'consultationOffice','socialRelationNodes','mainOffices','otherInfo',
+      'chiefComplaintGeneral','chiefComplaintWork','chiefComplaintLife',
+      'chiefComplaintOther','chiefComplaintFamily','bloodType','remarks',
+    ];
+    fields.forEach(f => onChange(f, ''));
+    onChange('medicalRows',     [{},{},{},{}]);
+    onChange('pastServiceRows', [{},{},{}]);
+    onChange('serviceTypeLaw',  [{}]);
+    onChange('serviceTypeLocal',[{}]);
+    onChange('familyMembers',   []);
+    setDisabilityNames([]);
     setFacilityCustomMode(false);
   };
 
@@ -337,18 +368,38 @@ const BasicInfoEdit = ({ data, onChange }) => {
   return (
     <div className={styles.formBody}>
 
-      {/* ── 테스트 데이터 입력 체크박스 ── */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '6px 16px 0' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#888', cursor: 'pointer', userSelect: 'none' }}>
+      {/* ── 테스트 데이터 로딩 오버레이 ── */}
+      {testLoading && (
+        <div className={styles.testLoadingOverlay}>
+          <div className={styles.testLoadingSpinner} />
+          <span>{isJa ? 'データを入力中...' : '데이터 입력 중...'}</span>
+        </div>
+      )}
+
+      {/* ── 테스트 데이터 슬라이드 토글 ── */}
+      <label className={styles.testToggleWrap}>
+        <span className={styles.testToggleSwitch}>
           <input
             type="checkbox"
             tabIndex={-1}
-            onChange={(e) => { if (e.target.checked) { fillTestData(); e.target.checked = false; } }}
-            style={{ width: 14, height: 14, cursor: 'pointer' }}
+            checked={testMode}
+            onChange={(e) => {
+              const next = e.target.checked;
+              setTestLoading(true);
+              setTimeout(() => {
+                if (next) fillTestData();
+                else clearTestData();
+                setTestMode(next);
+                setTestLoading(false);
+              }, 700);
+            }}
           />
-          {isJa ? 'テストデータを入力' : '테스트 데이터 입력'}
-        </label>
-      </div>
+          <span className={styles.testToggleTrack} />
+        </span>
+        {testMode
+          ? (isJa ? 'テストモード中' : '테스트 모드')
+          : (isJa ? 'テストデータを入力' : '테스트 데이터 입력')}
+      </label>
 
       {/* ── 상단 공통 ── */}
       <section className={styles.section} data-qa="edit-section-basic-top">

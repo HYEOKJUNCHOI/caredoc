@@ -395,6 +395,90 @@
   color: var(--accent-text);
 }
 
+/* ── 테스트 데이터 로딩 오버레이 ── */
+.testLoadingOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  gap: 14px;
+  font-size: 13px;
+  color: #555;
+}
+
+.testLoadingSpinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e0e0e0;
+  border-top-color: var(--action);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── 테스트 데이터 슬라이드 토글 ── */
+.testToggleWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 6px 16px 0;
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+  user-select: none;
+}
+
+.testToggleSwitch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.testToggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.testToggleTrack {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 20px;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.testToggleTrack::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.testToggleSwitch input:checked + .testToggleTrack {
+  background: var(--action);
+}
+
+.testToggleSwitch input:checked + .testToggleTrack::before {
+  transform: translateX(16px);
+}
+
 /* 자동연동 표시 */
 .autoLinked {
   background: var(--bg-surface);
@@ -871,6 +955,7 @@
   background: var(--bg-page);
   border-top: 1px solid var(--border-default);
   box-sizing: border-box;
+  z-index: 200;
 }
 
 .previewBtn {
