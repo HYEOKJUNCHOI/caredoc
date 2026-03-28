@@ -31,4 +31,6 @@ dist-ssr
 *.xlsx
 *.doc
 *.jpg
+*.jpeg
+*.png
 기본정보_필드정리.md
