@@ -16,7 +16,12 @@ export const useAuth = () => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(firebaseUser.uid));
-        try { await loadFromFirestore(firebaseUser.uid); } catch (e) { console.warn('Firestore 로드 실패:', e); }
+        try {
+          await Promise.race([
+            loadFromFirestore(firebaseUser.uid),
+            new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000)),
+          ]);
+        } catch (e) { console.warn('Firestore 로드 실패:', e); }
       } else {
         localStorage.removeItem(PREFIX + 'firebaseUid');
       }
