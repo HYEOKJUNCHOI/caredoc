@@ -130,8 +130,37 @@ const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
   const linkedGoals = supportPlanData?.shortTermGoals || [];
   const visibleSat  = satisfaction.filter(item => item[lang]);
 
+  /* 테스트 더미데이터 */
+  const fillTestData = () => {
+    const testRows = Array.from({ length: GOAL_COUNT }, (_, i) => ({
+      goalText: `短期目標${i + 1}：自立した生活を維持する`,
+      achieveA: ['A', 'B', 'C'][i],
+      satisfactionTexts: ['概ね達成できている', '本人の意欲がある'],
+      customItems: ['声かけ支援を実施'],
+    }));
+    onChange('year', '2025');
+    onChange('month', '3');
+    onChange('rows', testRows);
+    onChange('planChanged', false);
+    onChange('meetingOpinion', '今月も安定した生活が継続できている。引き続き現在の支援方針を継続する。');
+  };
+
+  const clearTestData = () => {
+    onChange('year', '');
+    onChange('month', '');
+    onChange('rows', Array.from({ length: GOAL_COUNT }, () => ({})));
+    onChange('planChanged', undefined);
+    onChange('meetingOpinion', '');
+  };
+
   return (
     <div className={styles.formBody} style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '12px 20px 80px' }}>
+
+      {/* 테스트 더미데이터 버튼 */}
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+        <button className={styles.testFillBtn} onClick={fillTestData}>🧪 テストデータ ON</button>
+        <button className={styles.testClearBtn} onClick={clearTestData}>✕ OFF</button>
+      </div>
 
       {/* 연도・월 */}
       <div className={styles.spBox} data-qa="edit-monitoring-yearmonth">
