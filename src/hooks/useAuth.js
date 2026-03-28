@@ -13,26 +13,31 @@ export const useAuth = () => {
   const [loginError, setLoginError]     = useState(null);
 
   useEffect(() => {
-    /* 리디렉션 후 복귀 시 결과 처리 — onAuthStateChanged보다 먼저 호출 */
+    console.log('[1] useEffect 시작');
+
     getRedirectResult(auth).then((result) => {
-      if (result?.user) console.log('[useAuth] redirect 로그인 성공:', result.user.email);
+      console.log('[2] getRedirectResult 완료, result:', result?.user?.email ?? 'null');
     }).catch((e) => {
-      console.error('[useAuth] redirect 결과 에러:', e.code, e.message);
+      console.error('[2] getRedirectResult 에러:', e.code, e.message);
       setLoginError(`エラー: ${e.code}`);
     });
 
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log('[3] onAuthStateChanged 발화, firebaseUser:', firebaseUser?.email ?? 'null');
       if (firebaseUser) {
         localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(firebaseUser.uid));
+        console.log('[4] loadFromFirestore 시작');
         try {
           await Promise.race([
             loadFromFirestore(firebaseUser.uid),
             new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000)),
           ]);
-        } catch (e) { console.warn('Firestore 로드 실패:', e); }
+          console.log('[5] loadFromFirestore 완료');
+        } catch (e) { console.warn('[5] Firestore 로드 실패:', e.message); }
       } else {
         localStorage.removeItem(PREFIX + 'firebaseUid');
       }
+      console.log('[6] setUser 호출');
       setUser(firebaseUser);
       setLoading(false);
       setLoginLoading(false);
@@ -41,6 +46,7 @@ export const useAuth = () => {
   }, []);
 
   const login = () => {
+    console.log('[LOGIN] 버튼 클릭 → signInWithRedirect 호출');
     setLoginError(null);
     setLoginLoading(true);
     googleProvider.setCustomParameters({ prompt: 'select_account' });
