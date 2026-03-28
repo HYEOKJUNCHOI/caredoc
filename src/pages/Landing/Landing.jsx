@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import styles from './Landing.module.css';
 
-const Landing = ({ loginError }) => {
+const Landing = ({ loginLoading, loginError }) => {
   const googleBtnRef = useRef(null);
 
   useEffect(() => {
@@ -51,8 +51,11 @@ const Landing = ({ loginError }) => {
 
       <p className={styles.catchCopy}>もっとスマートに、もっとラクに。</p>
 
-      {/* Google GSI 버튼 */}
-      <div ref={googleBtnRef} className={styles.googleBtnWrap} />
+      {/* Google GSI 버튼 / 로딩 */}
+      {loginLoading
+        ? <div className={styles.loginBtn}>ログイン中...</div>
+        : <div ref={googleBtnRef} className={styles.googleBtnWrap} />
+      }
 
       {loginError && <p className={styles.errorMsg}>{loginError}</p>}
 
