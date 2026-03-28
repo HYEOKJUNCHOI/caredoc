@@ -14,6 +14,9 @@ const Home = () => {
   /* 삭제 모드가 활성화된 이용자 ID (Long Press 시 설정) */
   const [deleteModeId, setDeleteModeId] = useState(null);
   
+  /* 삭제 확인 모달용 상태 */
+  const [userToDelete, setUserToDelete] = useState(null);
+  
   /* 꾹 누르기 타이머 참조 */
   const longPressTimer = useRef(null);
 
@@ -26,9 +29,14 @@ const Home = () => {
     navigate('/select');
   };
 
-  const handleDelete = async (e, userId, userName) => {
+  const handleDeleteClick = (e, user) => {
     e.stopPropagation();
-    if (!window.confirm(`「${userName}」を削除しますか？\n関連する書類データもすべて削除されます。`)) return;
+    setUserToDelete(user);
+  };
+
+  const confirmDelete = async () => {
+    if (!userToDelete) return;
+    const userId = userToDelete.id;
     const updated = users.filter((u) => u.id !== userId);
     await saveUsers(updated);
     /* 해당 이용자의 서류 데이터도 함께 삭제 */
@@ -37,6 +45,11 @@ const Home = () => {
     localStorage.setItem('caredoc-documents', JSON.stringify(docs));
     setUsers(updated);
     setDeleteModeId(null);
+    setUserToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setUserToDelete(null);
   };
 
   /* ── 꾹 누르기 (Long Press) 제어 ── */
@@ -112,7 +125,7 @@ const Home = () => {
               </button>
               <button
                 className={styles.deleteUserBtn}
-                onClick={(e) => handleDelete(e, user.id, user.name)}
+                onClick={(e) => handleDeleteClick(e, user)}
                 title="削除"
               >✕</button>
             </div>
@@ -130,6 +143,27 @@ const Home = () => {
         <span className={styles.addIcon}>+</span>
         {t('home.addUser')}
       </button>
+
+      {/* 삭제 확인 모달 */}
+      {userToDelete && (
+        <div className={styles.modalOverlay} onClick={cancelDelete}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <h3 className={styles.modalTitle}>削除の確認</h3>
+            <p className={styles.modalText}>
+              「{userToDelete.name}」を削除しますか？<br/>
+              関連する書類データもすべて削除されます。
+            </p>
+            <div className={styles.modalActions}>
+              <button className={styles.cancelBtn} onClick={cancelDelete}>
+                {t('common.cancel', 'キャンセル')}
+              </button>
+              <button className={styles.confirmBtn} onClick={confirmDelete}>
+                {t('common.delete', '削除')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

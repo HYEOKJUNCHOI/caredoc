@@ -63,6 +63,7 @@
 
 .userCardWrap:hover .deleteUserBtn {
   opacity: 1;
+  pointer-events: auto;
 }
 
 /* 터치 디바이스용 — JS에서 클래스 제어 */
@@ -202,4 +203,91 @@
   justify-content: center;
   font-size: 18px;
   color: var(--text-secondary);
+}
+
+/* --- 모달 (Modal) 스타일 --- */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.modalContent {
+  background: var(--bg-page, #ffffff);
+  border-radius: var(--radius-lg, 12px);
+  padding: 24px;
+  width: 90%;
+  max-width: 340px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.15s ease-out;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.modalTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary, #111111);
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.modalText {
+  font-size: 14px;
+  color: var(--text-secondary, #666666);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.cancelBtn, .confirmBtn {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: var(--radius-md, 8px);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.cancelBtn {
+  background: var(--bg-surface, #f2f2f7);
+  color: var(--text-secondary, #666);
+}
+
+.cancelBtn:hover {
+  background: #e5e5ea;
+}
+
+.confirmBtn {
+  background: #ff3b30;
+  color: #fff;
+}
+
+.confirmBtn:hover {
+  background: #e6352b;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
