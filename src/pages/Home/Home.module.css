@@ -65,6 +65,12 @@
   opacity: 1;
 }
 
+/* 터치 디바이스용 — JS에서 클래스 제어 */
+.userCardWrap.showDelete .deleteUserBtn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* 삭제 버튼 — 호버 시 우측 상단 모서리에 크로스오버 */
 .deleteUserBtn {
   position: absolute;
@@ -83,12 +89,13 @@
   border: none;
   cursor: pointer;
   opacity: 0;
+  pointer-events: none; /* 숨어있을 땐 클릭 방지 */
   transition: opacity 0.15s, transform 0.1s;
   box-shadow: 0 1px 6px rgba(255, 59, 48, 0.6);
   z-index: 2;
 }
 
-.deleteUserBtn:hover {
+.deleteUserBtn:hover, .userCardWrap.showDelete .deleteUserBtn {
   transform: scale(1.15);
 }
 

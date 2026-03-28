@@ -34,9 +34,9 @@ export const removeItem = (key) => {
 export const getUsers = () => getItem('users', []);
 
 /* 이용자 저장 (전체 목록 덮어쓰기) */
-export const saveUsers = (users) => {
+export const saveUsers = async (users) => {
   setItem('users', users);
-  saveToFirestore(getFirebaseUid(), 'users', users);
+  await saveToFirestore(getFirebaseUid(), 'users', users);
 };
 
 /* 현재 선택된 이용자 ID */
@@ -52,12 +52,12 @@ export const getDocument = (userId, docType) => {
 };
 
 /* 특정 이용자의 특정 서류 데이터 저장 */
-export const saveDocument = (userId, docType, data) => {
+export const saveDocument = async (userId, docType, data) => {
   const docs = getItem('documents', {});
   if (!docs[userId]) docs[userId] = {};
   docs[userId][docType] = { ...data, updatedAt: new Date().toISOString() };
   setItem('documents', docs);
-  saveToFirestore(getFirebaseUid(), 'documents', docs);
+  await saveToFirestore(getFirebaseUid(), 'documents', docs);
 };
 
 /* --- 문구 헬퍼 --- */

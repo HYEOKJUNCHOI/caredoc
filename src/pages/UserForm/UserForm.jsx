@@ -12,6 +12,7 @@ const UserForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', manager: '' });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
@@ -19,20 +20,28 @@ const UserForm = () => {
     setError('');
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.name.trim()) {
       setError('이름을 입력해주세요.');
       return;
     }
-    const users = getUsers();
-    const newUser = {
-      id: Date.now().toString(),
-      name: form.name.trim(),
-      manager: form.manager.trim() || '栗須康子',
-      createdAt: new Date().toISOString(),
-    };
-    saveUsers([...users, newUser]);
-    navigate('/');
+    setLoading(true);
+    try {
+      const users = getUsers();
+      const newUser = {
+        id: Date.now().toString(),
+        name: form.name.trim(),
+        manager: form.manager.trim() || '栗須康子',
+        createdAt: new Date().toISOString(),
+      };
+      await saveUsers([...users, newUser]);
+      navigate('/');
+    } catch (e) {
+      console.error('저장 실패:', e);
+      setError('저장에 실패했습니다. 네트워크 연결을 확인해주세요.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,11 +75,11 @@ const UserForm = () => {
       {error && <p className={styles.error}>{error}</p>}
 
       <div className={styles.actions}>
-        <button className={styles.cancelBtn} onClick={() => navigate('/')}>
+        <button className={styles.cancelBtn} onClick={() => navigate('/')} disabled={loading}>
           {t('userForm.cancel')}
         </button>
-        <button className={styles.saveBtn} onClick={handleSave}>
-          {t('userForm.save')}
+        <button className={styles.saveBtn} onClick={handleSave} disabled={loading}>
+          {loading ? '저장 중...' : t('userForm.save')}
         </button>
       </div>
     </div>

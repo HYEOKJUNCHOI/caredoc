@@ -81,7 +81,16 @@ const Preview = () => {
       pageStyle.id = '__print_page__';
       document.head.appendChild(pageStyle);
     }
-    pageStyle.textContent = `@page { size: ${pageCSS}; margin: 0; }`;
+    /* 모바일 인쇄 크기 문제 우회: 마진 0 강제, width fit-content 등 브라우저 맞춤 */
+    pageStyle.textContent = `
+      @page { 
+        size: ${pageCSS}; 
+        margin: 0mm; 
+      }
+      @media print {
+        body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      }
+    `;
     const fitStyle = document.getElementById('__print_fit__');
     if (fitStyle) fitStyle.remove();
     window.print();

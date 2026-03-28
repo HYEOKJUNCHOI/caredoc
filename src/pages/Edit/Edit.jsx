@@ -136,12 +136,12 @@ const Edit = () => {
   };
 
   /* 헤더 수정 저장 — 유저 정보 + 서류 writeDate 업데이트 */
-  const saveInfo = () => {
+  const saveInfo = async () => {
     const users = getUsers();
     const updated = users.map((u) =>
       u.id === userId ? { ...u, name: infoValues.name, manager: infoValues.manager } : u
     );
-    saveUsers(updated);
+    await saveUsers(updated);
     setLocalUser((prev) => ({ ...prev, name: infoValues.name, manager: infoValues.manager }));
     setFormData((prev) => ({ ...prev, writeDate: infoValues.writeDate }));
     setEditingInfo(false);
@@ -155,9 +155,10 @@ const Edit = () => {
   /* 미리보기 이동 전 저장
      - 원본(bilingual): type 키에 저장 (편집 재개용)
      - 스냅샷(현재 언어로 확정): type_preview 키에 저장 (Preview 표시용) */
-  const goPreview = () => {
+  const goPreview = async () => {
     if (userId) {
-      saveDocument(userId, type, formData);
+      /* 저장 중임을 알리는 피드백 (선택 사항) */
+      await saveDocument(userId, type, formData);
 
       /* { ko, ja } 배열 필드를 현재 언어 문자열로 확정 */
       const resolveArray = (arr) =>
@@ -178,7 +179,7 @@ const Edit = () => {
           ...(formData.supportContentItems || []),
         ],
       };
-      saveDocument(userId, type + '_preview', snapshot);
+      await saveDocument(userId, type + '_preview', snapshot);
     }
     navigate(`/preview/${type}`);
   };
