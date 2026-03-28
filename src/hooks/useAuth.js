@@ -55,6 +55,7 @@ export const useAuth = () => {
       });
       /* One Tap 자동 표시 방지 */
       window.google?.accounts.id.cancel();
+      window.google?.accounts.id.disableAutoSelect();
     };
     if (window.google) initGSI();
     else window.addEventListener('load', initGSI);
