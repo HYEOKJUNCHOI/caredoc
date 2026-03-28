@@ -76,8 +76,7 @@ const SAMPLE_DATA = {
 };
 
 const BasicInfoDoc = ({ data, writeDate }) => {
-  const hasMeaningfulData = data && (data.nameKanji || data.birthDate || data.address);
-  const d = hasMeaningfulData ? data : SAMPLE_DATA;
+  const d = data || {};
 
   const date = writeDate || d?.writeDate || '';
 

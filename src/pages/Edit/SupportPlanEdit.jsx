@@ -421,6 +421,7 @@ const SupportPlanEdit = ({ data, onChange }) => {
                 className={styles.input}
                 type="date"
                 lang={i18n.language}
+                placeholder={isJa ? "年-月-日" : "연도-월-일"}
                 value={consentDate}
                 onChange={(e) => onChange('consentDate', e.target.value)}
                 tabIndex={-1}

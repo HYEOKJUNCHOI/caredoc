@@ -225,6 +225,7 @@ const Edit = () => {
                 className={styles.infoInput}
                 type="date"
                 lang={lang}
+                placeholder={lang === 'ja' ? '年-月-日' : '연도-월-일'}
                 value={infoValues.writeDate}
                 onChange={(e) => setInfoValues((p) => ({ ...p, writeDate: e.target.value }))}
                 onFocus={(e) => { try { e.target.showPicker(); } catch (_) {} }}

@@ -314,6 +314,31 @@
   background: #F0FFF4;
 }
 
+/* ── Date Input Placeholder 강제 (WebKit/Blink) ── */
+/* 값이 비어있을 때 브라우저 기본 placeholder 텍스트(연도-월-일)를 투명하게 숨김 */
+input[type="date"]:invalid::-webkit-datetime-edit {
+  color: transparent !important;
+}
+
+/* 값이 비어있고 포커스가 없을 때 attr(placeholder)로 커스텀 텍스트 표시 */
+.input[type="date"]:invalid::before {
+  content: attr(placeholder);
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa; /* var(--text-tertiary) 와 유사한 색상 */
+  pointer-events: none;
+  width: calc(100% - 30px);
+  display: block;
+}
+
+/* 값이 입력되거나 포커스되면 커스텀 placeholder 숨김 */
+.input[type="date"]:focus::before,
+.input[type="date"]:valid::before {
+  display: none !important;
+}
+
 .inputSmall {
   width: 68px;
   padding: 8px 10px;
