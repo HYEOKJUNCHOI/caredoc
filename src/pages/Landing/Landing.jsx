@@ -1,7 +1,7 @@
 /* 랜딩 페이지 — 미로그인 시 표시 */
 import styles from './Landing.module.css';
 
-const Landing = ({ onLogin }) => (
+const Landing = ({ onLogin, loginLoading, loginError }) => (
   <div className={styles.wrap}>
 
     {/* 로고 */}
@@ -28,10 +28,12 @@ const Landing = ({ onLogin }) => (
     <p className={styles.catchCopy}>もっとスマートに、もっとラクに。</p>
 
     {/* 구글 로그인 버튼 */}
-    <button className={styles.loginBtn} onClick={onLogin}>
+    <button className={styles.loginBtn} onClick={onLogin} disabled={loginLoading}>
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className={styles.googleIcon} />
-      Googleアカウントでログイン
+      {loginLoading ? 'ログイン中...' : 'Googleアカウントでログイン'}
     </button>
+
+    {loginError && <p className={styles.errorMsg}>{loginError}</p>}
 
     <p className={styles.note}>ログインするとデータがクラウドに保存され<br />どの端末からでもアクセスできます。</p>
 

@@ -15,7 +15,7 @@ import Admin from './pages/Admin/Admin';
 import UserForm from './pages/UserForm/UserForm';
 
 function App() {
-  const { user, loading, login } = useAuth();
+  const { user, loading, login, loginLoading, loginError } = useAuth();
 
   /* 인증 상태 로딩 중 */
   if (loading) return (
@@ -25,7 +25,7 @@ function App() {
   );
 
   /* 미로그인 → 랜딩 페이지 */
-  if (!user) return <Landing onLogin={login} />;
+  if (!user) return <Landing onLogin={login} loginLoading={loginLoading} loginError={loginError} />;
 
   /* 로그인 → 앱 */
   return (
