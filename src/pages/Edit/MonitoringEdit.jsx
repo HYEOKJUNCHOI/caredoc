@@ -135,11 +135,27 @@ const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
 
   /* 테스트 더미데이터 */
   const fillTestData = () => {
+    const goalTexts = [
+      'けがをしないように気をつけて生活する',
+      '体調の変化に気をつけて生活する',
+      'おだやかに生活をする',
+    ];
+    const achieveVals = ['A', 'B', 'A'];
+    const satTexts = [
+      '日常生活において大きな問題なく過ごせている。本人も前向きに取り組んでいる。',
+      '体調の変化に都度対応し、安定した状態を維持できている。',
+      '穏やかに日々を過ごせており、表情も明るい。',
+    ];
+    const contentTexts = [
+      '引き続き夜間の見守りと声かけ支援を継続する。',
+      '服薬管理・受診同行支援を継続する。',
+      'レクリエーション参加を促し、生活の質向上を図る。',
+    ];
     const testRows = Array.from({ length: GOAL_COUNT }, (_, i) => ({
-      goalText: `短期目標${i + 1}：自立した生活を維持する`,
-      achieveA: ['A', 'B', 'C'][i],
-      satisfactionTexts: ['概ね達成できている', '本人の意欲がある'],
-      customItems: ['声かけ支援を実施'],
+      goalText: goalTexts[i],
+      achieve: achieveVals[i],
+      satisfactionText: satTexts[i],
+      contentChange: contentTexts[i],
     }));
     onChange('year', '2025');
     onChange('month', '3');
