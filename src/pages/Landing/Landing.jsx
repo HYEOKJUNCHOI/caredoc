@@ -25,7 +25,7 @@ const Landing = ({ onLogin }) => (
       </div>
     </div>
 
-    <p className={styles.catchCopy}>必要な書類を、必要なときに。</p>
+    <p className={styles.catchCopy}>もっとスマートに、もっとラクに。</p>
 
     {/* 구글 로그인 버튼 */}
     <button className={styles.loginBtn} onClick={onLogin}>
