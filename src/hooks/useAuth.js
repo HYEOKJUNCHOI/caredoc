@@ -40,6 +40,7 @@ export const useAuth = () => {
         } catch (e) { console.warn('Firestore 로드 실패:', e.message); }
       } else {
         localStorage.removeItem(PREFIX + 'firebaseUid');
+        setLoginLoading(false);
       }
       setUser(firebaseUser);
       setLoading(false);

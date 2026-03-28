@@ -15,6 +15,9 @@ const Landing = ({ loginLoading, loginError }) => {
           width: 280,
           logo_alignment: 'left',
         });
+        /* renderButton 후 One Tap 자동 표시 차단 */
+        window.google.accounts.id.cancel();
+        window.google.accounts.id.disableAutoSelect();
       }
     };
     if (window.google) renderBtn();
