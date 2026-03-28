@@ -52,6 +52,22 @@
 
 .flowIcon {
   font-size: 32px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.officeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  font-style: italic;
 }
 
 .flowLabel {
@@ -109,6 +125,10 @@
 .googleIcon {
   width: 20px;
   height: 20px;
+}
+
+.googleBtnWrap {
+  margin-top: 8px;
 }
 
 .note {
