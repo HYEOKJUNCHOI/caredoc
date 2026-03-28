@@ -780,7 +780,7 @@
 .spBox {
   border: 1px solid #c0c0c0;
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible; /* 팝업(z-index)이 잘리지 않도록 visible로 변경 */
 }
 
 .spBoxHeader {
@@ -793,6 +793,7 @@
   font-size: 13px;
   font-weight: 600;
   color: #333;
+  border-radius: 3px 3px 0 0; /* overflow: visible로 인해 배경 튀어나오는 것 방지 */
 }
 
 .spBoxNum {
