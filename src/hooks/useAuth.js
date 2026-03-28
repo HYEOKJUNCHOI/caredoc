@@ -32,17 +32,27 @@ export const useAuth = () => {
     return unsub;
   }, []);
 
-  const login = () => {
+  const login = async () => {
     setLoginError(null);
     setLoginLoading(true);
     googleProvider.setCustomParameters({ prompt: 'select_account' });
-    /* COOP 헤더로 팝업 통신이 차단되어도 onAuthStateChanged가 처리 */
-    signInWithPopup(auth, googleProvider).catch((e) => {
+    try {
+      /* 7초 안에 팝업 결과 못 받으면 auth.currentUser 직접 확인 (COOP 우회) */
+      await Promise.race([
+        signInWithPopup(auth, googleProvider),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('coop-timeout')), 7000)),
+      ]);
+    } catch (e) {
+      if (e.message === 'coop-timeout') {
+        /* COOP로 팝업 통신 차단된 경우 — 페이지 새로고침으로 auth 상태 반영 */
+        window.location.reload();
+        return;
+      }
       if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
         setLoginError(`エラー: ${e.code}`);
+        setLoginLoading(false);
       }
-      setLoginLoading(false);
-    });
+    }
   };
 
   const logout = () => signOut(auth);
