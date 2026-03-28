@@ -72,9 +72,9 @@
       "planChange": "계획 변경 여부",
       "planChangeYes": "유",
       "planChangeNo": "무",
-      "achieveA": "A　매우 만족",
-      "achieveB": "B　만족",
-      "achieveC": "C　불만족"
+      "achieveA": "A　よくできた",
+      "achieveB": "B　まあまあできた",
+      "achieveC": "C　できなかった"
     },
 
     "meeting": {

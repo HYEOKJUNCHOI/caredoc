@@ -109,10 +109,11 @@ const MonitoringDoc = ({ data, user, writeDate }) => {
         </tbody>
       </table>
 
-      {/* 하단 — 계획변경 + 의견란 */}
+      {/* 하단 — 2행 구조 */}
       <div className={a4.monFooter}>
-        <div className={a4.monFooterLabel}>計画作成会議の意見欄</div>
-        <div className={a4.monFooterBody}>
+        {/* 1행: 計画作成会議での所見 | 支援計画の変更 有・無 */}
+        <div className={a4.monFooterRow}>
+          <div className={a4.monFooterRowLabel}>計画作成会議での所見</div>
           <div className={a4.monPlanRow}>
             <span style={{ fontWeight: 'bold', marginRight: 8 }}>支援計画の変更</span>
             {data?.planChanged === true ? (
@@ -127,7 +128,11 @@ const MonitoringDoc = ({ data, user, writeDate }) => {
               </>
             )}
           </div>
-          <div style={{ flex: 1 }} />
+        </div>
+        {/* 2행: モニタリング・支援 | 의견 텍스트 */}
+        <div className={a4.monFooterRow}>
+          <div className={a4.monFooterRowLabel}>モニタリング・支援</div>
+          <div className={a4.monFooterContent}>{data?.meetingOpinion || ''}</div>
         </div>
       </div>
 

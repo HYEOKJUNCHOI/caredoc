@@ -106,22 +106,28 @@ button:active:not(:disabled) {
 }
 
 /* 인쇄 방향 강제 가로 — CSS Modules 스코프 밖에서도 적용되도록 전역에 선언 */
-@page { size: 297mm 210mm; margin: 0; }
-
 @media print {
-  /* 인쇄 시 #root 너비/높이 제한 해제 — A4 가로(1122px) 그대로 출력 */
+  /* body/html: 100svh min-height가 인쇄 뷰포트 높이로 계산되어 빈 2페이지 생성
+     → height: auto + overflow: hidden 으로 콘텐츠 높이만 차지하도록 */
+  html, body {
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+  /* #root: flex + min-height:100svh → display:block + height:auto 로 교체 */
   #root {
+    display: block !important;
     max-width: none !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
     border: none !important;
-    min-height: 0 !important;
-  }
-  body {
-    min-height: 0 !important;
-  }
-  /* A4 가로 페이지 크기 명시 */
-  .page {
-    width: 297mm !important;
-    height: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
   }
 }
 

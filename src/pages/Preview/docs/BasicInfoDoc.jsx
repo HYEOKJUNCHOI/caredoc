@@ -82,7 +82,7 @@ const BasicInfoDoc = ({ data, writeDate }) => {
   const date = writeDate || d?.writeDate || '';
 
   return (
-    <div className={`${s.page} page`} data-a4-page>
+    <div className={`${s.page} page basic-info-page`} data-a4-page>
 
       {/* ── 헤더: A面(좌측) 위에만 표시 ── */}
       <div style={{ display: 'flex' }}>

@@ -27,8 +27,40 @@ const oneTimeKey = (field) =>
 const SupportPlanEdit = ({ data, onChange }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const isJa = lang === 'ja';
   const needsRef    = useRef(null);
   const longTermRef = useRef(null);
+
+  /* 테스트 데이터 토글 상태 */
+  const [testMode,    setTestMode]    = useState(false);
+  const [testLoading, setTestLoading] = useState(false);
+
+  const fillTestData = () => {
+    onChange('needs',        '安心して生活できる環境の中で、健康を維持しながら穏やかに暮らしたい。体調の変化があった時に適切な支援を受けたい。');
+    onChange('longTermGoal', '心身の健康を維持しながら、グループホームでの安定した生活を継続できるよう支援する。');
+    onChange('shortTermGoals', [
+      { ko: '다치지 않도록 조심하며 생활한다', ja: 'けがをしないように気をつけて生活する' },
+      { ko: '건강 상태 변화에 주의하며 생활한다', ja: '体調の変化に気をつけて生活する' },
+      { ko: '평온하게 생활한다', ja: 'おだやかに生活をする' },
+    ]);
+    onChange('supportContent', [
+      { ko: '야간 정시 안전 확인 실시 (에어컨·침구 조정 등)', ja: '夜間定時見守りを行います（エアコン、寝具の調整等）' },
+      { ko: '병원 연락 및 조정 지원', ja: '病院との連携や調整の支援' },
+      { ko: '복약 관리 지원', ja: '服薬管理の支援' },
+    ]);
+    onChange('shortTermGoalItems', '');
+    onChange('supportContentItems', '');
+    onChange('specialNotes', [true, true, true, true]);
+    onChange('consentDate', getTodayString());
+    onChange('consentSign', '');
+  };
+
+  const clearTestData = () => {
+    ['needs', 'longTermGoal', 'shortTermGoalItems', 'supportContentItems', 'consentSign'].forEach(f => onChange(f, ''));
+    onChange('shortTermGoals', []);
+    onChange('supportContent', []);
+    onChange('specialNotes', [true, true, true, true]);
+  };
 
   /* refreshKey: 문구 추가 후 목록 재계산 트리거 */
   const [refreshKey, setRefreshKey] = useState(0);
@@ -206,6 +238,39 @@ const SupportPlanEdit = ({ data, onChange }) => {
 
   return (
     <div className={styles.formBody} style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '12px 20px 80px' }}>
+
+      {/* 테스트 데이터 로딩 오버레이 */}
+      {testLoading && (
+        <div className={styles.testLoadingOverlay}>
+          <div className={styles.testLoadingSpinner} />
+          <span>{isJa ? 'データを入力中...' : '데이터 입력 중...'}</span>
+        </div>
+      )}
+
+      {/* 테스트 데이터 슬라이드 토글 */}
+      <label className={styles.testToggleWrap}>
+        <span className={styles.testToggleSwitch}>
+          <input
+            type="checkbox"
+            tabIndex={-1}
+            checked={testMode}
+            onChange={(e) => {
+              const next = e.target.checked;
+              setTestLoading(true);
+              setTimeout(() => {
+                if (next) fillTestData();
+                else clearTestData();
+                setTestMode(next);
+                setTestLoading(false);
+              }, 700);
+            }}
+          />
+          <span className={styles.testToggleTrack} />
+        </span>
+        {testMode
+          ? (isJa ? 'テストモード中' : '테스트 모드')
+          : (isJa ? 'テストデータを入力' : '테스트 데이터 입력')}
+      </label>
 
       {/* 섹션 1: 본인 의향·니즈 */}
       <div className={styles.spBox} data-qa="edit-section-needs">

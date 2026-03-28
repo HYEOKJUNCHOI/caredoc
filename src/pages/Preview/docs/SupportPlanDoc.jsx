@@ -95,7 +95,7 @@ const SupportPlanDoc = ({ data, user, writeDate }) => {
             </tr>
           </thead>
           <tbody>
-            <tr style={{ height: '120px' }}>
+            <tr style={{ height: '100%' }}>
               <td className={a4.goalCol}>{goalText}</td>
               <td className={a4.supportCol}>{supportText}</td>
               <td className={a4.periodCell}>①〜②　3ヵ月</td>

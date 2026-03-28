@@ -7,7 +7,7 @@
 .page {
   width: 1587px;
   height: 1123px;
-  padding: 20px 30px;
+  padding: 15px 25px;  /* 20→15 / 30→25 : 내부 높이 10px 확보 */
   background: #fff;
   color: #000;
   font-family: 'MS Mincho', 'Yu Mincho', 'Hiragino Mincho Pro', 'Pretendard JP', serif;
@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid #000;
+  /* border는 내부 table이 담당 (border-collapse 활용) */
 }
 
 .rightCol {
@@ -107,7 +107,6 @@
 }
 
 .bloodLabel {
-  border-left: 0.5px solid #000;
   border-right: 0.5px solid #000;
   background: #efefef;
   padding: 2px 6px;
@@ -283,7 +282,10 @@
 
 .medTable th {
   background: #efefef;
-  border: 0.5px solid #000;
+  border-top: none;
+  border-left: none;
+  border-right: 0.5px solid #000;
+  border-bottom: 0.5px solid #000;
   padding: 2px 4px;
   font-size: 7.5pt;
   font-weight: bold;
@@ -292,10 +294,37 @@
 }
 
 .medTable td {
-  border: 0.5px solid #000;
+  border-top: none;
+  border-left: none;
+  border-right: 0.5px solid #000;
+  border-bottom: 0.5px solid #000;
   padding: 2px 5px;
   height: 20px;
   vertical-align: middle;
+}
+
+/* 마지막 열 border-right 제거 — leftCol/rightCol border(1px)와 겹쳐 1.5px로 보이는 것 방지 */
+.medTable th:last-child,
+.medTable td:last-child {
+  border-right: none;
+}
+
+/* 마지막 행 border-bottom 제거 — 외부 셀 border(0.5px)와 겹쳐 굵게 보이는 것 방지 */
+.medTable tr:last-child td,
+.medTable tr:last-child th {
+  border-bottom: none;
+}
+
+/* 受給者証 통합 테이블 — rightCol border(1px)와 겹침 방지
+   첫 행 border-top: rightCol 상단 1px와 겹침 → 제거
+   마지막 열 border-right: rightCol 우측 1px와 겹침 → 제거 */
+.certTable tr:first-child td,
+.certTable tr:first-child th {
+  border-top: none;
+}
+.certTable th:last-child,
+.certTable td:last-child {
+  border-right: none;
 }
 
 /* ── 긴 세로 라벨 (letter-spacing 제거로 압축) ── */
@@ -326,17 +355,42 @@
 }
 
 /* ── 인쇄 ── */
-@page { size: A3 landscape; margin: 0; }
-
 @media print {
-  .page {
+  @page {
+    size: 420mm 297mm;
+    margin: 0;
+  }
+
+  html, body {
     width: 420mm;
     height: 297mm;
-    padding: 5mm;
-    page-break-after: always;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 전체를 95%로 축소 — 프린터 비인쇄 영역(좌·하단 잘림) 방지
+     transform-origin: center center → 사방에 균등 여백 확보 */
+  .page {
+    width: 420mm !important;
+    height: 297mm !important;
+    padding: 4mm 6.5mm !important;
+    transform: scale(0.94) !important;
+    transform-origin: center center !important;
     box-shadow: none;
     overflow: hidden;
-    transform: scale(0.95);
-    transform-origin: top left;
+    page-break-after: avoid;
+  }
+
+  :global(.basic-info-page) {
+    width: 420mm !important;
+    height: 297mm !important;
+    overflow: hidden !important;
+    page-break-after: avoid;
+  }
+
+  /* 배경색·이미지 인쇄 강제 */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

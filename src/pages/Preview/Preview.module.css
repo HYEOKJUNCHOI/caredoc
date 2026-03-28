@@ -42,6 +42,15 @@
   transform: translateY(-1px);
 }
 
+/* 인쇄 배율 안내 문구 */
+.printHint {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+  line-height: 1.4;
+  display: block;
+}
+
 /* PDF 버튼 */
 .pdfBtn {
   flex: 1;
@@ -425,21 +434,43 @@
 }
 
 @media print {
-  /* 인쇄 시 버튼 바 숨김, A4 원본 크기 그대로 출력 */
+  /* UI 요소 숨김 */
   .actions { display: none !important; }
-  .container { padding-bottom: 0 !important; }
+
+  /* 모든 래퍼: height:auto + overflow:hidden → 콘텐츠(a4Page) 높이만 차지 */
+  .container {
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
   .a4Viewport {
+    height: auto !important;
+    min-height: 0 !important;
     background: none !important;
     padding: 0 !important;
-    min-height: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
   }
+  /* ScaleOuter: inline height 인라인 스타일 무력화, 라인박스 여백 제거 */
   .a4ScaleOuter {
     height: auto !important;
-    overflow: visible !important;
-    margin-bottom: 0 !important; /* 전체 인쇄 시 페이지 간 여백 제거 */
+    width: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
   }
+  /* ScaleInner: inline-block → block (라인박스 여분 높이 제거) */
   .a4ScaleInner {
+    display: block !important;
     transform: none !important;
-    width: auto !important;
+    height: auto !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }

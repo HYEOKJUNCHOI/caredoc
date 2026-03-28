@@ -214,6 +214,17 @@ const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
         </div>
       </div>
 
+      {/* モニタリング・支援 의견 */}
+      <div className={styles.spBox} data-qa="edit-monitoring-opinion">
+        <div className={styles.spBoxHeader}>モニタリング・支援</div>
+        <div className={styles.spBoxBody}>
+          <textarea className={styles.textarea} rows={3}
+            placeholder={t('edit.customPlaceholder')}
+            value={data.meetingOpinion || ''}
+            onChange={(e) => onChange('meetingOpinion', e.target.value)} />
+        </div>
+      </div>
+
     </div>
   );
 };

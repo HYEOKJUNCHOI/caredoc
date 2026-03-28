@@ -116,13 +116,13 @@ const GenogramSVG = ({ members = [], selfGender = '女性', compact = false }) =
       viewBox={`0 0 ${W} ${svgH}`}
       preserveAspectRatio="xMidYMid meet"
       style={{
-        /* compact(A4): 컨테이너 높이 100% + 너비 자동 → 비율 유지하며 박스를 채움
-           normal(편집): 컨테이너 너비 100%로 채움 */
-        height:   '100%',
-        width:    compact ? 'auto' : '100%',
-        maxWidth: '100%',
-        display:  'block',
-        overflow: 'visible',
+        /* compact(A4): 컨테이너를 width/height 100%로 채우고 meet으로 축소
+           → 멤버가 늘어나도 컨테이너 크기 고정, SVG 비율 유지하며 자동 축소
+           normal(편집): 너비 100%로 채움 */
+        height:  '100%',
+        width:   '100%',
+        display: 'block',
+        overflow: compact ? 'hidden' : 'visible',
       }}
     >
 
