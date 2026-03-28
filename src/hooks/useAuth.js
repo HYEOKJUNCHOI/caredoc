@@ -1,6 +1,6 @@
 /* Google OAuth2 인증 훅 */
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase';
 import { loadFromFirestore } from '../lib/firestoreSync';
 
@@ -13,6 +13,18 @@ export const useAuth = () => {
   const [loginError, setLoginError]     = useState(null);
 
   useEffect(() => {
+    /* 리디렉션 후 돌아왔을 때 결과 처리 */
+    getRedirectResult(auth).then(async (result) => {
+      if (result?.user) {
+        localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(result.user.uid));
+        await loadFromFirestore(result.user.uid);
+      }
+    }).catch((e) => {
+      if (e.code !== 'auth/cancelled-popup-request') {
+        setLoginError(`エラー: ${e.code}`);
+      }
+    });
+
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(firebaseUser.uid));
@@ -26,26 +38,11 @@ export const useAuth = () => {
     return unsub;
   }, []);
 
-  const login = async () => {
+  const login = () => {
     setLoginError(null);
     setLoginLoading(true);
-    try {
-      googleProvider.setCustomParameters({ prompt: 'select_account' });
-      const result = await signInWithPopup(auth, googleProvider);
-      /* 팝업 결과를 명시적으로 처리해 첫 시도에서도 상태 반영 */
-      if (result?.user) {
-        localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(result.user.uid));
-        await loadFromFirestore(result.user.uid);
-        setUser(result.user);
-      }
-    } catch (e) {
-      /* popup 차단 등 에러 */
-      if (e.code !== 'auth/popup-closed-by-user') {
-        setLoginError(`エラー: ${e.code}`);
-      }
-    } finally {
-      setLoginLoading(false);
-    }
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
+    signInWithRedirect(auth, googleProvider);
   };
 
   const logout = () => signOut(auth);
