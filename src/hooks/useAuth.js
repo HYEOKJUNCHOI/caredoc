@@ -50,6 +50,8 @@ export const useAuth = () => {
         auto_select: false,
         cancel_on_tap_outside: true,
       });
+      /* One Tap 자동 표시 방지 */
+      window.google?.accounts.id.cancel();
     };
     if (window.google) initGSI();
     else window.addEventListener('load', initGSI);
