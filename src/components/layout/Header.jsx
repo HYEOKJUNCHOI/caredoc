@@ -2,6 +2,7 @@
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../hooks/useAuth';
 import LanguageToggle from '../common/LanguageToggle';
 import styles from './Header.module.css';
 
@@ -16,6 +17,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
+  const { logout } = useAuth();
   const isHome = location.pathname === '/';
 
   /* /edit/:type 또는 /preview/:type 경로에서 서류명 파싱 */
@@ -49,6 +51,7 @@ const Header = () => {
 
       <div className={styles.right}>
         <LanguageToggle />
+        <button className={styles.logoutBtn} onClick={logout} tabIndex={-1}>ログアウト</button>
       </div>
     </header>
   );

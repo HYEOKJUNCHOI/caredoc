@@ -1,6 +1,10 @@
-/* LocalStorage 유틸리티
-   - CareDoc의 모든 데이터는 localStorage에 저장
-   - key prefix: 'caredoc-' 로 네임스페이스 충돌 방지 */
+/* LocalStorage 유틸리티 + Firestore 동기화
+   - 읽기/쓰기는 localStorage (동기, 빠름)
+   - 쓰기 시 Firestore에도 병렬 기록 (비동기, 클라우드 백업) */
+import { saveToFirestore } from '../lib/firestoreSync';
+const getFirebaseUid = () => {
+  try { return JSON.parse(localStorage.getItem('caredoc-firebaseUid')); } catch { return null; }
+};
 
 const PREFIX = 'caredoc-';
 
@@ -30,7 +34,10 @@ export const removeItem = (key) => {
 export const getUsers = () => getItem('users', []);
 
 /* 이용자 저장 (전체 목록 덮어쓰기) */
-export const saveUsers = (users) => setItem('users', users);
+export const saveUsers = (users) => {
+  setItem('users', users);
+  saveToFirestore(getFirebaseUid(), 'users', users);
+};
 
 /* 현재 선택된 이용자 ID */
 export const getCurrentUserId = () => getItem('currentUserId', null);
@@ -50,6 +57,7 @@ export const saveDocument = (userId, docType, data) => {
   if (!docs[userId]) docs[userId] = {};
   docs[userId][docType] = { ...data, updatedAt: new Date().toISOString() };
   setItem('documents', docs);
+  saveToFirestore(getFirebaseUid(), 'documents', docs);
 };
 
 /* --- 문구 헬퍼 --- */
