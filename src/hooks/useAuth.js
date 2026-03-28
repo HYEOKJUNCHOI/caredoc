@@ -16,7 +16,7 @@ export const useAuth = () => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(firebaseUser.uid));
-        await loadFromFirestore(firebaseUser.uid);
+        try { await loadFromFirestore(firebaseUser.uid); } catch (e) { console.warn('Firestore 로드 실패:', e); }
       } else {
         localStorage.removeItem(PREFIX + 'firebaseUid');
       }
