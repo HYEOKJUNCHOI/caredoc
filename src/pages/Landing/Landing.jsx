@@ -1,29 +1,10 @@
-/* 랜딩 페이지 — GSI 버튼으로 Google 로그인 */
-import { useEffect, useRef } from 'react';
+/* 랜딩 페이지 — Google 로그인 */
 import styles from './Landing.module.css';
 
 const Landing = ({ loginLoading, loginError }) => {
-  const googleBtnRef = useRef(null);
-
-  useEffect(() => {
-    const renderBtn = () => {
-      if (window.google?.accounts?.id && googleBtnRef.current) {
-        window.google.accounts.id.renderButton(googleBtnRef.current, {
-          type: 'standard',
-          size: 'large',
-          text: 'signin_with',
-          width: 280,
-          logo_alignment: 'left',
-        });
-        /* renderButton 후 One Tap 자동 표시 차단 */
-        window.google.accounts.id.cancel();
-        window.google.accounts.id.disableAutoSelect();
-      }
-    };
-    if (window.google) renderBtn();
-    else window.addEventListener('load', renderBtn);
-    return () => window.removeEventListener('load', renderBtn);
-  }, []);
+  const handleLogin = () => {
+    window.google?.accounts.id.prompt();
+  };
 
   return (
     <div className={styles.wrap}>
@@ -54,11 +35,11 @@ const Landing = ({ loginLoading, loginError }) => {
 
       <p className={styles.catchCopy}>もっとスマートに、もっとラクに。</p>
 
-      {/* Google GSI 버튼 / 로딩 */}
-      {loginLoading
-        ? <div className={styles.loginBtn}>ログイン中...</div>
-        : <div ref={googleBtnRef} className={styles.googleBtnWrap} />
-      }
+      {/* 구글 로그인 버튼 */}
+      <button className={styles.loginBtn} onClick={handleLogin} disabled={loginLoading}>
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className={styles.googleIcon} />
+        {loginLoading ? 'ログイン中...' : 'Googleアカウントでログイン'}
+      </button>
 
       {loginError && <p className={styles.errorMsg}>{loginError}</p>}
 
