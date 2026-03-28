@@ -22,7 +22,10 @@ const MeetingDoc = ({ data, user, writeDate }) => {
   /* 참가자: 이용자 이름 + 담당자 이름 + 추가 인원 */
   const userId = getCurrentUserId();
   const basicInfo = getDocument(userId, 'basicInfo');
-  const participantParts = [basicInfo?.nameKanji, user?.name, data?.extraParticipants].filter(Boolean);
+  const extraList = Array.isArray(data?.extraParticipantList)
+    ? data.extraParticipantList
+    : (data?.extraParticipants ? [data.extraParticipants] : []);
+  const participantParts = [basicInfo?.nameKanji, user?.name, ...extraList].filter(Boolean);
   /* 기존 data.participants 도 폴백으로 지원 */
   const participantsText = participantParts.length > 0
     ? participantParts.join('・')

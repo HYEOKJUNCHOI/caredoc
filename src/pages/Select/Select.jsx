@@ -39,14 +39,6 @@ const Select = () => {
         ))}
       </div>
 
-      {/* 전체 인쇄 버튼 */}
-      <button
-        className={styles.printAllBtn}
-        onClick={() => navigate('/preview/all')}
-        data-qa="select-print-all"
-      >
-        🖨 {t('select.printAll')}
-      </button>
     </div>
   );
 };

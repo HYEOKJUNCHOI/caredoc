@@ -14,11 +14,53 @@ const GOAL_COUNT = 2;
 const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const isJa = lang === 'ja';
+
+  /* 테스트 데이터 토글 상태 */
+  const [testMode,    setTestMode]    = useState(false);
+  const [testLoading, setTestLoading] = useState(false);
+
+  const fillTestData = () => {
+    onChange('extraParticipantList', ['相談支援専門員　田中一郎', '家族（母）']);
+    onChange('rows', [
+      {
+        goalText:     'けがをしないように気をつけて生活する',
+        opinionTexts: ['頑張っています'],
+        opinionCustom:'特に大きな問題なく過ごせている。',
+        review:       '日常的な安全確認を継続する。夜間の見守りも引き続き実施していく。',
+        customItems:  [],
+      },
+      {
+        goalText:     '体調の変化に気をつけて生活する',
+        opinionTexts: ['大丈夫'],
+        opinionCustom:'服薬も継続できており、体調は安定している。',
+        review:       '通院同行を月1回継続。処方内容に変更があった場合は速やかに家族へ連絡する。',
+        customItems:  [],
+      },
+    ]);
+    onChange('futureTask', '引き続き現在の支援計画を継続しながら、本人の状態変化に応じて柔軟に対応していく。次回モニタリングは3ヶ月後を予定。');
+  };
+
+  const clearTestData = () => {
+    onChange('extraParticipantList', []);
+    onChange('rows', Array.from({ length: GOAL_COUNT }, () => ({})));
+    onChange('futureTask', '');
+  };
 
   const [refreshKey, setRefreshKey] = useState(0);
   const [addingRow, setAddingRow]   = useState(null);
   const [addText, setAddText]       = useState('');
   const addInputRef = useRef(null);
+
+  /* 참가자 칩 상태 */
+  const [addingParticipant, setAddingParticipant] = useState(false);
+  const [participantText, setParticipantText]     = useState('');
+  const participantInputRef = useRef(null);
+
+  /* 고정 참가자 편집 상태 */
+  const [editingFixed, setEditingFixed]   = useState(null); // index
+  const [editFixedText, setEditFixedText] = useState('');
+  const editFixedRef = useRef(null);
 
   /* 1회용 항목 상태 */
   const [oneTimeRow, setOneTimeRow]   = useState(null);
@@ -84,8 +126,47 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   }, [addingRow]);
 
   useEffect(() => {
+    if (addingParticipant) setTimeout(() => participantInputRef.current?.focus(), 30);
+  }, [addingParticipant]);
+
+  useEffect(() => {
+    if (editingFixed !== null) setTimeout(() => editFixedRef.current?.focus(), 30);
+  }, [editingFixed]);
+
+  useEffect(() => {
     if (oneTimeRow !== null) setTimeout(() => oneTimeRef.current?.focus(), 30);
   }, [oneTimeRow]);
+
+  /* ── 고정 참가자 편집 핸들러 ── */
+  const startEditFixed = (idx, currentName) => {
+    setEditingFixed(idx);
+    /* 이미 오버라이드가 있으면 그 값으로, 없으면 원본값으로 */
+    const overrides = data.fixedParticipantOverrides || [];
+    setEditFixedText(overrides[idx] ?? currentName);
+  };
+
+  const saveFixedEdit = (idx) => {
+    const text = editFixedText.trim();
+    const overrides = [...(data.fixedParticipantOverrides || [])];
+    overrides[idx] = text || null; // 비우면 null → 원본 복원
+    onChange('fixedParticipantOverrides', overrides);
+    setEditingFixed(null);
+  };
+
+  /* ── 참가자 칩 핸들러 ── */
+  const confirmParticipant = () => {
+    const text = participantText.trim();
+    if (!text) { setAddingParticipant(false); return; }
+    const list = data.extraParticipantList || [];
+    onChange('extraParticipantList', [...list, text]);
+    setParticipantText('');
+    setAddingParticipant(false);
+  };
+
+  const removeParticipant = (idx) => {
+    const list = data.extraParticipantList || [];
+    onChange('extraParticipantList', list.filter((_, i) => i !== idx));
+  };
 
   /* ── 1회용 항목 핸들러 ── */
   const addOneTimeItem = (rowIdx) => {
@@ -128,27 +209,119 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   const linkedGoals = supportPlanData?.shortTermGoals || [];
   const visibleSat  = satisfaction.filter(item => item[lang]);
 
-  /* 고정 참가자: 이용자 + 담당자 */
+  /* 고정 참가자: 이용자 + 담당자 (오버라이드 적용) */
   const userId = getCurrentUserId();
   const currentUser = getCurrentUser();
   const basicInfoData = getDocument(userId, 'basicInfo');
-  const fixedParticipants = [basicInfoData?.nameKanji, currentUser?.name].filter(Boolean);
+  const fixedDefaults    = [basicInfoData?.nameKanji, currentUser?.name];
+  const fixedOverrides   = data.fixedParticipantOverrides || [];
+  /* 원본이 없으면 칩 자체를 숨기지 않고, 오버라이드 값 or 원본값 표示 */
+  const fixedParticipants = fixedDefaults
+    .map((def, i) => fixedOverrides[i] ?? def)
+    .map((val, i) => ({ display: val, hasDefault: Boolean(fixedDefaults[i]) }))
+    .filter(({ display, hasDefault }) => display || hasDefault);
 
   return (
     <div className={styles.formBody} style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '12px 20px 80px' }}>
 
+      {/* 테스트 데이터 로딩 오버레이 */}
+      {testLoading && (
+        <div className={styles.testLoadingOverlay}>
+          <div className={styles.testLoadingSpinner} />
+          <span>{isJa ? 'データを入力中...' : '데이터 입력 중...'}</span>
+        </div>
+      )}
+
+      {/* 테스트 데이터 슬라이드 토글 */}
+      <label className={styles.testToggleWrap}>
+        <span className={styles.testToggleSwitch}>
+          <input
+            type="checkbox"
+            tabIndex={-1}
+            checked={testMode}
+            onChange={(e) => {
+              const next = e.target.checked;
+              setTestLoading(true);
+              setTimeout(() => {
+                if (next) fillTestData();
+                else clearTestData();
+                setTestMode(next);
+                setTestLoading(false);
+              }, 700);
+            }}
+          />
+          <span className={styles.testToggleTrack} />
+        </span>
+        {testMode
+          ? (isJa ? 'テストモード中' : '테스트 모드')
+          : (isJa ? 'テストデータを入力' : '테스트 데이터 입력')}
+      </label>
+
       {/* 참가자 */}
       <div className={styles.spBox} data-qa="edit-meeting-participants">
         <div className={styles.spBoxHeader}>{t('doc.meeting.participants')}</div>
-        <div className={styles.spBoxBody} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
-          {fixedParticipants.map((name, i) => (
-            <span key={i} className={styles.fixedChip}>{name}</span>
-          ))}
-          <input className={styles.input} type="text"
-            style={{ flex: 1, minWidth: 160 }}
-            placeholder={lang === 'ko' ? '추가 참가자 입력...' : '追加参加者を入力...'}
-            value={data.extraParticipants || ''}
-            onChange={(e) => onChange('extraParticipants', e.target.value)} />
+        <div className={styles.spBoxBody}>
+          {/* 칩 행 + floating 인풋은 항상 칩 옆에 붙어서 표시 */}
+          <div className={styles.participantChipArea}>
+            {/* 고정 칩 — 항상 보임, 클릭 시 해당 칩 오른쪽에 floating 인풋 */}
+            {fixedParticipants.map(({ display }, i) => (
+              <span key={i} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+                <span className={`${styles.fixedChipEditable} ${editingFixed === i ? styles.fixedChipActive : ''}`}
+                  onClick={() => startEditFixed(i, display)}
+                  title={isJa ? 'クリックして編集' : '클릭하여 편집'}>
+                  {display || (isJa ? '(未設定)' : '(미설정)')}
+                </span>
+                {editingFixed === i && (
+                  <div className={styles.participantFloatingWrap} onClick={(e) => e.stopPropagation()}>
+                    <input
+                      ref={editFixedRef}
+                      className={styles.participantFloatingInput}
+                      value={editFixedText}
+                      onChange={(e) => setEditFixedText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveFixedEdit(i);
+                        if (e.key === 'Escape') setEditingFixed(null);
+                      }}
+                      tabIndex={-1}
+                    />
+                    <button className={styles.participantFloatingConfirm} onClick={() => saveFixedEdit(i)} tabIndex={-1}>✓</button>
+                    <button className={styles.participantFloatingCancel} onClick={() => setEditingFixed(null)} tabIndex={-1}>✕</button>
+                  </div>
+                )}
+              </span>
+            ))}
+            {/* 추가 참가자 칩 — 항상 보임 */}
+            {(data.extraParticipantList || []).map((name, i) => (
+              <span key={i} className={styles.participantChip}>
+                {name}
+                <button className={styles.chipRemoveBtn} onClick={() => removeParticipant(i)} tabIndex={-1}>✕</button>
+              </span>
+            ))}
+            {/* + 버튼 or floating 인풋 — 칩들 옆에 나란히 */}
+            <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+              <button className={styles.addPhraseBtn} tabIndex={-1}
+                onClick={() => { setAddingParticipant(true); setParticipantText(''); }}
+                title={lang === 'ko' ? '참가자 추가' : '参加者を追加'}>+</button>
+              {addingParticipant && (
+                <div className={styles.participantFloatingWrap} onClick={(e) => e.stopPropagation()}>
+                  <input
+                    ref={participantInputRef}
+                    className={styles.participantFloatingInput}
+                    placeholder={lang === 'ko' ? '참가자 이름 입력...' : '参加者名を入力...'}
+                    value={participantText}
+                    onChange={(e) => setParticipantText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') confirmParticipant();
+                      if (e.key === 'Escape') { setAddingParticipant(false); setParticipantText(''); }
+                    }}
+                    tabIndex={-1}
+                  />
+                  <button className={styles.participantFloatingConfirm} onClick={confirmParticipant} tabIndex={-1}>✓</button>
+                  <button className={styles.participantFloatingCancel} onClick={() => { setAddingParticipant(false); setParticipantText(''); }} tabIndex={-1}>✕</button>
+                </div>
+              )}
+            </span>
+          </div>
         </div>
       </div>
 
