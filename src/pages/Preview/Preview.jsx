@@ -81,7 +81,10 @@ const Preview = () => {
       pageStyle.id = '__print_page__';
       document.head.appendChild(pageStyle);
     }
-    /* 모바일 인쇄 크기 문제 우회: 마진 0 강제, width fit-content 등 브라우저 맞춤 */
+    /* 모바일 인쇄 크기 문제 우회: 마진 0 강제, A4 너비(1122px)에 맞춰 스케일 축소 */
+    const isA3 = pageWidth > 1200;
+    const printRatio = isA3 ? 1122 / pageWidth : 1; 
+
     pageStyle.textContent = `
       @page { 
         size: ${pageCSS}; 
@@ -89,6 +92,12 @@ const Preview = () => {
       }
       @media print {
         body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        #print-scale-target {
+          transform: scale(${printRatio}) !important;
+          transform-origin: top left !important;
+          width: ${pageWidth}px !important;
+          max-width: ${pageWidth}px !important;
+        }
       }
     `;
     const fitStyle = document.getElementById('__print_fit__');
@@ -167,6 +176,7 @@ const Preview = () => {
             style={{ height: Math.ceil(pageHeight * scale) }}
           >
             <div
+              id="print-scale-target"
               ref={innerRef}
               className={styles.a4ScaleInner}
               style={{

@@ -468,10 +468,8 @@
   /* ScaleInner: 모바일 등에서 너비가 넘어가지 않도록 강제 축소 (핏) */
   .a4ScaleInner {
     display: block !important;
-    transform: none !important;
+    /* transform은 JS에서 주입하는 #print-scale-target 설정을 따름 */
     height: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
     overflow: hidden !important;
     margin: 0 !important;
     padding: 0 !important;

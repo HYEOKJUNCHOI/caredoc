@@ -11,7 +11,7 @@ import GenogramSVG from '../../components/common/GenogramSVG';
 const FACILITY_OPTIONS = ['生馬ホーム', '奥平ホーム'];
 
 /* 가족 관계 선택지 */
-const RELATION_OPTIONS = ['父', '母', '兄', '姉', '弟', '妹', '夫', '妻', '子', 'カスタム'];
+const RELATION_OPTIONS = ['父', '母', '兄', '姉', '弟', '妹', '夫', '妻', '子'];
 
 /* 한 명만 존재할 수 있는 관계 (중복 불가) */
 const UNIQUE_RELATIONS = new Set(['父', '母', '夫', '妻']);
@@ -574,26 +574,13 @@ const BasicInfoEdit = ({ data, onChange }) => {
               value={m.relation}
               onChange={(e) => updateMember(m.id, 'relation', e.target.value)}
               tabIndex={-1}
-              style={{ padding: '5px 8px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4, minWidth: 110 }}
+              style={{ padding: '5px 8px', fontSize: 13, border: '1px solid #ccc', borderRadius: 4, minWidth: 70 }}
             >
               {availableOptions(m.id, m.relation).map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt === 'カスタム' ? (isJa ? 'カスタム（直接入力）' : 'カスタム（직접입력）') : opt}
-                </option>
+                <option key={opt} value={opt}>{opt}</option>
               ))}
             </select>
 
-            {/* 직접입력 시 관계명 필드 */}
-            {m.relation === 'カスタム' && (
-              <input
-                className={styles.input}
-                placeholder={isJa ? '関係名' : '관계명'}
-                value={m.customRelation || ''}
-                onChange={(e) => updateMember(m.id, 'customRelation', e.target.value)}
-                tabIndex={-1}
-                style={{ width: 80 }}
-              />
-            )}
 
             {/* 이름 */}
             <input
