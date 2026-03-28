@@ -1,6 +1,6 @@
 /* 홈 — 이용자 목록 */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getUsers, saveUsers, setCurrentUserId } from '../../utils/storage';
