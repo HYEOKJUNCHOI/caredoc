@@ -16,7 +16,10 @@ const GOAL_COUNT = 3;
 const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const isJa = lang === 'ja';
 
+  const [testMode, setTestMode]       = useState(false);
+  const [testLoading, setTestLoading] = useState(false);
   const [refreshKey, setRefreshKey]   = useState(0);
   const [addingRow, setAddingRow]     = useState(null);
   const [addText, setAddText]         = useState('');
@@ -156,11 +159,38 @@ const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
   return (
     <div className={styles.formBody} style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '12px 20px 80px' }}>
 
-      {/* 테스트 더미데이터 버튼 */}
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-        <button className={styles.testFillBtn} onClick={fillTestData}>🧪 テストデータ ON</button>
-        <button className={styles.testClearBtn} onClick={clearTestData}>✕ OFF</button>
-      </div>
+      {/* 테스트 데이터 로딩 오버레이 */}
+      {testLoading && (
+        <div className={styles.testLoadingOverlay}>
+          <div className={styles.testLoadingSpinner} />
+          <span>{isJa ? 'データを入力中...' : '데이터 입력 중...'}</span>
+        </div>
+      )}
+
+      {/* 테스트 데이터 토글 */}
+      <label className={styles.testToggleWrap}>
+        <span className={styles.testToggleSwitch}>
+          <input
+            type="checkbox"
+            tabIndex={-1}
+            checked={testMode}
+            onChange={(e) => {
+              const next = e.target.checked;
+              setTestLoading(true);
+              setTimeout(() => {
+                if (next) fillTestData();
+                else clearTestData();
+                setTestMode(next);
+                setTestLoading(false);
+              }, 700);
+            }}
+          />
+          <span className={styles.testToggleTrack} />
+        </span>
+        {testMode
+          ? (isJa ? 'テストモード中' : '테스트 모드')
+          : (isJa ? 'テストデータを入力' : '테스트 데이터 입력')}
+      </label>
 
       {/* 연도・월 */}
       <div className={styles.spBox} data-qa="edit-monitoring-yearmonth">
