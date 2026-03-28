@@ -44,16 +44,26 @@ const DOC_COMPONENTS = {
   basicInfo:      BasicInfoDoc,
 };
 
+/* 서류 타입 → PDF 파일명 라벨 */
+const DOC_LABELS = {
+  supportPlan:    '個別支援計画書',
+  monitoring:     'モニタリング記録表',
+  meetingMinutes: '作成会議録',
+  basicInfo:      '基本情報',
+};
+
 const Preview = () => {
   const { type } = useParams();
   const { t } = useTranslation();
   const userId = getCurrentUserId();
   const user   = getCurrentUser();
   const [data, setData] = useState(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   const { width: pageWidth, height: pageHeight, pageCSS } = getPageSize(type);
 
   const viewportRef = useRef(null);
+  const innerRef    = useRef(null); /* PDF 캡처 대상 */
   const scale = usePageScale(viewportRef, pageWidth);
 
   useEffect(() => {
@@ -63,13 +73,8 @@ const Preview = () => {
 
   const writeDate = data?.writeDate;
 
-  /* A4/A3 페이지 DOM 요소 가져오기 */
-  const getA4El = () => document.querySelector('[data-a4-page]');
-
-  /* ── 인쇄: 타입별 페이지 크기 강제 + 넘침 시 자동 스케일 ── */
+  /* ── 인쇄: @page 크기만 강제 주입 — scale/zoom 조작 없음 ── */
   const handlePrint = () => {
-    const el = getA4El();
-
     let pageStyle = document.getElementById('__print_page__');
     if (!pageStyle) {
       pageStyle = document.createElement('style');
@@ -77,20 +82,57 @@ const Preview = () => {
       document.head.appendChild(pageStyle);
     }
     pageStyle.textContent = `@page { size: ${pageCSS}; margin: 0; }`;
-
-    /* 내용이 페이지 높이 초과 시 zoom으로 1페이지 맞춤 */
-    if (el && el.scrollHeight > pageHeight) {
-      const zoom = ((pageHeight / el.scrollHeight) * 100).toFixed(1);
-      let fitStyle = document.getElementById('__print_fit__');
-      if (!fitStyle) {
-        fitStyle = document.createElement('style');
-        fitStyle.id = '__print_fit__';
-        document.head.appendChild(fitStyle);
-      }
-      fitStyle.textContent = `@media print { [data-a4-page] { zoom: ${zoom}% !important; } }`;
-    }
-
+    const fitStyle = document.getElementById('__print_fit__');
+    if (fitStyle) fitStyle.remove();
     window.print();
+  };
+
+  /* ── PDF 다운로드: html2canvas → jsPDF ── */
+  const handleDownloadPdf = async () => {
+    if (!innerRef.current) return;
+    setPdfLoading(true);
+    try {
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ]);
+
+      const el = innerRef.current;
+
+      /* 스케일 transform 일시 해제 → 원본 해상도로 캡처 */
+      const prevTransform = el.style.transform;
+      el.style.transform = 'none';
+
+      const canvas = await html2canvas(el, {
+        scale: 2,           /* 2× → 고해상도 */
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+      });
+
+      el.style.transform = prevTransform;
+
+      const isA3 = type === 'basicInfo';
+      const pdf  = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: isA3 ? 'a3' : 'a4',
+      });
+
+      const pdfW = pdf.internal.pageSize.getWidth();
+      const pdfH = pdf.internal.pageSize.getHeight();
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH);
+
+      const nameLabel = data?.nameKanji || user?.name || 'document';
+      const docLabel  = DOC_LABELS[type] || type;
+      pdf.save(`${nameLabel}_${docLabel}.pdf`);
+    } catch (err) {
+      console.error('PDF 생성 실패:', err);
+      alert('PDF 생성에 실패했습니다.');
+    } finally {
+      setPdfLoading(false);
+    }
   };
 
   const DocComponent = DOC_COMPONENTS[type];
@@ -103,6 +145,9 @@ const Preview = () => {
         <button className={styles.printBtn} onClick={handlePrint}>
           🖨 {t('preview.print')}
         </button>
+        <button className={styles.pdfBtn} onClick={handleDownloadPdf} disabled={pdfLoading || !data}>
+          {pdfLoading ? '⏳ 생성 중...' : `📄 ${t('preview.downloadPdf')}`}
+        </button>
       </div>
 
       {/* 뷰어 영역 */}
@@ -113,6 +158,7 @@ const Preview = () => {
             style={{ height: Math.ceil(pageHeight * scale) }}
           >
             <div
+              ref={innerRef}
               className={styles.a4ScaleInner}
               style={{
                 transform: `scale(${scale})`,
