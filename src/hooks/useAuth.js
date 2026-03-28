@@ -1,6 +1,6 @@
 /* Google OAuth2 인증 훅 */
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase';
 import { loadFromFirestore } from '../lib/firestoreSync';
 
@@ -13,18 +13,6 @@ export const useAuth = () => {
   const [loginError, setLoginError]     = useState(null);
 
   useEffect(() => {
-    /* 리디렉션 후 돌아왔을 때 결과 처리 */
-    getRedirectResult(auth).then(async (result) => {
-      if (result?.user) {
-        localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(result.user.uid));
-        await loadFromFirestore(result.user.uid);
-      }
-    }).catch((e) => {
-      if (e.code !== 'auth/cancelled-popup-request') {
-        setLoginError(`エラー: ${e.code}`);
-      }
-    });
-
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(firebaseUser.uid));
@@ -34,6 +22,7 @@ export const useAuth = () => {
       }
       setUser(firebaseUser);
       setLoading(false);
+      setLoginLoading(false);
     });
     return unsub;
   }, []);
@@ -42,7 +31,13 @@ export const useAuth = () => {
     setLoginError(null);
     setLoginLoading(true);
     googleProvider.setCustomParameters({ prompt: 'select_account' });
-    signInWithRedirect(auth, googleProvider);
+    /* COOP 헤더로 팝업 통신이 차단되어도 onAuthStateChanged가 처리 */
+    signInWithPopup(auth, googleProvider).catch((e) => {
+      if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+        setLoginError(`エラー: ${e.code}`);
+      }
+      setLoginLoading(false);
+    });
   };
 
   const logout = () => signOut(auth);
