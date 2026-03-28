@@ -321,21 +321,22 @@ input[type="date"]:invalid::-webkit-datetime-edit {
 }
 
 /* 값이 비어있고 포커스가 없을 때 attr(placeholder)로 커스텀 텍스트 표시 */
-.input[type="date"]:invalid::before {
+/* .input 또는 .infoInput 클래스를 가진 모든 date 형식에 적용 */
+input[type="date"]:invalid::before {
   content: attr(placeholder);
   position: absolute;
   left: 8px;
   top: 50%;
   transform: translateY(-50%);
-  color: #aaa; /* var(--text-tertiary) 와 유사한 색상 */
+  color: #aaa;
   pointer-events: none;
   width: calc(100% - 30px);
   display: block;
 }
 
 /* 값이 입력되거나 포커스되면 커스텀 placeholder 숨김 */
-.input[type="date"]:focus::before,
-.input[type="date"]:valid::before {
+input[type="date"]:focus::before,
+input[type="date"]:valid::before {
   display: none !important;
 }
 
