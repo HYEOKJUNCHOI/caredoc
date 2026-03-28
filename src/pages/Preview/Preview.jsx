@@ -73,7 +73,7 @@ const Preview = () => {
 
   const writeDate = data?.writeDate;
 
-  /* ── 인쇄: @page 크기만 강제 주입 — scale/zoom 조작 없음 ── */
+  /* ── 인쇄: 용지 크기에 맞춰 콘텐츠를 꽉 채움 ── */
   const handlePrint = () => {
     let pageStyle = document.getElementById('__print_page__');
     if (!pageStyle) {
@@ -81,22 +81,25 @@ const Preview = () => {
       pageStyle.id = '__print_page__';
       document.head.appendChild(pageStyle);
     }
-    /* 모바일 인쇄 크기 문제 우회: 마진 0 강제, A4 너비(1122px)에 맞춰 스케일 축소 */
-    const isA3 = pageWidth > 1200;
-    const printRatio = isA3 ? 1122 / pageWidth : 1; 
 
+    /* @page size를 지정하지 않음 → 사용자가 인쇄 다이얼로그에서 선택한 용지에 맞춤 */
     pageStyle.textContent = `
-      @page { 
-        size: ${pageCSS}; 
-        margin: 0mm; 
+      @page {
+        size: landscape;
+        margin: 0mm;
       }
       @media print {
         body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         #print-scale-target {
-          transform: scale(${printRatio}) !important;
+          transform: none !important;
           transform-origin: top left !important;
-          width: ${pageWidth}px !important;
-          max-width: ${pageWidth}px !important;
+          width: 100vw !important;
+          max-width: 100vw !important;
+          height: 100vh !important;
+        }
+        #print-scale-target > * {
+          width: 100% !important;
+          height: 100% !important;
         }
       }
     `;

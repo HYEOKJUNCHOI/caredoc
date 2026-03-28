@@ -106,9 +106,9 @@ const BasicInfoDocA = ({ d }) => {
 
           {/* ═══ Row 0: 緊急時の連絡先 (2%) ═══ */}
           <tr style={{ height: '2%' }}>
-            <td colSpan={3} style={{ border: BD, padding: 0, fontSize: '8pt' }}>
+            <td colSpan={3} style={{ border: BD, padding: 0, fontSize: '8pt', background: '#FFFBEA' }}>
               <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                <span style={{ width: '23%', flexShrink: 0, background: '#efefef', borderRight: BD, padding: '2px 6px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ width: '23%', flexShrink: 0, background: '#FEF3C7', borderRight: BD, padding: '2px 6px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   緊急時の連絡先
                 </span>
                 <span style={{ flex: 1, padding: '2px 8px 2px 13px', fontSize: '8.5pt', borderRight: BD, alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
@@ -118,7 +118,7 @@ const BasicInfoDocA = ({ d }) => {
                 <span style={{ flex: 1, padding: '2px 8px 2px 13px', fontSize: '8.5pt', borderRight: BD, alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
                   {d?.emergencyPhone || '　'}
                 </span>
-                <span style={{ background: '#efefef', borderRight: BD, padding: '2px 6px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ background: '#FEF3C7', borderRight: BD, padding: '2px 6px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   血液型
                 </span>
                 <span style={{ padding: '2px 8px', minWidth: 52, fontSize: '8.5pt', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

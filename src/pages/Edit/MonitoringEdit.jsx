@@ -20,6 +20,7 @@ const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
 
   const [testMode, setTestMode]       = useState(false);
   const [testLoading, setTestLoading] = useState(false);
+  const testModeRef = useRef(false);
   const [refreshKey, setRefreshKey]   = useState(0);
   const [addingRow, setAddingRow]     = useState(null);
   const [addText, setAddText]         = useState('');
@@ -135,6 +136,7 @@ const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
 
   /* 테스트 더미데이터 */
   const fillTestData = () => {
+    onChange('_testMode', true);
     const goalTexts = [
       'けがをしないように気をつけて生活する',
       '体調の変化に気をつけて生活する',
@@ -165,12 +167,18 @@ const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
   };
 
   const clearTestData = () => {
+    onChange('_testMode', false);
     onChange('year', '');
     onChange('month', '');
     onChange('rows', Array.from({ length: GOAL_COUNT }, () => ({})));
     onChange('planChanged', undefined);
     onChange('meetingOpinion', '');
   };
+
+  /* 페이지 이탈 시 테스트 데이터 정리 */
+  useEffect(() => {
+    return () => { if (testModeRef.current) clearTestData(); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={styles.formBody} style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '12px 20px 80px' }}>
@@ -197,6 +205,7 @@ const MonitoringEdit = ({ data, onChange, supportPlanData }) => {
                 if (next) fillTestData();
                 else clearTestData();
                 setTestMode(next);
+                testModeRef.current = next;
                 setTestLoading(false);
               }, 700);
             }}

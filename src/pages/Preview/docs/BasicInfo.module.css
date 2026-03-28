@@ -356,35 +356,14 @@
 
 /* ── 인쇄 ── */
 @media print {
-  @page {
-    size: 420mm 297mm;
-    margin: 0;
-  }
-
-  html, body {
-    width: 420mm;
-    height: 297mm;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* 전체를 95%로 축소 — 프린터 비인쇄 영역(좌·하단 잘림) 방지
-     transform-origin: center center → 사방에 균등 여백 확보 */
+  /* 용지 크기를 강제하지 않음 → 인쇄 다이얼로그 설정에 따름 */
   .page {
-    width: 420mm !important;
-    height: 297mm !important;
-    padding: 4mm 6.5mm !important;
-    transform: scale(0.94) !important;
-    transform-origin: center center !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 4mm 6mm !important;
+    transform: none !important;
     box-shadow: none;
     overflow: hidden;
-    page-break-after: avoid;
-  }
-
-  :global(.basic-info-page) {
-    width: 420mm !important;
-    height: 297mm !important;
-    overflow: hidden !important;
     page-break-after: avoid;
   }
 

@@ -9,7 +9,10 @@
       "Bash(node -e \"const p=require\\(''./package.json''\\); p.engines={node:''>=20''}; require\\(''fs''\\).writeFileSync\\(''package.json'', JSON.stringify\\(p, null, 2\\)+''\\\\n''\\)\")",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npx vercel:*)",
+      "Bash(gh api:*)",
+      "Bash(npm run:*)"
     ],
     "additionalDirectories": [
       "c:\\Users\\gurwn\\Desktop\\Project\\yasuko"

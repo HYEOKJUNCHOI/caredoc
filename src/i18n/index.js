@@ -23,9 +23,13 @@ i18n.use(initReactI18next).init({
   },
 });
 
-/* 언어 변경 시 localStorage에도 저장 */
+/* 초기 언어 설정 동기화 */
+document.documentElement.lang = i18n.language;
+
+/* 언어 변경 시 localStorage 저장 및 html lang 속성 업데이트 */
 i18n.on('languageChanged', (lng) => {
   localStorage.setItem('caredoc-lang', lng);
+  document.documentElement.lang = lng;
 });
 
 export default i18n;

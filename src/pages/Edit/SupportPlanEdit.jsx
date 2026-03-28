@@ -34,8 +34,10 @@ const SupportPlanEdit = ({ data, onChange }) => {
   /* 테스트 데이터 토글 상태 */
   const [testMode,    setTestMode]    = useState(false);
   const [testLoading, setTestLoading] = useState(false);
+  const testModeRef = useRef(false);
 
   const fillTestData = () => {
+    onChange('_testMode', true);
     onChange('needs',        '安心して生活できる環境の中で、健康を維持しながら穏やかに暮らしたい。体調の変化があった時に適切な支援を受けたい。');
     onChange('longTermGoal', '心身の健康を維持しながら、グループホームでの安定した生活を継続できるよう支援する。');
     onChange('shortTermGoals', [
@@ -56,11 +58,17 @@ const SupportPlanEdit = ({ data, onChange }) => {
   };
 
   const clearTestData = () => {
+    onChange('_testMode', false);
     ['needs', 'longTermGoal', 'shortTermGoalItems', 'supportContentItems', 'consentSign'].forEach(f => onChange(f, ''));
     onChange('shortTermGoals', []);
     onChange('supportContent', []);
     onChange('specialNotes', [true, true, true, true]);
   };
+
+  /* 페이지 이탈 시 테스트 데이터 정리 */
+  useEffect(() => {
+    return () => { if (testModeRef.current) clearTestData(); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* refreshKey: 문구 추가 후 목록 재계산 트리거 */
   const [refreshKey, setRefreshKey] = useState(0);
@@ -261,6 +269,7 @@ const SupportPlanEdit = ({ data, onChange }) => {
                 if (next) fillTestData();
                 else clearTestData();
                 setTestMode(next);
+                testModeRef.current = next;
                 setTestLoading(false);
               }, 700);
             }}
@@ -411,6 +420,7 @@ const SupportPlanEdit = ({ data, onChange }) => {
               <input
                 className={styles.input}
                 type="date"
+                lang={i18n.language}
                 value={consentDate}
                 onChange={(e) => onChange('consentDate', e.target.value)}
                 tabIndex={-1}

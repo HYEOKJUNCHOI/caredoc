@@ -54,11 +54,12 @@ const Edit = () => {
     return iso;
   };
 
-  /* 마운트 시 저장된 서류 데이터 로드 */
+  /* 마운트 시 저장된 서류 데이터 로드
+     — _testMode가 true로 저장된 데이터는 테스트 데이터이므로 무시 */
   useEffect(() => {
     if (!userId) return;
     const saved = getDocument(userId, type);
-    if (saved) {
+    if (saved && !saved._testMode) {
       setFormData(saved);
     } else if (type === 'basicInfo') {
       /* 이용자 등록 데이터 자동 연동 — 이름만 초기값으로 설정 */
@@ -157,8 +158,10 @@ const Edit = () => {
      - 스냅샷(현재 언어로 확정): type_preview 키에 저장 (Preview 표시용) */
   const goPreview = async () => {
     if (userId) {
-      /* 저장 중임을 알리는 피드백 (선택 사항) */
-      await saveDocument(userId, type, formData);
+      /* 테스트 모드 중에는 원본 데이터를 저장하지 않음 (재진입 시 빈 양식 유지) */
+      if (!formData._testMode) {
+        await saveDocument(userId, type, formData);
+      }
 
       /* { ko, ja } 배열 필드를 현재 언어 문자열로 확정 */
       const resolveArray = (arr) =>
@@ -221,6 +224,7 @@ const Edit = () => {
               <input
                 className={styles.infoInput}
                 type="date"
+                lang={lang}
                 value={infoValues.writeDate}
                 onChange={(e) => setInfoValues((p) => ({ ...p, writeDate: e.target.value }))}
                 onFocus={(e) => { try { e.target.showPicker(); } catch (_) {} }}

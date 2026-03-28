@@ -74,6 +74,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
   });
   const [testLoading, setTestLoading] = useState(false);
   const [testMode, setTestMode] = useState(false);
+  const testModeRef = useRef(false);
   const [addingDisability, setAddingDisability] = useState(false);
   const [addDisabilityText, setAddDisabilityText] = useState('');
   const [editingDisabilityIdx, setEditingDisabilityIdx] = useState(null);
@@ -207,6 +208,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
   /* ── 테스트 데이터 일괄 입력 ──
      개인정보(이름·생년월일·전화)는 무작위, 나머지는 공통값 사용 */
   const fillTestData = () => {
+    onChange('_testMode', true);
     const pool = [
       ['田中　一郎', 'たなか　いちろう', '男性'],
       ['山田　太郎', 'やまだ　たろう',   '男性'],
@@ -312,6 +314,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
   /* 테스트 데이터 전체 초기화 */
   const clearTestData = () => {
+    onChange('_testMode', false);
     const fields = [
       'nameKanji','nameKana','gender','birthDate','phoneMobile','phoneOffice',
       'emergencyName','emergencyRelation','emergencyPhone','facilityName',
@@ -333,6 +336,11 @@ const BasicInfoEdit = ({ data, onChange }) => {
     setDisabilityNames([]);
     setFacilityCustomMode(false);
   };
+
+  /* 페이지 이탈 시 테스트 데이터 정리 */
+  useEffect(() => {
+    return () => { if (testModeRef.current) clearTestData(); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const inp = (field, placeholder = '', rows = 0) => rows > 0 ? (
     <textarea
@@ -358,6 +366,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
     <input
       className={styles.input}
       type="date"
+      lang={i18n.language}
       value={data[field] || ''}
       onChange={(e) => onChange(field, e.target.value)}
       tabIndex={-1}
@@ -390,6 +399,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
                 if (next) fillTestData();
                 else clearTestData();
                 setTestMode(next);
+                testModeRef.current = next;
                 setTestLoading(false);
               }, 700);
             }}

@@ -66,10 +66,12 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   /* 테스트 데이터 토글 상태 */
   const [testMode,    setTestMode]    = useState(false);
   const [testLoading, setTestLoading] = useState(false);
+  const testModeRef = useRef(false);
   const [fixedAnchorEl, setFixedAnchorEl] = useState(null);
   const [addAnchorEl, setAddAnchorEl] = useState(null);
 
   const fillTestData = () => {
+    onChange('_testMode', true);
     onChange('extraParticipantList', ['相談支援専門員　田中一郎', '家族（母）']);
     onChange('rows', [
       {
@@ -91,10 +93,16 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   };
 
   const clearTestData = () => {
+    onChange('_testMode', false);
     onChange('extraParticipantList', []);
     onChange('rows', Array.from({ length: GOAL_COUNT }, () => ({})));
     onChange('futureTask', '');
   };
+
+  /* 페이지 이탈 시 테스트 데이터 정리 */
+  useEffect(() => {
+    return () => { if (testModeRef.current) clearTestData(); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [refreshKey, setRefreshKey] = useState(0);
   const [addingRow, setAddingRow]   = useState(null);
@@ -262,7 +270,7 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   const userId = getCurrentUserId();
   const currentUser = getCurrentUser();
   const basicInfoData = getDocument(userId, 'basicInfo');
-  const fixedDefaults    = [basicInfoData?.nameKanji, currentUser?.name];
+  const fixedDefaults    = [basicInfoData?.nameKanji || currentUser?.name, currentUser?.manager];
   const fixedOverrides   = data.fixedParticipantOverrides || [];
   /* 원본이 없으면 칩 자체를 숨기지 않고, 오버라이드 값 or 원본값 표示 */
   const fixedParticipants = fixedDefaults
@@ -295,6 +303,7 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
                 if (next) fillTestData();
                 else clearTestData();
                 setTestMode(next);
+                testModeRef.current = next;
                 setTestLoading(false);
               }, 700);
             }}
