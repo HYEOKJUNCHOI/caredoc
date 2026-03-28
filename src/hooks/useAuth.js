@@ -34,8 +34,9 @@ export const useAuth = () => {
       await signInWithPopup(auth, googleProvider);
     } catch (e) {
       /* popup 차단 등 에러 */
+      console.error('[useAuth] login error:', e.code, e.message);
       if (e.code !== 'auth/popup-closed-by-user') {
-        setLoginError('ログインに失敗しました。もう一度お試しください。');
+        setLoginError(`エラー: ${e.code}`);
       }
     } finally {
       setLoginLoading(false);
