@@ -1,6 +1,6 @@
 /* Google OAuth2 인증 훅 — GSI(Google Identity Services) + signInWithCredential */
-import { useState, useEffect, useCallback } from 'react';
-import { onAuthStateChanged, signInWithCredential, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { loadFromFirestore } from '../lib/firestoreSync';
 
@@ -13,19 +13,24 @@ export const useAuth = () => {
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState(null);
 
-  /* GSI 콜백 — Google이 ID 토큰을 전달하면 Firebase에 로그인 */
-  const handleCredential = useCallback(async (response) => {
+  /* Firebase Auth 표준 팝업 로그인 */
+  const loginWithGoogle = async () => {
     setLoginError(null);
     setLoginLoading(true);
     try {
-      const credential = GoogleAuthProvider.credential(response.credential);
-      await signInWithCredential(auth, credential);
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' }); // 기본적으로 계정 선택창 띄움
+      await signInWithPopup(auth, provider);
     } catch (e) {
-      console.error('[useAuth] signInWithCredential 에러:', e.code);
-      setLoginError('ログインに失敗しました。もう一度お試しください。');
+      console.error('[useAuth] signInWithPopup 에러:', e.code);
+      if (e.code === 'auth/popup-closed-by-user') {
+        setLoginError('ログインがキャンセルされました。');
+      } else {
+        setLoginError('ログインに失敗しました。もう一度お試しください。');
+      }
       setLoginLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     /* Firebase 인증 상태 감지 */
@@ -46,28 +51,10 @@ export const useAuth = () => {
       setLoginLoading(false);
     });
 
-    /* GSI 초기화 — 스크립트 로드 후 실행 */
-    const initGSI = () => {
-      window.google?.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleCredential,
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-      /* One Tap 자동 표시 방지 */
-      window.google?.accounts.id.cancel();
-      window.google?.accounts.id.disableAutoSelect();
-    };
-    if (window.google) initGSI();
-    else window.addEventListener('load', initGSI);
-
-    return () => {
-      unsub();
-      window.removeEventListener('load', initGSI);
-    };
-  }, [handleCredential]);
+    return () => unsub();
+  }, []);
 
   const logout = () => signOut(auth);
 
-  return { user, loading, loginLoading, loginError, logout };
+  return { user, loading, loginLoading, loginError, loginWithGoogle, logout };
 };

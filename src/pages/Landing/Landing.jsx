@@ -1,10 +1,7 @@
 /* 랜딩 페이지 — Google 로그인 */
 import styles from './Landing.module.css';
 
-const Landing = ({ loginLoading, loginError }) => {
-  const handleLogin = () => {
-    window.google?.accounts.id.prompt();
-  };
+const Landing = ({ loginLoading, loginError, loginWithGoogle }) => {
 
   return (
     <div className={styles.wrap}>
@@ -36,7 +33,7 @@ const Landing = ({ loginLoading, loginError }) => {
       <p className={styles.catchCopy}>もっとスマートに、もっとラクに。</p>
 
       {/* 구글 로그인 버튼 */}
-      <button className={styles.loginBtn} onClick={handleLogin} disabled={loginLoading}>
+      <button className={styles.loginBtn} onClick={loginWithGoogle} disabled={loginLoading}>
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className={styles.googleIcon} />
         {loginLoading ? 'ログイン中...' : 'Googleアカウントでログイン'}
       </button>
