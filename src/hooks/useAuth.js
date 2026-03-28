@@ -31,10 +31,15 @@ export const useAuth = () => {
     setLoginLoading(true);
     try {
       googleProvider.setCustomParameters({ prompt: 'select_account' });
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      /* 팝업 결과를 명시적으로 처리해 첫 시도에서도 상태 반영 */
+      if (result?.user) {
+        localStorage.setItem(PREFIX + 'firebaseUid', JSON.stringify(result.user.uid));
+        await loadFromFirestore(result.user.uid);
+        setUser(result.user);
+      }
     } catch (e) {
       /* popup 차단 등 에러 */
-      console.error('[useAuth] login error:', e.code, e.message);
       if (e.code !== 'auth/popup-closed-by-user') {
         setLoginError(`エラー: ${e.code}`);
       }
