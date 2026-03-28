@@ -25,13 +25,7 @@ const Landing = ({ onLogin }) => (
       </div>
     </div>
 
-    {/* 기능 요약 */}
-    <div className={styles.features}>
-      <span>✅ 基本情報</span>
-      <span>✅ 個別支援計画書</span>
-      <span>✅ モニタリング記録表</span>
-      <span>✅ 作成会議録</span>
-    </div>
+    <p className={styles.catchCopy}>必要な書類を、必要なときに。</p>
 
     {/* 구글 로그인 버튼 */}
     <button className={styles.loginBtn} onClick={onLogin}>
