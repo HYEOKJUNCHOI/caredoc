@@ -1,6 +1,7 @@
 /* 작성회의록 폼 */
 
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState, useMemo, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { getMergedPhrases, getItem, setItem, hidePhrase, getCurrentUser, getCurrentUserId, getDocument } from '../../utils/storage';
 import defaultPhrases from '../../data/phrases';
@@ -11,6 +12,52 @@ const isDefaultSat = (item) =>
 
 const GOAL_COUNT = 2;
 
+const FloatingPortal = ({ anchorEl, children }) => {
+  const [style, setStyle] = useState({ display: 'none' });
+
+  useLayoutEffect(() => {
+    if (!anchorEl) return;
+    const updatePosition = () => {
+      const rect = anchorEl.getBoundingClientRect();
+      const popupWidth = 260; // Approximate width based on CSS
+      const isTooFarRight = rect.right + popupWidth + 20 > window.innerWidth;
+      
+      if (isTooFarRight) {
+        setStyle({
+          position: 'fixed',
+          top: rect.bottom + 8,
+          left: Math.max(10, rect.right - popupWidth),
+          zIndex: 99999,
+        });
+      } else {
+        setStyle({
+          position: 'fixed',
+          top: Math.round(rect.top + rect.height / 2),
+          left: Math.round(rect.right + 6),
+          transform: 'translateY(-50%)',
+          zIndex: 99999,
+        });
+      }
+    };
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [anchorEl]);
+
+  if (!anchorEl) return null;
+
+  return createPortal(
+    <div style={style} onClick={(e) => e.stopPropagation()}>
+      {children}
+    </div>,
+    document.body
+  );
+};
+
 const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -19,6 +66,8 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
   /* 테스트 데이터 토글 상태 */
   const [testMode,    setTestMode]    = useState(false);
   const [testLoading, setTestLoading] = useState(false);
+  const [fixedAnchorEl, setFixedAnchorEl] = useState(null);
+  const [addAnchorEl, setAddAnchorEl] = useState(null);
 
   const fillTestData = () => {
     onChange('extraParticipantList', ['相談支援専門員　田中一郎', '家族（母）']);
@@ -267,12 +316,16 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
             {fixedParticipants.map(({ display }, i) => (
               <span key={i} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
                 <span className={`${styles.fixedChipEditable} ${editingFixed === i ? styles.fixedChipActive : ''}`}
-                  onClick={() => startEditFixed(i, display)}
+                  onClick={(e) => {
+                    startEditFixed(i, display);
+                    setFixedAnchorEl(e.currentTarget);
+                  }}
                   title={isJa ? 'クリックして編集' : '클릭하여 편집'}>
                   {display || (isJa ? '(未設定)' : '(미설정)')}
                 </span>
                 {editingFixed === i && (
-                  <div className={styles.participantFloatingWrap} onClick={(e) => e.stopPropagation()}>
+                  <FloatingPortal anchorEl={fixedAnchorEl}>
+                  <div className={styles.participantFloatingWrap} style={{ position: 'static', transform: 'none' }} onClick={(e) => e.stopPropagation()}>
                     <input
                       ref={editFixedRef}
                       className={styles.participantFloatingInput}
@@ -287,6 +340,7 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
                     <button className={styles.participantFloatingConfirm} onClick={() => saveFixedEdit(i)} tabIndex={-1}>✓</button>
                     <button className={styles.participantFloatingCancel} onClick={() => setEditingFixed(null)} tabIndex={-1}>✕</button>
                   </div>
+                  </FloatingPortal>
                 )}
               </span>
             ))}
@@ -299,11 +353,17 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
             ))}
             {/* + 버튼 or floating 인풋 — 칩들 옆에 나란히 */}
             <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+              {/* 모바일 가로 잘림 방지를 위해 아래쪽으로 뜨도록 CSS(Edit.module.css) 연동됨 */}
               <button className={styles.addPhraseBtn} tabIndex={-1}
-                onClick={() => { setAddingParticipant(true); setParticipantText(''); }}
+                onClick={(e) => { 
+                  setAddingParticipant(true); 
+                  setParticipantText(''); 
+                  setAddAnchorEl(e.currentTarget);
+                }}
                 title={lang === 'ko' ? '참가자 추가' : '参加者を追加'}>+</button>
               {addingParticipant && (
-                <div className={styles.participantFloatingWrap} onClick={(e) => e.stopPropagation()}>
+                <FloatingPortal anchorEl={addAnchorEl}>
+                <div className={styles.participantFloatingWrap} style={{ position: 'static', transform: 'none' }} onClick={(e) => e.stopPropagation()}>
                   <input
                     ref={participantInputRef}
                     className={styles.participantFloatingInput}
@@ -319,6 +379,7 @@ const MeetingMinutesEdit = ({ data, onChange, supportPlanData }) => {
                   <button className={styles.participantFloatingConfirm} onClick={confirmParticipant} tabIndex={-1}>✓</button>
                   <button className={styles.participantFloatingCancel} onClick={() => { setAddingParticipant(false); setParticipantText(''); }} tabIndex={-1}>✕</button>
                 </div>
+                </FloatingPortal>
               )}
             </span>
           </div>
