@@ -1,6 +1,6 @@
 /* Google OAuth2 인증 훅 */
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase';
 import { loadFromFirestore } from '../lib/firestoreSync';
 
@@ -11,6 +11,9 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    /* 리다이렉트 로그인 결과 처리 */
+    getRedirectResult(auth).catch(() => {});
+
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         /* Firebase UID를 localStorage에 저장 → storage.js에서 참조 */
@@ -26,7 +29,7 @@ export const useAuth = () => {
     return unsub;
   }, []);
 
-  const login = () => signInWithPopup(auth, googleProvider);
+  const login = () => signInWithRedirect(auth, googleProvider);
   const logout = () => signOut(auth);
 
   return { user, loading, login, logout };
