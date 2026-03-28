@@ -26,3 +26,9 @@ dist-ssr
 # Firebase env
 .env
 .env.local
+
+# 개인정보 원본 파일 (절대 커밋 금지)
+*.xlsx
+*.doc
+*.jpg
+기본정보_필드정리.md
