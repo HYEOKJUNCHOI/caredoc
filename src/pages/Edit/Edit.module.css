@@ -887,12 +887,11 @@
   position: relative;
 }
 
-/* 参加者 floating 인풋 패널 — 칩 오른쪽에 붙어서 뜸 */
+/* 参加者 floating 인풋 패널 — 모바일 등 가로폭 부족 대비 아래로 뜨게 변경 */
 .participantFloatingWrap {
   position: absolute;
-  top: 50%;
-  left: calc(100% + 6px);
-  transform: translateY(-50%);
+  top: calc(100% + 8px);
+  left: 0;
   z-index: 200;
   display: flex;
   align-items: center;
