@@ -82,6 +82,22 @@
   justify-content: flex-end;
 }
 
+/* 타이머 스타일 */
+.timer {
+  font-size: 12px;
+  color: #c6e0b4;
+  margin-right: 8px;
+  font-variant-numeric: tabular-nums; /* 숫자가 고정폭으로 표시되도록 애니메이션 깔끔하게 */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timerWarning {
+  color: #ffb7b2;
+  font-weight: bold;
+}
+
 .logoutBtn {
   font-size: 11px;
   color: #888;
