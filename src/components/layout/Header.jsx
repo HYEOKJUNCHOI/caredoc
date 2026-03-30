@@ -26,12 +26,12 @@ const Header = () => {
   const docTitle = DOC_TITLES[pathType] || null;
 
   /* 30분 자동 로그아웃 타이머 로직 */
-  const [timeLeft, setTimeLeft] = useState(1800); // 30분 = 1800초
+  const [timeLeft, setTimeLeft] = useState(1200); // 20분 = 1200초
   const lastActiveRef = useRef(Date.now());
 
   useEffect(() => {
     // 사용자 활동 이벤트 (마우스, 키보드, 터치, 스크롤 등)
-    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel'];
+    const events = ['mousedown', 'keydown', 'touchstart', 'wheel'];
     const resetTimer = () => {
       lastActiveRef.current = Date.now();
     };
@@ -41,7 +41,7 @@ const Header = () => {
     const interval = setInterval(() => {
       const now = Date.now();
       const elapsed = Math.floor((now - lastActiveRef.current) / 1000);
-      const remaining = Math.max(1800 - elapsed, 0);
+      const remaining = Math.max(1200 - elapsed, 0);
       
       setTimeLeft(remaining);
 

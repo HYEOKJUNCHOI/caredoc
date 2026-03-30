@@ -104,24 +104,28 @@ const BasicInfoDocA = ({ d }) => {
         </colgroup>
         <tbody>
 
-          {/* ═══ Row 0: 緊急時の連絡先 (2%) ═══ */}
+          {/* ═══ Row 0: 緊急時の連絡先 (2%) ═══
+               첫 td: border hidden → table 외곽선보다 우선순위 높아 왼쪽 빈 공간 연출
+               나머지 colSpan={2}: 정상 테두리 */}
           <tr style={{ height: '2%' }}>
-            <td colSpan={3} style={{ border: BD, padding: 0, fontSize: '8pt', background: '#FFFBEA' }}>
+            {/* 왼쪽 빈 공간 — プロフィール(10%) + ふりがな라벨(13%) 합쳐서 숨김 */}
+            <td colSpan={2} style={{ borderLeft: 'hidden', borderTop: 'hidden', borderRight: 'none', borderBottom: '1px solid #000' }} />
+            <td style={{ border: '1px solid #000', padding: 0, fontSize: '7.5pt', background: '#FFFBEA' }}>
               <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                <span style={{ width: '23%', flexShrink: 0, background: '#FEF3C7', borderRight: BD, padding: '2px 6px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ width: '22%', flexShrink: 0, background: '#FEF3C7', borderRight: BD, padding: '2px 4px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7pt' }}>
                   緊急時の連絡先
                 </span>
-                <span style={{ flex: 1, padding: '2px 8px 2px 13px', fontSize: '8.5pt', borderRight: BD, alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
+                <span style={{ flex: 2, padding: '2px 4px 2px 6px', fontSize: '7.5pt', borderRight: BD, alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
                   {d?.emergencyName || '　'}
                   {d?.emergencyRelation ? `（${d.emergencyRelation}）` : ''}
                 </span>
-                <span style={{ flex: 1, padding: '2px 8px 2px 13px', fontSize: '8.5pt', borderRight: BD, alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
+                <span style={{ flex: 1, padding: '2px 4px 2px 6px', fontSize: '7.5pt', borderRight: BD, alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
                   {d?.emergencyPhone || '　'}
                 </span>
-                <span style={{ background: '#FEF3C7', borderRight: BD, padding: '2px 6px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ background: '#FEF3C7', borderRight: BD, padding: '2px 4px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7pt' }}>
                   血液型
                 </span>
-                <span style={{ padding: '2px 8px', minWidth: 52, fontSize: '8.5pt', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ padding: '2px 4px', minWidth: 36, fontSize: '7.5pt', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {d?.bloodType || '　'}
                 </span>
               </div>
