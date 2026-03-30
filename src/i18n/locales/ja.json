@@ -105,7 +105,8 @@
     "downloadWord": "Wordダウンロード",
     "downloadPdf": "PDFダウンロード",
     "print": "印刷",
-    "backToEdit": "修正する"
+    "backToEdit": "修正する",
+    "mobilePdfHint": "PDF保存後に開いて印刷"
   },
 
   "admin": {

@@ -105,7 +105,8 @@
     "downloadWord": "Word 다운로드",
     "downloadPdf": "PDF 다운로드",
     "print": "프린트",
-    "backToEdit": "수정하기"
+    "backToEdit": "수정하기",
+    "mobilePdfHint": "PDF 저장 후 열어서 인쇄"
   },
 
   "admin": {

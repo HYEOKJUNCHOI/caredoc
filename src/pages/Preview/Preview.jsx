@@ -173,16 +173,14 @@ const Preview = () => {
             🖨 {t('preview.print')}
           </button>
         )}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-          <button className={styles.pdfBtn} onClick={handleDownloadPdf} disabled={pdfLoading || !data}>
-            {pdfLoading ? '⏳ 생성 중...' : `📄 ${t('preview.downloadPdf')}`}
-          </button>
-          {isMobile && (
-            <span style={{ fontSize: '11px', color: '#888', textAlign: 'center' }}>
-              PDF를 저장한 후 열어서 인쇄해주세요
-            </span>
-          )}
-        </div>
+        <button className={styles.pdfBtn} onClick={handleDownloadPdf} disabled={pdfLoading || !data}>
+          {pdfLoading ? '⏳ 생성 중...' : `📄 ${t('preview.downloadPdf')}`}
+        </button>
+        {isMobile && (
+          <span style={{ fontSize: '11px', color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}>
+            📄 → 🖨 {t('preview.mobilePdfHint')}
+          </span>
+        )}
       </div>
 
       {/* 뷰어 영역 */}
