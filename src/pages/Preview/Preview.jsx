@@ -160,7 +160,7 @@ const Preview = () => {
 
   /* 모바일 감지 — UA + 화면 너비 병행 */
   const isMobile = useMemo(() =>
-    /iPhone|iPad|Android/i.test(navigator.userAgent) || window.innerWidth < 768
+    /iPhone|iPad|Android/i.test(navigator.userAgent) || window.innerWidth < 1024
   , []);
 
   return (
