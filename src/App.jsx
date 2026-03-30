@@ -2,7 +2,7 @@
    - 로그인 전: Landing 페이지
    - 로그인 후: 앱 전체 접근 */
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import Landing from './pages/Landing/Landing';
 import Header from './components/layout/Header';
@@ -39,6 +39,7 @@ function App() {
         <Route path="/preview/all" element={<PrintAll />} />
         <Route path="/preview/:type" element={<Preview />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
