@@ -2,7 +2,7 @@
    - 서류 타입에 따라 A4 가로 / A3 가로 자동 전환
    - 화면 너비에 맞게 scale 해서 표시 */
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getCurrentUser, getCurrentUserId, getDocument } from '../../utils/storage';
@@ -158,17 +158,31 @@ const Preview = () => {
 
   const DocComponent = DOC_COMPONENTS[type];
 
+  /* 모바일 감지 — UA + 화면 너비 병행 */
+  const isMobile = useMemo(() =>
+    /iPhone|iPad|Android/i.test(navigator.userAgent) || window.innerWidth < 768
+  , []);
+
   return (
     <div className={styles.container} data-qa="preview-page">
 
       {/* ── 출력 버튼 바 ── */}
       <div className={styles.actions} data-qa="preview-actions">
-        <button className={styles.printBtn} onClick={handlePrint}>
-          🖨 {t('preview.print')}
-        </button>
-        <button className={styles.pdfBtn} onClick={handleDownloadPdf} disabled={pdfLoading || !data}>
-          {pdfLoading ? '⏳ 생성 중...' : `📄 ${t('preview.downloadPdf')}`}
-        </button>
+        {!isMobile && (
+          <button className={styles.printBtn} onClick={handlePrint}>
+            🖨 {t('preview.print')}
+          </button>
+        )}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+          <button className={styles.pdfBtn} onClick={handleDownloadPdf} disabled={pdfLoading || !data}>
+            {pdfLoading ? '⏳ 생성 중...' : `📄 ${t('preview.downloadPdf')}`}
+          </button>
+          {isMobile && (
+            <span style={{ fontSize: '11px', color: '#888', textAlign: 'center' }}>
+              PDF를 저장한 후 열어서 인쇄해주세요
+            </span>
+          )}
+        </div>
       </div>
 
       {/* 뷰어 영역 */}
