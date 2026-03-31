@@ -35,7 +35,7 @@ const UserForm = () => {
         manager: form.manager.trim() || defaultManager,
         createdAt: new Date().toISOString(),
       };
-      await saveUsers([...users, newUser]);
+      await saveUsers([newUser, ...users]); /* 신규가 맨 위 */
       navigate('/');
     } catch (e) {
       console.error('저장 실패:', e);
