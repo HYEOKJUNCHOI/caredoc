@@ -9,7 +9,8 @@ import { getUsers, saveUsers } from '../../utils/storage';
 import styles from './UserForm.module.css';
 
 const UserForm = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const defaultManager = i18n.language === 'ja' ? '栗須康子' : '최혁준';
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', manager: '' });
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,7 @@ const UserForm = () => {
       const newUser = {
         id: Date.now().toString(),
         name: form.name.trim(),
-        manager: form.manager.trim() || '栗須康子',
+        manager: form.manager.trim() || defaultManager,
         createdAt: new Date().toISOString(),
       };
       await saveUsers([...users, newUser]);
