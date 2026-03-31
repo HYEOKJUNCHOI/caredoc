@@ -126,7 +126,7 @@ const Home = () => {
               <button
                 className={styles.deleteUserBtn}
                 onClick={(e) => handleDeleteClick(e, user)}
-                title="削除"
+                title={t('ui.deleteTooltip')}
               >✕</button>
             </div>
           ))
@@ -148,17 +148,17 @@ const Home = () => {
       {userToDelete && (
         <div className={styles.modalOverlay} onClick={cancelDelete}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <h3 className={styles.modalTitle}>削除の確認</h3>
+            <h3 className={styles.modalTitle}>{t('ui.deleteConfirmTitle')}</h3>
             <p className={styles.modalText}>
-              「{userToDelete.name}」を削除しますか？<br/>
-              関連する書類データもすべて削除されます。
+              「{userToDelete.name}」{t('ui.deleteConfirmText').split('\n')[0]}<br/>
+              {t('ui.deleteConfirmText').split('\n')[1]}
             </p>
             <div className={styles.modalActions}>
               <button className={styles.cancelBtn} onClick={cancelDelete}>
-                {t('common.cancel', 'キャンセル')}
+                {t('common.cancel')}
               </button>
               <button className={styles.confirmBtn} onClick={confirmDelete}>
-                {t('common.delete', '削除')}
+                {t('common.delete')}
               </button>
             </div>
           </div>

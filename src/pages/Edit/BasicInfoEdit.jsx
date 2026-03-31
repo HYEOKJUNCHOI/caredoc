@@ -148,8 +148,8 @@ const BasicInfoEdit = ({ data, onChange }) => {
     setFuriCandidate('');
   };
 
-  /* 언어에 따라 라벨 전환 — 일본어 모드: 일본어만 / 한국어 모드: 한국어（日本語）*/
-  const lbl = (ko, jp) => isJa ? jp : `${ko}（${jp}）`;
+  /* 언어에 따라 라벨 전환 — 일본어 모드: 일본어만 / 한국어 모드: 한국어만 */
+  const lbl = (ko, jp) => isJa ? jp : ko;
 
   /* 가족 멤버 조작 헬퍼 */
   const familyMembers = data.familyMembers || [];
@@ -209,7 +209,10 @@ const BasicInfoEdit = ({ data, onChange }) => {
      개인정보(이름·생년월일·전화)는 무작위, 나머지는 공통값 사용 */
   const fillTestData = () => {
     onChange('_testMode', true);
-    const pool = [
+    const rnd = (max) => Math.floor(Math.random() * max);
+
+    /* ── 언어별 테스트 데이터 풀 ── */
+    const pool = isJa ? [
       ['田中　一郎', 'たなか　いちろう', '男性'],
       ['山田　太郎', 'やまだ　たろう',   '男性'],
       ['佐藤　健二', 'さとう　けんじ',   '男性'],
@@ -220,14 +223,27 @@ const BasicInfoEdit = ({ data, onChange }) => {
       ['加藤　幸子', 'かとう　さちこ',   '女性'],
       ['伊藤　雅子', 'いとう　まさこ',   '女性'],
       ['渡辺　里美', 'わたなべ　さとみ', '女性'],
+    ] : [
+      /* 한국어 모드 — 한국식 이름 + 한글 독음 */
+      ['김민준', '김민준', '男性'],
+      ['이서준', '이서준', '男性'],
+      ['박지훈', '박지훈', '男性'],
+      ['최도윤', '최도윤', '男性'],
+      ['정시우', '정시우', '男性'],
+      ['이서연', '이서연', '女性'],
+      ['김지아', '김지아', '女性'],
+      ['박하은', '박하은', '女性'],
+      ['최수아', '최수아', '女性'],
+      ['윤아린', '윤아린', '女性'],
     ];
-    const emPool = [
+
+    const emPool = isJa ? [
       ['父', '田中　次郎'], ['母', '山本　幸子'], ['兄', '佐藤　一男'],
       ['姉', '鈴木　和子'], ['夫', '中村　博'],   ['妻', '加藤　美智子'],
+    ] : [
+      ['父', '김 철수'], ['母', '이 영희'], ['兄', '박 민수'],
+      ['姉', '최 수진'], ['夫', '정 재원'], ['妻', '윤 지현'],
     ];
-    const rnd = (max) => Math.floor(Math.random() * max);
-    const rndPhone = (prefix = '0') =>
-      `${prefix}${String(rnd(90) + 10)}-${String(rnd(9000) + 1000)}-${String(rnd(9000) + 1000)}`;
 
     const [kanji, kana, gender] = pool[rnd(pool.length)];
     const [emRelation, emName]  = emPool[rnd(emPool.length)];
@@ -240,75 +256,137 @@ const BasicInfoEdit = ({ data, onChange }) => {
     onChange('nameKana',         kana);
     onChange('gender',           gender);
     onChange('birthDate',        `${year}-${month}-${day}`);
-    onChange('phoneMobile',      `080-${String(rnd(9000) + 1000)}-${String(rnd(9000) + 1000)}`);
-    onChange('phoneOffice',      rndPhone());
+    onChange('phoneMobile',      `010-${String(rnd(9000) + 1000)}-${String(rnd(9000) + 1000)}`);
+    onChange('phoneOffice',      `02-${String(rnd(900) + 100)}-${String(rnd(9000) + 1000)}`);
     onChange('emergencyName',    emName);
     onChange('emergencyRelation',emRelation);
-    onChange('emergencyPhone',   `090-${String(rnd(9000) + 1000)}-${String(rnd(9000) + 1000)}`);
-
-    /* 공통 고정값 */
-    onChange('facilityName',     '生馬ホーム');
-    onChange('address',          '白浜町中嶋44');
-    onChange('residenceType',    'グループホーム等');
-    onChange('disabilityName',   '両下肢機能全廃（1級）、二分脊椎排便排尿障害（4級）');
-    onChange('notebookType',     '療育手帳');
-    onChange('notebookLevel',    'B2');
-    onChange('disabilityPension','1級');
-    onChange('careInsurance',    '無');
-    onChange('disabilityOverview',   '車椅子を使用しており、日常生活全般に介助が必要。意思疎通は良好で、自分の意見をしっかりと伝えられる。');
-    onChange('careLevel',            '');
-    onChange('medicalRows', [
-      { hospital: 'こころの医療センター', disease: '統合失調症',   medication: '3食後、寝る前' },
-      { hospital: '紀南病院泌尿器科',     disease: '排尿障害',     medication: '導尿（自己）' },
-      { hospital: '南和歌山医療センター', disease: '高血圧',       medication: '朝1錠' },
-      { hospital: '南紀整形外科',         disease: '脊椎側弯症',   medication: 'リハビリ週1回' },
-    ]);
-    onChange('historyBirth',         '大阪府堺市にて出生。出生時より二分脊椎の診断を受ける。');
-    onChange('historyKindergarten',  '南紀福祉センター療育園（3歳〜6歳）');
-    onChange('historyElementary',    '安居小学校入学後、愛徳整肢園へ転院。小4より南紀養護学校へ転校。');
-    onChange('historyJuniorHigh',    '南紀養護学校中学部');
-    onChange('historySeniorHigh',    '南紀養護学校高等部');
-    onChange('historyOtherSchool',   '');
-    onChange('historyAdult',         'いきいき作業所（H.20〜H.27）→ふたば作業所（H.28.4〜現在）');
-    onChange('pastServiceRows', [
-      { serviceName: '移動支援',   facility: 'すてっぷ',       period: 'H.28〜現在' },
-      { serviceName: '日中一時支援', facility: '奥平デイサービス', period: 'R.2〜現在' },
-      { serviceName: '居宅介護',   facility: 'ヘルパーステーション白浜', period: 'R.3〜現在' },
-    ]);
-    onChange('supportLevel',    '4');
-    onChange('certValidFrom',   '2022-09-01');
-    onChange('certValidTo',     '2025-08-31');
-    onChange('paymentCity',     '白浜町');
-    onChange('certIssuedDate',  '2022-09-20');
-    onChange('certNumber',      `401${String(rnd(90000000) + 10000000)}`);
-    onChange('serviceTypeLaw', [
-      { type: '共同生活援助（グループホーム）', amount: '' },
-      { type: '生活介護',                       amount: '' },
-      { type: '居宅介護',                       amount: '36h/月（1回2hまで）' },
-    ]);
-    onChange('serviceTypeLocal', [
-      { type: '日中一時支援（デイサービス）', amount: '2日/月' },
-      { type: '移動支援（身体介護有）',       amount: '7h/月' },
-      { type: '',                               amount: '' },
-    ]);
-    onChange('consultationOffice',   '西牟婁障害者支援センター　リーふ');
-    onChange('socialRelationNodes',  'ヘルパー\nふたば作業所\n奥平マンション\n訪着すてっぷ');
-    onChange('mainOffices',          'ふたば作業所　奥平マンション');
-    onChange('otherInfo',            '田辺市社協権利擁護事業利用（金銭管理）2か月に1回');
-    onChange('chiefComplaintGeneral','いろいろなことを経験したい');
-    onChange('chiefComplaintWork',   '給料をたくさん稼ぎたい');
-    onChange('chiefComplaintLife',   '奥平マンションで良い。できることは自分でやる');
-    onChange('chiefComplaintOther',  '長期休暇には実家に帰省するのを楽しみにしている');
-    onChange('chiefComplaintFamily', '家族が定期的に様子を見にきてくれる。');
-    onChange('remarks',              '毎月第3木曜日にケース会議を実施。緊急時は施設長へ連絡すること。');
+    onChange('emergencyPhone',   `010-${String(rnd(9000) + 1000)}-${String(rnd(9000) + 1000)}`);
     onChange('bloodType', ['A','B','O','AB'][rnd(4)]);
-    onChange('familyMembers', [
-      { id: '1', relation: '父', name: '', customRelation: '' },
-      { id: '2', relation: '母', name: '', customRelation: '' },
-    ]);
 
-    /* 로컬 상태 동기화 */
-    setDisabilityNames(['両下肢機能全廃（1級）', '二分脊椎排便排尿障害（4級）']);
+    if (isJa) {
+      /* ── 일본어 고정값 ── */
+      onChange('facilityName',     '生馬ホーム');
+      onChange('address',          '白浜町中嶋44');
+      onChange('residenceType',    'グループホーム等');
+      onChange('disabilityName',   '両下肢機能全廃（1級）、二分脊椎排便排尿障害（4級）');
+      onChange('notebookType',     '療育手帳');
+      onChange('notebookLevel',    'B2');
+      onChange('disabilityPension','1級');
+      onChange('careInsurance',    '無');
+      onChange('disabilityOverview','車椅子を使用しており、日常生活全般に介助が必要。意思疎通は良好で、自分の意見をしっかりと伝えられる。');
+      onChange('careLevel',        '');
+      onChange('medicalRows', [
+        { hospital: 'こころの医療センター', disease: '統合失調症',   medication: '3食後、寝る前' },
+        { hospital: '紀南病院泌尿器科',     disease: '排尿障害',     medication: '導尿（自己）' },
+        { hospital: '南和歌山医療センター', disease: '高血圧',       medication: '朝1錠' },
+        { hospital: '南紀整形外科',         disease: '脊椎側弯症',   medication: 'リハビリ週1回' },
+      ]);
+      onChange('historyBirth',        '大阪府堺市にて出生。出生時より二分脊椎の診断を受ける。');
+      onChange('historyKindergarten', '南紀福祉センター療育園（3歳〜6歳）');
+      onChange('historyElementary',   '安居小学校入学後、愛徳整肢園へ転院。小4より南紀養護学校へ転校。');
+      onChange('historyJuniorHigh',   '南紀養護学校中学部');
+      onChange('historySeniorHigh',   '南紀養護学校高等部');
+      onChange('historyOtherSchool',  '');
+      onChange('historyAdult',        'いきいき作業所（H.20〜H.27）→ふたば作業所（H.28.4〜現在）');
+      onChange('pastServiceRows', [
+        { serviceName: '移動支援',     facility: 'すてっぷ',               period: 'H.28〜現在' },
+        { serviceName: '日中一時支援', facility: '奥平デイサービス',         period: 'R.2〜現在' },
+        { serviceName: '居宅介護',     facility: 'ヘルパーステーション白浜', period: 'R.3〜現在' },
+      ]);
+      onChange('supportLevel',        '4');
+      onChange('certValidFrom',       '2022-09-01');
+      onChange('certValidTo',         '2025-08-31');
+      onChange('paymentCity',         '白浜町');
+      onChange('certIssuedDate',      '2022-09-20');
+      onChange('certNumber',          `401${String(rnd(90000000) + 10000000)}`);
+      onChange('serviceTypeLaw', [
+        { type: '共同生活援助（グループホーム）', amount: '' },
+        { type: '生活介護',                       amount: '' },
+        { type: '居宅介護',                       amount: '36h/月（1回2hまで）' },
+      ]);
+      onChange('serviceTypeLocal', [
+        { type: '日中一時支援（デイサービス）', amount: '2日/月' },
+        { type: '移動支援（身体介護有）',       amount: '7h/月' },
+        { type: '',                               amount: '' },
+      ]);
+      onChange('consultationOffice',   '西牟婁障害者支援センター　リーふ');
+      onChange('socialRelationNodes',  'ヘルパー\nふたば作業所\n奥平マンション\n訪着すてっぷ');
+      onChange('mainOffices',          'ふたば作業所　奥平マンション');
+      onChange('otherInfo',            '田辺市社協権利擁護事業利用（金銭管理）2か月に1回');
+      onChange('chiefComplaintGeneral','いろいろなことを経験したい');
+      onChange('chiefComplaintWork',   '給料をたくさん稼ぎたい');
+      onChange('chiefComplaintLife',   '奥平マンションで良い。できることは自分でやる');
+      onChange('chiefComplaintOther',  '長期休暇には実家に帰省するのを楽しみにしている');
+      onChange('chiefComplaintFamily', '家族が定期的に様子を見にきてくれる。');
+      onChange('remarks',              '毎月第3木曜日にケース会議を実施。緊急時は施設長へ連絡すること。');
+      onChange('familyMembers', [
+        { id: '1', relation: '父', name: '', customRelation: '' },
+        { id: '2', relation: '母', name: '', customRelation: '' },
+      ]);
+      setDisabilityNames(['両下肢機能全廃（1級）', '二分脊椎排便排尿障害（4級）']);
+    } else {
+      /* ── 한국어 고정값 ── */
+      onChange('facilityName',     '생마 홈');
+      onChange('address',          '경기도 수원시 팔달구 중동 44');
+      onChange('residenceType',    'グループホーム等');
+      onChange('disabilityName',   '지체장애 1급, 신경인성 방광 4급');
+      onChange('notebookType',     '장애인 등록증');
+      onChange('notebookLevel',    'B2');
+      onChange('disabilityPension','1급');
+      onChange('careInsurance',    '무');
+      onChange('disabilityOverview','휠체어를 사용하며 일상생활 전반에 도움이 필요합니다. 의사소통은 원활하며 자신의 의견을 명확히 표현할 수 있습니다.');
+      onChange('careLevel',        '');
+      onChange('medicalRows', [
+        { hospital: '마음건강의원',     disease: '조현병',        medication: '3식 후, 취침 전' },
+        { hospital: '수원성모병원 비뇨기과', disease: '신경인성 방광', medication: '자가 도뇨' },
+        { hospital: '아주대병원',       disease: '고혈압',        medication: '아침 1정' },
+        { hospital: '수원정형외과',     disease: '척추측만증',    medication: '재활 주 1회' },
+      ]);
+      onChange('historyBirth',        '경기도 수원시 출생. 출생 시부터 이분척추 진단을 받음.');
+      onChange('historyKindergarten', '수원 복지센터 치료교육원 (3세~6세)');
+      onChange('historyElementary',   '영통초등학교 입학 후 재활병원 입원. 4학년부터 특수학교 전학.');
+      onChange('historyJuniorHigh',   '경기도립 특수학교 중학부');
+      onChange('historySeniorHigh',   '경기도립 특수학교 고등부');
+      onChange('historyOtherSchool',  '');
+      onChange('historyAdult',        '희망 작업장 (2008~2015) → 나눔 작업장 (2016~현재)');
+      onChange('pastServiceRows', [
+        { serviceName: '이동 지원',    facility: '스텝 복지관',        period: '2016~현재' },
+        { serviceName: '주간 일시지원', facility: '행복 데이서비스',    period: '2020~현재' },
+        { serviceName: '재가 돌봄',    facility: '돌봄 헬퍼 스테이션', period: '2021~현재' },
+      ]);
+      onChange('supportLevel',        '4');
+      onChange('certValidFrom',       '2022-09-01');
+      onChange('certValidTo',         '2025-08-31');
+      onChange('paymentCity',         '수원시');
+      onChange('certIssuedDate',      '2022-09-20');
+      onChange('certNumber',          `401${String(rnd(90000000) + 10000000)}`);
+      onChange('serviceTypeLaw', [
+        { type: '공동생활 지원 (그룹홈)', amount: '' },
+        { type: '생활 돌봄',              amount: '' },
+        { type: '재가 돌봄',              amount: '36h/월 (1회 2h까지)' },
+      ]);
+      onChange('serviceTypeLocal', [
+        { type: '주간 일시지원 (데이서비스)', amount: '월 2일' },
+        { type: '이동 지원 (신체 도움 포함)', amount: '월 7h' },
+        { type: '',                            amount: '' },
+      ]);
+      onChange('consultationOffice',   '수원 장애인 지원센터 나래');
+      onChange('socialRelationNodes',  '돌봄 헬퍼\n나눔 작업장\n생마 홈\n스텝 복지관');
+      onChange('mainOffices',          '나눔 작업장  생마 홈');
+      onChange('otherInfo',            '수원시 권리 옹호 사업 이용 (금전 관리) 2개월에 1회');
+      onChange('chiefComplaintGeneral','다양한 경험을 하고 싶다');
+      onChange('chiefComplaintWork',   '급여를 많이 받고 싶다');
+      onChange('chiefComplaintLife',   '지금 사는 곳이 좋다. 할 수 있는 건 스스로 하고 싶다');
+      onChange('chiefComplaintOther',  '긴 연휴에 본가에 가는 것을 기대하고 있다');
+      onChange('chiefComplaintFamily', '가족이 정기적으로 방문해준다.');
+      onChange('remarks',              '매월 셋째 목요일에 케이스 회의 실시. 긴급 시 시설장에게 연락할 것.');
+      onChange('familyMembers', [
+        { id: '1', relation: '父', name: '', customRelation: '' },
+        { id: '2', relation: '母', name: '', customRelation: '' },
+      ]);
+      setDisabilityNames(['지체장애 1급', '신경인성 방광 4급']);
+    }
+
     setFacilityCustomMode(false);
   };
 
@@ -474,7 +552,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 프로필 ── */}
       <section className={styles.section} data-qa="edit-section-profile">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>プロフィール</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? 'プロフィール' : '프로필'}</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('성명 한자', '氏名')}</label>
@@ -561,7 +639,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 가족 상황 (제노그램) ── */}
       <section className={styles.section} data-qa="edit-section-family">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 6 }}>家族状況</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 6 }}>{isJa ? '家族状況' : '가족 상황'}</h2>
         <p style={{ fontSize: 12, color: '#888', marginBottom: 10 }}>
           {isJa
             ? '関係を選んで名前（任意）を入力してください。'
@@ -724,7 +802,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 개호보험 ── */}
       <section className={styles.section} data-qa="edit-section-care">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>介護保険</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '介護保険' : '요양보험'}</h2>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-end' }}>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('개호보험', '介護保険')}</label>
@@ -743,7 +821,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 의료기관·복약 ── */}
       <section className={styles.section} data-qa="edit-section-medical">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>医療機関・服薬状況</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '医療機関・服薬状況' : '의료기관·복약 현황'}</h2>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
@@ -774,7 +852,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 기왕력 ── */}
       <section className={styles.section} data-qa="edit-section-history">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>既往</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '既往' : '과거력'}</h2>
         <div style={{ display: 'grid', gap: '10px' }}>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('출생·영유아기', '出生・乳幼児期')}</label>
@@ -803,7 +881,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 과거 서비스 이용 ── */}
       <section className={styles.section} data-qa="edit-section-past-service">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>過去のサービス利用</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '過去のサービス利用' : '과거 서비스 이용'}</h2>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
@@ -828,7 +906,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 수급자증 ── */}
       <section className={styles.section} data-qa="edit-section-cert">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>受給者証</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '受給者証' : '수급자증'}</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('지원구분', '支援区分')}</label>
@@ -901,7 +979,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 상담지원사업소 ── */}
       <section className={styles.section} data-qa="edit-section-consultation">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>相談支援事業所</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '相談支援事業所' : '상담지원 사업소'}</h2>
         <div className={styles.field}>
           <label className={styles.fieldLabel}>{lbl('상담지원사업소명', '事業所名')}</label>
           {inp('consultationOffice', isJa ? '事業所名を入力' : '사업소명 입력')}
@@ -910,7 +988,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 사회관계도 ── */}
       <section className={styles.section} data-qa="edit-section-social">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>社会関係図</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '社会関係図' : '사회관계도'}</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('관계 기관명 (한 줄에 하나씩)', '関係機関名（1行に1つ）')}</label>
@@ -929,7 +1007,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 주訴 ── */}
       <section className={styles.section} data-qa="edit-section-complaint">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>当該事業所利用時の主訴</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '当該事業所利用時の主訴' : '해당 사업소 이용 시 주요 호소'}</h2>
         <div style={{ display: 'grid', gap: '10px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             {[
@@ -953,7 +1031,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 비고 ── */}
       <section className={styles.section} data-qa="edit-section-remarks">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>備考</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 8 }}>{isJa ? '備考' : '비고'}</h2>
         <div className={styles.field}>
           {inp('remarks', '', 4)}
         </div>

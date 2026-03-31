@@ -3,6 +3,13 @@
   "nav": { "home": "홈", "back": "뒤로" },
   "lang": { "toggle": "日本語", "current": "한국어" },
 
+  "ui": {
+    "loading": "로딩 중...",
+    "deleteConfirmTitle": "삭제 확인",
+    "deleteConfirmText": "을(를) 삭제하시겠습니까?\n관련된 서류 데이터도 모두 삭제됩니다.",
+    "deleteTooltip": "삭제"
+  },
+
   "home": {
     "title": "이용자 목록",
     "addUser": "+ 새 이용자 추가",

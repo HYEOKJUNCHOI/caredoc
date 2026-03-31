@@ -3,6 +3,7 @@
    - 로그인 후: 앱 전체 접근 */
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from './hooks/useAuth';
 import Landing from './pages/Landing/Landing';
 import Header from './components/layout/Header';
@@ -15,12 +16,13 @@ import Admin from './pages/Admin/Admin';
 import UserForm from './pages/UserForm/UserForm';
 
 function App() {
+  const { t } = useTranslation();
   const { user, loading, loginLoading, loginError, loginWithGoogle } = useAuth();
 
   /* 인증 상태 로딩 중 */
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100svh', color: '#aaa', fontSize: 14 }}>
-      読み込み中...
+      {t('ui.loading')}
     </div>
   );
 

@@ -3,6 +3,13 @@
   "nav": { "home": "ホーム", "back": "戻る" },
   "lang": { "toggle": "한국어", "current": "日本語" },
 
+  "ui": {
+    "loading": "読み込み中...",
+    "deleteConfirmTitle": "削除の確認",
+    "deleteConfirmText": "を削除しますか？\n関連する書類データもすべて削除されます。",
+    "deleteTooltip": "削除"
+  },
+
   "home": {
     "title": "利用者一覧",
     "addUser": "+ 新しい利用者を追加",
