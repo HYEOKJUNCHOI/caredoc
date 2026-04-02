@@ -75,7 +75,7 @@ export const useAuth = () => {
     const params = new URLSearchParams({
       response_type: 'code',
       client_id:     '2009682092',
-      redirect_uri:  'https://caredoc.vercel.app/auth/line/callback',
+      redirect_uri:  'https://caredoc-navy.vercel.app/auth/line/callback',
       state,
       scope:         'profile',
     });
