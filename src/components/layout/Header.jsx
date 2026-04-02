@@ -44,6 +44,9 @@ const Header = () => {
   const { t, i18n } = useTranslation();
   const { logout } = useAuth();
 
+  /* 로그아웃 확인 모달 표시 여부 */
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   /* 홈('/') 여부 판단 — 홈이면 로고 표시, 그 외엔 뒤로가기 버튼 표시 */
   const isHome = location.pathname === '/';
 
@@ -154,8 +157,58 @@ const Header = () => {
         </div>
         {/* 언어 토글 컴포넌트 — 한국어/일본어 전환 */}
         <LanguageToggle />
-        <button className={styles.logoutBtn} onClick={logout} tabIndex={-1}>{i18n.language === 'ja' ? 'ログアウト' : '로그아웃'}</button>
+        <button className={styles.logoutBtn} onClick={() => setShowLogoutModal(true)} tabIndex={-1}>
+          {i18n.language === 'ja' ? 'ログアウト' : '로그아웃'}
+        </button>
       </div>
+
+      {/* 로그아웃 확인 모달 */}
+      {showLogoutModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowLogoutModal(false)}>
+          <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.modalTitle}>
+              {i18n.language === 'ja' ? 'ログアウト' : '로그아웃'}
+            </p>
+            <p className={styles.modalDesc}>
+              {i18n.language === 'ja'
+                ? '公共の場でご利用でしたか？\n各サービスからもログアウトを推奨します。'
+                : '공공장소에서 사용하셨나요?\n아래 서비스에서도 로그아웃하시길 권장합니다.'}
+            </p>
+            <div className={styles.modalLinks}>
+              <a
+                href="https://accounts.google.com/logout"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.modalLinkBtn}
+                style={{ background: '#fff', color: '#333', border: '1px solid #ddd' }}
+              >
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={16} height={16} alt="" />
+                {i18n.language === 'ja' ? 'Googleからログアウト' : 'Google 로그아웃'}
+              </a>
+              <a
+                href="https://line.me/ko/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.modalLinkBtn}
+                style={{ background: '#06C755', color: '#fff' }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <path d="M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                </svg>
+                {i18n.language === 'ja' ? 'LINEからログアウト' : 'LINE 로그아웃'}
+              </a>
+            </div>
+            <div className={styles.modalActions}>
+              <button className={styles.modalCancelBtn} onClick={() => setShowLogoutModal(false)}>
+                {i18n.language === 'ja' ? 'キャンセル' : '취소'}
+              </button>
+              <button className={styles.modalLogoutBtn} onClick={() => { setShowLogoutModal(false); logout(); }}>
+                {i18n.language === 'ja' ? 'アプリをログアウト' : '앱 로그아웃'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
