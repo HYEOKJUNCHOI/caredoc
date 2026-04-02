@@ -54,6 +54,11 @@ const ref = (uid, key) => doc(db, 'users', uid, 'data', key);
    ────────────────────────────────────────── */
 export const loadFromFirestore = async (uid) => {
   const keys = ['users', 'documents', 'customPhrases', 'hiddenPhrases'];
+  /* 보안: 로그인 전 이전 사용자의 localStorage 데이터를 먼저 삭제
+     다른 계정으로 로그인해도 잔류 데이터가 보이지 않도록 방지 */
+  ['users', 'documents', 'customPhrases', 'hiddenPhrases', 'currentUserId'].forEach(
+    (key) => localStorage.removeItem(PREFIX + key)
+  );
   await Promise.all(keys.map(async (key) => {
     try {
       /* getDoc(겟닥): 해당 경로의 문서를 한 번 읽어옴 */

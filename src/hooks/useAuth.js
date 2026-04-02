@@ -150,8 +150,15 @@ export const useAuth = () => {
     return () => unsub();
   }, []);
 
-  /* signOut(사인아웃): Firebase 로그아웃 — auth 인스턴스와 연결된 세션을 종료 */
-  const logout = () => signOut(auth);
+  /* signOut(사인아웃): Firebase 로그아웃 — auth 인스턴스와 연결된 세션을 종료
+     보안: 로그아웃 시 localStorage의 모든 앱 데이터를 즉시 삭제
+     → 같은 브라우저에서 다른 사람이 로그인해도 이전 사용자 데이터가 노출되지 않음 */
+  const logout = () => {
+    ['users', 'documents', 'customPhrases', 'hiddenPhrases', 'currentUserId', 'firebaseUid'].forEach(
+      (key) => localStorage.removeItem('caredoc-' + key)
+    );
+    return signOut(auth);
+  };
 
   /* 훅 사용자가 필요한 값/함수만 선택적으로 꺼내 쓸 수 있도록 객체로 반환 */
   return { user, loading, loginLoading, loginError, loginWithGoogle, loginWithLine, logout };
