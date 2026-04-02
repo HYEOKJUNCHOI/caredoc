@@ -70,7 +70,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
   /* ── 장애·질병명 CRUD ── */
   const [disabilityNames, setDisabilityNames] = useState(() => {
     if (data.disabilityNames?.length) return data.disabilityNames;
-    return ['精神障害'];
+    return [isJa ? '精神障害' : '정신장애'];
   });
   const [testLoading, setTestLoading] = useState(false);
   const [testMode, setTestMode] = useState(false);
@@ -613,7 +613,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           <div className={styles.field} style={{ gridColumn: '1 / -1' }}>
             <label className={styles.fieldLabel}>{lbl('주거상황', '住居状況')}</label>
             <ToggleOptions
-              options={['持家', '賃貸共同住宅', 'グループホーム等', 'その他']}
+              options={isJa ? ['持家', '賃貸共同住宅', 'グループホーム等', 'その他'] : ['자가', '임대공동주택', '그룹홈 등', '기타']}
               value={data.residenceType || ''}
               onChange={(v) => onChange('residenceType', v)}
             />
@@ -674,7 +674,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
             {/* 이름 */}
             <input
               className={styles.input}
-              placeholder={isJa ? '名前' : '이름（名前）'}
+              placeholder={isJa ? '名前' : '이름'}
               value={m.name || ''}
               onChange={(e) => updateMember(m.id, 'name', e.target.value)}
               tabIndex={-1}
@@ -775,7 +775,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('수첩 종류', '手帳種別')}</label>
             <ToggleOptions
-              options={['療育手帳', '精神障害手帳', '身体障害手帳']}
+              options={isJa ? ['療育手帳', '精神障害手帳', '身体障害手帳'] : ['치료교육수첩', '정신장애수첩', '신체장애수첩']}
               value={data.notebookType || ''}
               onChange={(v) => onChange('notebookType', v)}
             />
@@ -787,7 +787,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('장애연금', '障害年金')}</label>
             <ToggleOptions
-              options={['1級', '2級', 'なし']}
+              options={isJa ? ['1級', '2級', 'なし'] : ['1급', '2급', '없음']}
               value={data.disabilityPension || ''}
               onChange={(v) => onChange('disabilityPension', v)}
             />
@@ -807,7 +807,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('개호보험', '介護保険')}</label>
             <ToggleOptions
-              options={['有', '無']}
+              options={isJa ? ['有', '無'] : ['유', '무']}
               value={data.careInsurance || ''}
               onChange={(v) => onChange('careInsurance', v)}
             />
@@ -939,7 +939,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
         </div>
 
         {/* 서비스 종별 (지원법) */}
-        <h3 style={{ fontSize: '13px', margin: '14px 0 6px', color: '#555' }}>サービス種別（支援法）</h3>
+        <h3 style={{ fontSize: '13px', margin: '14px 0 6px', color: '#555' }}>{isJa ? 'サービス種別（支援法）' : '서비스 종별（지원법）'}</h3>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
           <thead>
             <tr style={{ background: '#f5f5f5' }}>
@@ -958,7 +958,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
         </table>
 
         {/* 서비스 종별 (지역생활지원) */}
-        <h3 style={{ fontSize: '13px', margin: '14px 0 6px', color: '#555' }}>サービス種別（地域生活支援事業）</h3>
+        <h3 style={{ fontSize: '13px', margin: '14px 0 6px', color: '#555' }}>{isJa ? 'サービス種別（地域生活支援事業）' : '서비스 종별（지역생활지원사업）'}</h3>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
           <thead>
             <tr style={{ background: '#f5f5f5' }}>
@@ -1024,7 +1024,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
           </div>
           <div className={styles.field}>
             <label className={styles.fieldLabel}>{lbl('가족', '家族')}</label>
-            {inp('chiefComplaintFamily', isJa ? '家族の主訴を入力' : '가족 주訴 입력')}
+            {inp('chiefComplaintFamily', isJa ? '家族の主訴を入力' : '가족 주요 호소 입력')}
           </div>
         </div>
       </section>

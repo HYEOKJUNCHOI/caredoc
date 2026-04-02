@@ -22,11 +22,17 @@ import styles from './Header.module.css';
 
 /* DOC_TITLES(닥타이틀스): 서류 타입 키 → 헤더 중앙에 표시할 문서명 매핑 객체
    URL 경로 맨 뒤(.pop())가 이 객체의 키와 일치하면 해당 이름을 중앙에 표시 */
-const DOC_TITLES = {
+const DOC_TITLES_JA = {
   basicInfo:      '基本情報',
   supportPlan:    '個別支援計画書',
   monitoring:     'モニタリング記録表',
   meetingMinutes: '作成会議録',
+};
+const DOC_TITLES_KO = {
+  basicInfo:      '기본정보',
+  supportPlan:    '개별지원계획서',
+  monitoring:     '모니터링기록표',
+  meetingMinutes: '작성회의록',
 };
 
 const Header = () => {
@@ -35,7 +41,7 @@ const Header = () => {
   /* useLocation(유즈로케이션): 현재 페이지 URL 정보를 담은 객체
      location.pathname(패스네임): 현재 URL 경로 예: '/edit/basicInfo' */
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { logout } = useAuth();
 
   /* 홈('/') 여부 판단 — 홈이면 로고 표시, 그 외엔 뒤로가기 버튼 표시 */
@@ -45,6 +51,7 @@ const Header = () => {
      '/edit/basicInfo'.split('/').pop() → 'basicInfo'
      이 값으로 DOC_TITLES 객체를 조회해 중앙 서류명을 표시 */
   const pathType = location.pathname.split('/').pop();
+  const DOC_TITLES = i18n.language === 'ja' ? DOC_TITLES_JA : DOC_TITLES_KO;
   const docTitle = DOC_TITLES[pathType] || null;
 
   /* ── 자동 로그아웃 타이머 ──
@@ -147,7 +154,7 @@ const Header = () => {
         </div>
         {/* 언어 토글 컴포넌트 — 한국어/일본어 전환 */}
         <LanguageToggle />
-        <button className={styles.logoutBtn} onClick={logout} tabIndex={-1}>ログアウト</button>
+        <button className={styles.logoutBtn} onClick={logout} tabIndex={-1}>{i18n.language === 'ja' ? 'ログアウト' : '로그아웃'}</button>
       </div>
     </header>
   );
