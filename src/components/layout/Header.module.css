@@ -156,7 +156,8 @@
 .modalLinkBtn {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 10px;
   padding: 14px 18px;
   border-radius: 10px;
   font-size: 14px;
@@ -167,8 +168,9 @@
 
 .modalLineNote {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   padding: 14px 18px;
   border-radius: 10px;
   border: 1px solid #d4f0dc;
@@ -176,10 +178,12 @@
   font-size: 14px;
   color: #2a7a3a;
   font-weight: 500;
+  overflow: visible;
 }
 
 .modalBtnText {
   line-height: 1.65;
+  text-align: center;
 }
 
 .modalActions {
