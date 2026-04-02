@@ -15,17 +15,21 @@ import PrintAll from './pages/Preview/PrintAll';
 import Admin from './pages/Admin/Admin';
 import UserForm from './pages/UserForm/UserForm';
 import Privacy from './pages/Privacy/Privacy';
+import LineCallback from './pages/LineCallback/LineCallback';
 
-/* 인증 가드 내부 — /privacy는 로그인 없이 접근 가능 */
-const AuthGate = ({ loginLoading, loginError, loginWithGoogle }) => {
+/* 인증 가드 내부 — /privacy, /auth/line/callback은 로그인 없이 접근 가능 */
+const AuthGate = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) => {
   const location = useLocation();
   const { user } = useAuth();
 
   /* /privacy는 누구나 접근 */
   if (location.pathname === '/privacy') return <Privacy />;
 
+  /* LINE 로그인 콜백 — 로그인 처리 중이므로 인증 불필요 */
+  if (location.pathname === '/auth/line/callback') return <LineCallback />;
+
   /* 미로그인 → 랜딩 */
-  if (!user) return <Landing loginLoading={loginLoading} loginError={loginError} loginWithGoogle={loginWithGoogle} />;
+  if (!user) return <Landing loginLoading={loginLoading} loginError={loginError} loginWithGoogle={loginWithGoogle} loginWithLine={loginWithLine} />;
 
   /* 로그인 → 앱 */
   return (
@@ -47,7 +51,7 @@ const AuthGate = ({ loginLoading, loginError, loginWithGoogle }) => {
 
 function App() {
   const { t } = useTranslation();
-  const { loading, loginLoading, loginError, loginWithGoogle } = useAuth();
+  const { loading, loginLoading, loginError, loginWithGoogle, loginWithLine } = useAuth();
 
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100svh', color: '#aaa', fontSize: 14 }}>
@@ -63,6 +67,7 @@ function App() {
             loginLoading={loginLoading}
             loginError={loginError}
             loginWithGoogle={loginWithGoogle}
+            loginWithLine={loginWithLine}
           />
         } />
       </Routes>
