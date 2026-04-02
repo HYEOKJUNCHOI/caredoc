@@ -185,18 +185,16 @@ const Header = () => {
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={16} height={16} alt="" />
                 {i18n.language === 'ja' ? 'Googleからログアウト' : 'Google 로그아웃'}
               </a>
-              <a
-                href="https://line.me/ko/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.modalLinkBtn}
-                style={{ background: '#06C755', color: '#fff' }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+              <div className={styles.modalLineNote}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#06C755" style={{ flexShrink: 0 }}>
                   <path d="M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
                 </svg>
-                {i18n.language === 'ja' ? 'LINEからログアウト' : 'LINE 로그아웃'}
-              </a>
+                <span>
+                  {i18n.language === 'ja'
+                    ? 'LINEアプリ → 設定 → ログアウト'
+                    : 'LINE 앱 → 설정 → 로그아웃'}
+                </span>
+              </div>
             </div>
             <div className={styles.modalActions}>
               <button className={styles.modalCancelBtn} onClick={() => setShowLogoutModal(false)}>

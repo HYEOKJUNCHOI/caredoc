@@ -166,6 +166,19 @@
   cursor: pointer;
 }
 
+.modalLineNote {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d4f0dc;
+  background: #f3fdf5;
+  font-size: 13px;
+  color: #2a7a3a;
+  font-weight: 500;
+}
+
 .modalActions {
   display: flex;
   gap: 8px;
