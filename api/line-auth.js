@@ -42,8 +42,8 @@ export default async function handler(req, res) {
       body: new URLSearchParams({
         grant_type:    'authorization_code',
         code,
-        redirect_uri:  process.env.VITE_LINE_REDIRECT_URI,
-        client_id:     process.env.VITE_LINE_CHANNEL_ID,
+        redirect_uri:  'https://caredoc-navy.vercel.app/auth/line/callback',
+        client_id:     '2009682092',
         client_secret: process.env.LINE_CHANNEL_SECRET,
       }).toString(),
     });
