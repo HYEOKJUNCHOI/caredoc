@@ -156,31 +156,30 @@
 .modalLinkBtn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px;
-  border-radius: 8px;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  text-align: center;
-  line-height: 1.5;
 }
 
 .modalLineNote {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 13px;
-  border-radius: 8px;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 10px;
   border: 1px solid #d4f0dc;
   background: #f3fdf5;
-  font-size: 13px;
+  font-size: 14px;
   color: #2a7a3a;
   font-weight: 500;
-  text-align: center;
-  line-height: 1.6;
+}
+
+.modalBtnText {
+  line-height: 1.65;
 }
 
 .modalActions {

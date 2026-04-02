@@ -182,14 +182,16 @@ const Header = () => {
                 className={styles.modalLinkBtn}
                 style={{ background: '#fff', color: '#333', border: '1px solid #ddd' }}
               >
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={16} height={16} alt="" />
-                {i18n.language === 'ja' ? <>Googleから<br/>ログアウト</> : <>Google<br/>로그아웃</>}
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={18} height={18} alt="" style={{ flexShrink: 0 }} />
+                <span className={styles.modalBtnText}>
+                  {i18n.language === 'ja' ? 'Googleからログアウト' : 'Google 로그아웃'}
+                </span>
               </a>
               <div className={styles.modalLineNote}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#06C755" style={{ flexShrink: 0 }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#06C755" style={{ flexShrink: 0 }}>
                   <path d="M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
                 </svg>
-                <span>
+                <span className={styles.modalBtnText}>
                   {i18n.language === 'ja'
                     ? <>LINEアプリ → ⚙️ → アカウント →<br/>ログイン中の端末 → ログアウト</>
                     : <>LINE 앱 → ⚙️ → 계정 → 접속중인기기<br/>→ 로그아웃</>}
