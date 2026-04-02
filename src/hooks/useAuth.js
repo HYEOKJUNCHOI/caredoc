@@ -74,8 +74,8 @@ export const useAuth = () => {
 
     const params = new URLSearchParams({
       response_type: 'code',
-      client_id:     import.meta.env.VITE_LINE_CHANNEL_ID,
-      redirect_uri:  import.meta.env.VITE_LINE_REDIRECT_URI,
+      client_id:     '2009682092',
+      redirect_uri:  'https://caredoc.vercel.app/auth/line/callback',
       state,
       scope:         'profile',
     });
