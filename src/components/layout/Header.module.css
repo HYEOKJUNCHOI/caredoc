@@ -164,6 +164,8 @@
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
+  text-align: center;
+  line-height: 1.5;
 }
 
 .modalLineNote {
@@ -177,7 +179,8 @@
   font-size: 13px;
   color: #2a7a3a;
   font-weight: 500;
-  white-space: nowrap;
+  text-align: center;
+  line-height: 1.6;
 }
 
 .modalActions {

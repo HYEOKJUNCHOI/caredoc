@@ -183,7 +183,7 @@ const Header = () => {
                 style={{ background: '#fff', color: '#333', border: '1px solid #ddd' }}
               >
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={16} height={16} alt="" />
-                {i18n.language === 'ja' ? 'Googleからログアウト' : 'Google 로그아웃'}
+                {i18n.language === 'ja' ? <>Googleから<br/>ログアウト</> : <>Google<br/>로그아웃</>}
               </a>
               <div className={styles.modalLineNote}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="#06C755" style={{ flexShrink: 0 }}>
@@ -191,8 +191,8 @@ const Header = () => {
                 </svg>
                 <span>
                   {i18n.language === 'ja'
-                    ? 'LINEアプリ → ⚙️ → アカウント → ログイン中の端末 → ログアウト'
-                    : 'LINE 앱 → ⚙️ → 계정 → 접속중인기기 → 로그아웃'}
+                    ? <>LINEアプリ → ⚙️ → アカウント →<br/>ログイン中の端末 → ログアウト</>
+                    : <>LINE 앱 → ⚙️ → 계정 → 접속중인기기<br/>→ 로그아웃</>}
                 </span>
               </div>
             </div>
