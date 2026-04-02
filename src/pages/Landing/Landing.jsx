@@ -13,6 +13,7 @@
    - loginWithGoogle: 버튼 클릭 시 실행할 로그인 함수 → App.jsx에서 주입
    ============================================================ */
 
+import LanguageToggle from '../../components/common/LanguageToggle';
 import styles from './Landing.module.css';
 
 /* 구조 분해 할당(Destructuring 디스트럭처링):
@@ -21,6 +22,10 @@ const Landing = ({ loginLoading, loginError, loginWithGoogle }) => {
 
   return (
     <div className={styles.wrap}>
+      {/* 오른쪽 상단 언어 토글 — position fixed로 랜딩 위에 항상 표시 */}
+      <div style={{ position: 'fixed', top: 12, right: 16, zIndex: 100 }}>
+        <LanguageToggle />
+      </div>
 
       {/* 로고 */}
       <div className={styles.logo}>CareDoc</div>
