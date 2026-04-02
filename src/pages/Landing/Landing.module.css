@@ -99,50 +99,48 @@
   letter-spacing: 0.04em;
 }
 
-/* LINE 로그인 버튼 */
-.lineBtn {
+/* 로그인 버튼 묶음 — 두 버튼을 동일 너비로, 간격 15px */
+.loginBtns {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #06C755;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
+  flex-direction: column;
+  gap: 15px;
   margin-top: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-  transition: transform 0.1s, box-shadow 0.1s;
 }
 
-.lineBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-}
-
-/* 구글 로그인 버튼 */
+/* 공통 버튼 베이스 */
+.lineBtn,
 .loginBtn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  background: #fff;
-  color: #333;
+  width: 100%;
   border: none;
   border-radius: 8px;
   padding: 12px 24px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.4);
   transition: transform 0.1s, box-shadow 0.1s;
 }
 
+.lineBtn:hover,
 .loginBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+/* LINE 버튼 색상 */
+.lineBtn {
+  background: #06C755;
+  color: #fff;
+}
+
+/* Google 버튼 색상 */
+.loginBtn {
+  background: #fff;
+  color: #333;
 }
 
 .googleIcon {
