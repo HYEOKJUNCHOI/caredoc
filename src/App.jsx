@@ -16,6 +16,7 @@ import Admin from './pages/Admin/Admin';
 import UserForm from './pages/UserForm/UserForm';
 import Privacy from './pages/Privacy/Privacy';
 import LineCallback from './pages/LineCallback/LineCallback';
+import ShibaWag from './components/common/ShibaWag';
 
 /* 인증 가드 내부 — /privacy, /auth/line/callback은 로그인 없이 접근 가능 */
 const AuthGate = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) => {
@@ -35,6 +36,7 @@ const AuthGate = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) 
   return (
     <>
       <Header />
+      <ShibaWag />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/user/new" element={<UserForm />} />
