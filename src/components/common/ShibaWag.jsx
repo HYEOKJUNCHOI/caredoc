@@ -3,22 +3,21 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './ShibaWag.module.css';
-import ShibaHelp from './SupportModal';
 
 const MESSAGES = {
   ja: [
-    'お役に立てましたか？🐾',
-    '書類作成、お疲れ様です！',
-    'いつもありがとうございます！',
-    '困ったことはありませんか？',
-    'クリックしてヘルプを見る📋',
+    '利用者を追加して始めよう！👤',
+    '書類はPDFで保存できるよ📄',
+    'カードを長押しで削除🗑️',
+    'データは自動でクラウド保存☁️',
+    '書類の種類は複数選べるよ📋',
   ],
   ko: [
-    '도움이 되셨나요? 🐾',
-    '서류 작성 수고 많으세요!',
-    '항상 감사합니다!',
-    '궁금한 게 있으면 눌러보세요!',
-    '눌러서 도움말 보기 📋',
+    '이용자를 추가하고 시작해요! 👤',
+    '서류는 PDF로 저장할 수 있어요 📄',
+    '카드를 꾹 누르면 삭제 가능 🗑️',
+    '데이터는 자동으로 클라우드 저장 ☁️',
+    '서류 종류는 여러 개 선택 가능 📋',
   ],
 };
 
@@ -26,7 +25,6 @@ const ShibaWag = () => {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'ko' ? 'ko' : 'ja';
 
-  const [open, setOpen] = useState(false);
   const [msgIdx, setMsgIdx] = useState(0);
 
   useEffect(() => {
@@ -41,15 +39,12 @@ const ShibaWag = () => {
   }, [lang]);
 
   return (
-    <>
-      <div className={styles.wrap}>
-        <div className={styles.inner} onClick={() => setOpen(true)}>
-          <div className={styles.bubble}>{MESSAGES[lang][msgIdx]}</div>
-          <div className={styles.shiba} />
-        </div>
+    <div className={styles.wrap}>
+      <div className={styles.inner}>
+        <div className={styles.bubble}>{MESSAGES[lang][msgIdx]}</div>
+        <div className={styles.shiba} />
       </div>
-      {open && <ShibaHelp onClose={() => setOpen(false)} />}
-    </>
+    </div>
   );
 };
 

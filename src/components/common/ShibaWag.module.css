@@ -18,8 +18,7 @@
   align-items: center;
   padding-right: 12px;
   padding-bottom: 0;
-  cursor: pointer;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 /* 말풍선: 알약 모양, 꼬리는 오른쪽 아래 */
