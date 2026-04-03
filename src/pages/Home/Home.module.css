@@ -94,12 +94,6 @@
   pointer-events: auto;
 }
 
-/* 터치 디바이스용 — JS에서 클래스 제어 */
-.userCardWrap.showDelete .deleteUserBtn {
-  opacity: 1;
-  pointer-events: auto;
-}
-
 /* 삭제 버튼 — 우측 상단, overflow-x:hidden에 잘리지 않도록 카드 안에 배치 */
 .deleteUserBtn {
   position: absolute;
@@ -124,7 +118,7 @@
   z-index: 2;
 }
 
-.deleteUserBtn:hover, .userCardWrap.showDelete .deleteUserBtn {
+.deleteUserBtn:hover {
   transform: scale(1.15);
 }
 
