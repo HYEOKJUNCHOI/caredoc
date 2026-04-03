@@ -23,20 +23,20 @@
   z-index: 100;
 }
 
-/* 설치 — 콘텐츠 박스 중앙에서 150px 왼쪽, 시바와 같은 선상 */
+/* 설치 — 왼쪽 끝, 시바 발 선상(bottom:20px)에 집 바닥 맞춤 */
 .installWrap {
   position: fixed;
-  bottom: -50px; /* 시바와 동일한 bottom */
-  left: max(0px, calc((100vw - 720px) / 2));
+  bottom: 20px; /* 시바 시각적 발 높이와 동일 */
+  left: max(0px, calc((100vw - 720px) / 2 - 20px));
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* 라벨을 오른쪽 끝으로 */
+  align-items: center;
   pointer-events: auto;
   z-index: 100;
   cursor: pointer;
 }
 
-/* 뱃지형 라벨 */
+/* 뱃지형 라벨 — 집 바로 위, 시바-말풍선 간격(약 8px) */
 .installLabel {
   background: #fff2cc;
   border-radius: 6px;
@@ -46,13 +46,11 @@
   color: #7a6000;
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  margin-bottom: -14px; /* 집 쪽으로 더 붙이고 20px 내림 */
+  margin-bottom: 8px;
   letter-spacing: 0.3px;
-  position: relative;
-  z-index: 1;
 }
 
-/* sibazip 집 이미지 — 현재 160px × 3 = 480px */
+/* sibazip 집 이미지 */
 .houseImg {
   width: 384px;
   height: auto;
