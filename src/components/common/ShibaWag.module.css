@@ -34,9 +34,9 @@
 .bubble {
   background: #fff;
   border: 2px solid #217346;
-  border-radius: 12px;
-  padding: 6px 14px;
-  font-size: 11px;
+  border-radius: 16px;
+  padding: 10px 20px;
+  font-size: 13px;
   font-weight: 600;
   color: #217346;
   white-space: nowrap;
@@ -68,6 +68,7 @@
 }
 
 .shiba {
+  margin-top: -12px; /* 꼬리~머리 간격 제거 */
   width: 120px;
   height: 160px; /* 120 * (1024/768) */
   background-image: url('/siba2.png');
