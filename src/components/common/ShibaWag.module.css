@@ -1,28 +1,36 @@
+/* wrap: 콘텐츠 박스(max 720px) 하단에 집(왼쪽 끝) + 시바(오른쪽 끝) */
 .wrap {
   position: fixed;
-  bottom: 16px;
-  right: max(16px, calc((100vw - 720px) / 2 + 16px));
+  bottom: 0;
+  left: max(0px, calc((100vw - 720px) / 2));
+  right: max(0px, calc((100vw - 720px) / 2));
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
   align-items: flex-end;
-  gap: 8px;
+  pointer-events: none; /* 클릭 가능한 자식만 pointer-events: auto */
   z-index: 100;
 }
 
+/* 집: 왼쪽 끝, 시바보다 크게 */
 .house {
-  width: 80px;
+  width: 120px;
   height: auto;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
 }
 
-/* 시바 + 말풍선 세로 배치 */
+/* 시바 + 말풍선 묶음: 오른쪽 끝 */
 .inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
+  padding-right: 16px;
+  padding-bottom: 8px;
   cursor: pointer;
+  pointer-events: auto;
 }
 
+/* 말풍선: 알약 모양, 꼬리는 오른쪽 아래 */
 .bubble {
   background: #fff;
   border: 2px solid #217346;
@@ -34,16 +42,15 @@
   white-space: nowrap;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   position: relative;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
-/* 꼬리: 아래 방향 (시바 귀 위로) */
+/* 꼬리: 오른쪽 아래 */
 .bubble::after {
   content: '';
   position: absolute;
   bottom: -9px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 18px;
   border: 5px solid transparent;
   border-top-color: #217346;
 }
@@ -52,31 +59,28 @@
   content: '';
   position: absolute;
   bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 18px;
   border: 5px solid transparent;
   border-top-color: #fff;
   z-index: 1;
 }
 
 .shiba {
-  width: 170px;
-  height: 227px; /* 170 * (1024/768) — 프레임 1장 기준 */
+  width: 100px;
+  height: 133px; /* 100 * (1024/768) */
   background-image: url('/siba2.png');
-  background-size: 340px 227px;
+  background-size: 200px 133px;
   background-repeat: no-repeat;
   animation: wag 1.7s steps(1) infinite;
-  cursor: pointer;
-  z-index: 50;
   image-rendering: auto;
   filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.45));
 }
 
 @keyframes wag {
   0%,  49% { background-position: 0 0; }
-  50%, 100% { background-position: -170px 0; }
+  50%, 100% { background-position: -100px 0; }
 }
 
 @media print {
-  .shiba { display: none; }
+  .wrap { display: none; }
 }

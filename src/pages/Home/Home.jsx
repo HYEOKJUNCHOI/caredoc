@@ -46,6 +46,11 @@ const Home = () => {
   /* 모달(Modal 모달): 화면 위에 떠서 사용자의 확인/취소를 받는 팝업 UI */
   const [userToDelete, setUserToDelete] = useState(null);
 
+  /* 무한스크롤 — 6개씩 추가 표시 */
+  const PAGE_SIZE = 6;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef(null);
+
   /* 꾹 누르기 타이머 참조 */
   /* useRef로 타이머 ID를 저장한다.
      setState 대신 useRef를 쓰는 이유: 타이머 ID는 화면에 표시할 필요가 없으므로
@@ -57,6 +62,19 @@ const Home = () => {
   useEffect(() => {
     setUsers(getUsers());
   }, []);
+
+  /* IntersectionObserver: sentinel 요소가 화면에 보이면 visibleCount를 늘림 */
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setVisibleCount((c) => c + PAGE_SIZE);
+      }
+    }, { threshold: 1.0 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [users]);
 
   /* 카드 클릭 시 해당 이용자를 "현재 선택된 이용자"로 저장하고 서류 선택 화면으로 이동 */
   const handleSelect = (userId) => {
@@ -155,14 +173,10 @@ const Home = () => {
       </div>
 
       <div className={styles.userList} data-qa="home-user-list">
-        {/* 조건부 렌더링(Conditional Rendering 컨디셔널 렌더링):
-            users.length === 0 이면 "이용자 없음" 안내 문구,
-            아니면 map으로 각 이용자 카드를 렌더링 */}
         {users.length === 0 ? (
           <p className={styles.empty}>{t('home.noUsers')}</p>
         ) : (
-          /* map(맵): 배열의 각 항목을 JSX로 변환해 새 배열을 만드는 고차 함수 */
-          users.map((user) => (
+          users.slice(0, visibleCount).map((user) => (
             /* key(키): React가 리스트 아이템을 효율적으로 업데이트하기 위해 필요한 고유 식별자.
                key가 없으면 경고가 발생하고 렌더링 성능이 저하된다. */
             <div
@@ -211,6 +225,9 @@ const Home = () => {
           ))
         )}
       </div>
+
+      {/* sentinel: 리스트 끝에 보이지 않는 요소 — 스크롤 감지용 */}
+      {visibleCount < users.length && <div ref={sentinelRef} style={{ height: 1 }} />}
 
       {/* 이용자가 한 명이라도 있을 때만 구분선을 표시하는 조건부 렌더링 */}
       {users.length > 0 && <div className={styles.divider} />}

@@ -1,6 +1,4 @@
-/* ShibaWag — 꼬리 흔드는 시바견 캐릭터
-   원본 이미지(siba.png): 1536×1024, 두 프레임이 좌우로 나란히
-   CSS background-position으로 프레임 1↔2 전환 → 꼬리 흔들기 애니메이션 */
+/* ShibaWag — 꼬리 흔드는 시바견 캐릭터 + 집 + 순환 말풍선 */
 
 import { useState, useEffect } from 'react';
 import styles from './ShibaWag.module.css';
@@ -30,8 +28,9 @@ const ShibaWag = () => {
 
   return (
     <>
+      {/* wrap: 콘텐츠 박스 하단 전체 폭에 걸쳐 집(왼쪽) + 시바(오른쪽) 배치 */}
       <div className={styles.wrap}>
-        <img src="/sibazip.png" className={styles.house} alt="" />
+        <img src="/sibazip.png" className={styles.house} alt="시바 집" />
         <div className={styles.inner} onClick={() => setOpen(true)}>
           <div className={styles.bubble}>{MESSAGES[msgIdx]}</div>
           <div className={styles.shiba} />
