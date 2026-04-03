@@ -50,6 +50,20 @@
   white-space: nowrap;
 }
 
+.installGuide {
+  margin-top: 6px;
+  background: #fff;
+  border: 1.5px solid #217346;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-line;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  max-width: 160px;
+}
+
 /* 시바 + 말풍선 묶음: 오른쪽 끝, 바닥 밀착 */
 .inner {
   display: flex;

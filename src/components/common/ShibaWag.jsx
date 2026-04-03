@@ -25,7 +25,8 @@ const MESSAGES = {
 const ShibaWag = () => {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'ko' ? 'ko' : 'ja';
-  const { canInstall, install } = useInstallPrompt();
+  const { canInstall, isInstalled, install } = useInstallPrompt();
+  const [showGuide, setShowGuide] = useState(false);
 
   const [msgIdx, setMsgIdx] = useState(0);
 
@@ -42,14 +43,24 @@ const ShibaWag = () => {
 
   return (
     <>
-      {canInstall && (
+      {!isInstalled && (
         <div className={styles.installWrap}>
-          <button className={styles.installBtn} onClick={install}>
+          <button
+            className={styles.installBtn}
+            onClick={canInstall ? install : () => setShowGuide((v) => !v)}
+          >
             <span className={styles.installIcon}>📲</span>
             <span className={styles.installLabel}>
               {lang === 'ko' ? '바탕화면에 추가' : 'ホーム画面に追加'}
             </span>
           </button>
+          {showGuide && !canInstall && (
+            <div className={styles.installGuide}>
+              {lang === 'ko'
+                ? 'Chrome 주소창 오른쪽 ⊕ 버튼을 누르거나\niOS는 공유 → 홈 화면에 추가'
+                : 'Chromeのアドレスバー右の⊕\niOSは共有→ホーム画面に追加'}
+            </div>
+          )}
         </div>
       )}
       <div className={styles.wrap}>
