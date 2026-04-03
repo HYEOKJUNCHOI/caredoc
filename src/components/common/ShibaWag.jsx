@@ -41,7 +41,7 @@ const ShibaWag = () => {
   }, [lang]);
 
   return (
-    <div className={styles.wrap}>
+    <>
       {canInstall && (
         <div className={styles.installWrap}>
           <button className={styles.installBtn} onClick={install}>
@@ -52,11 +52,13 @@ const ShibaWag = () => {
           </button>
         </div>
       )}
-      <div className={styles.inner}>
-        <div className={styles.bubble}>{MESSAGES[lang][msgIdx]}</div>
-        <div className={styles.shiba} />
+      <div className={styles.wrap}>
+        <div className={styles.inner}>
+          <div className={styles.bubble}>{MESSAGES[lang][msgIdx]}</div>
+          <div className={styles.shiba} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
