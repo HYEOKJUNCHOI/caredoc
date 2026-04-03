@@ -22,7 +22,7 @@ const ShibaWag = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setMsgIdx((i) => (i + 1) % MESSAGES.length);
-    }, 3000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 

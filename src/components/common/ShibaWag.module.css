@@ -11,12 +11,13 @@
   z-index: 100;
 }
 
-/* 시바 + 말풍선 묶음: 오른쪽 끝 */
+/* 시바 + 말풍선 묶음: 오른쪽 끝, 바닥 밀착 */
 .inner {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-right: 12px;
+  padding-bottom: 0;
   cursor: pointer;
   pointer-events: auto;
 }
@@ -59,11 +60,11 @@
 }
 
 .shiba {
-  margin-top: -40px; /* 꼬리~머리 간격 제거 */
-  width: 275px;
-  height: 367px; /* 275 * (160/120) */
+  margin-top: -70px; /* 말풍선 꼬리를 머리 바로 위에 */
+  width: 220px;
+  height: 293px; /* 220 * (160/120) */
   background-image: url('/siba2.png');
-  background-size: 550px 367px; /* 2프레임 × 275px */
+  background-size: 440px 293px; /* 2프레임 × 220px */
   background-repeat: no-repeat;
   animation: wag 1.7s steps(1) infinite;
   image-rendering: auto;
@@ -72,7 +73,7 @@
 
 @keyframes wag {
   0%,  49% { background-position: 0 0; }
-  50%, 100% { background-position: -275px 0; }
+  50%, 100% { background-position: -220px 0; }
 }
 
 @media print {
