@@ -46,6 +46,8 @@
   flex-direction: column;
   gap: 4px;
   margin-bottom: 16px;
+  max-height: 256px; /* 카드 4개 높이 (64px × 4) */
+  overflow-y: auto;
 }
 
 .empty {

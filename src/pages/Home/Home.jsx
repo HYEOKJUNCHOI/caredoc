@@ -46,10 +46,7 @@ const Home = () => {
   /* 모달(Modal 모달): 화면 위에 떠서 사용자의 확인/취소를 받는 팝업 UI */
   const [userToDelete, setUserToDelete] = useState(null);
 
-  /* 무한스크롤 — 6개씩 추가 표시 */
-  const PAGE_SIZE = 4;
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const sentinelRef = useRef(null);
+  /* 4개 고정 스크롤 컨테이너 — 5개 이상이면 스크롤로 확인 */
 
   /* 꾹 누르기 타이머 참조 */
   /* useRef로 타이머 ID를 저장한다.
@@ -63,18 +60,6 @@ const Home = () => {
     setUsers(getUsers());
   }, []);
 
-  /* IntersectionObserver: sentinel 요소가 화면에 보이면 visibleCount를 늘림 */
-  useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setVisibleCount((c) => c + PAGE_SIZE);
-      }
-    }, { threshold: 1.0 });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [users]);
 
   /* 카드 클릭 시 해당 이용자를 "현재 선택된 이용자"로 저장하고 서류 선택 화면으로 이동 */
   const handleSelect = (userId) => {
@@ -176,7 +161,7 @@ const Home = () => {
         {users.length === 0 ? (
           <p className={styles.empty}>{t('home.noUsers')}</p>
         ) : (
-          users.slice(0, visibleCount).map((user) => (
+          users.map((user) => (
             /* key(키): React가 리스트 아이템을 효율적으로 업데이트하기 위해 필요한 고유 식별자.
                key가 없으면 경고가 발생하고 렌더링 성능이 저하된다. */
             <div
@@ -225,9 +210,6 @@ const Home = () => {
           ))
         )}
       </div>
-
-      {/* sentinel: 리스트 끝에 보이지 않는 요소 — 스크롤 감지용 */}
-      {visibleCount < users.length && <div ref={sentinelRef} style={{ height: 1 }} />}
 
       {/* 이용자가 한 명이라도 있을 때만 구분선을 표시하는 조건부 렌더링 */}
       {users.length > 0 && <div className={styles.divider} />}
