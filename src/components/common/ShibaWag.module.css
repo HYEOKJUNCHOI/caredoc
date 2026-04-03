@@ -5,15 +5,16 @@
   right: 24px;
   width: 100px;
   height: 67px; /* 100 * (1024/1536) */
-  background-image: url('/siba.png');
+  background-image: url('/siba2.png');
   /* background-size: 전체 너비(두 프레임) × 높이 */
   background-size: 200px 67px;
   background-repeat: no-repeat;
   /* steps(1): 부드럽게 전환하지 않고 딱딱 끊어서 프레임 전환 */
-  animation: wag 0.5s steps(1) infinite;
+  animation: wag 1.5s steps(1) infinite;
   cursor: default;
   z-index: 50;
   image-rendering: auto;
+  mix-blend-mode: multiply; /* 흰 배경 제거 — 흰색×배경색=배경색 원리 */
 }
 
 /* 프레임 1(0 0): 왼쪽 절반 → 프레임 2(-100px 0): 오른쪽 절반 */
