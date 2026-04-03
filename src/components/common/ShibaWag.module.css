@@ -3,61 +3,59 @@
   bottom: 16px;
   right: max(16px, calc((100vw - 720px) / 2 + 16px));
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-end;
+  gap: 8px;
   z-index: 100;
 }
 
 .house {
-  font-size: 36px;
-  line-height: 1;
-  margin-bottom: -8px;
-  align-self: flex-start;
-  margin-left: 8px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  width: 80px;
+  height: auto;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
 }
 
-/* 시바 + 말풍선 가로 배치 */
+/* 시바 + 말풍선 세로 배치 */
 .inner {
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
+  flex-direction: column;
+  align-items: center;
   cursor: pointer;
 }
 
 .bubble {
   background: #fff;
   border: 2px solid #217346;
-  border-radius: 12px;
-  padding: 6px 10px;
+  border-radius: 999px;
+  padding: 6px 14px;
   font-size: 11px;
   font-weight: 600;
   color: #217346;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
-/* 꼬리: 오른쪽에서 시바 방향으로 */
+/* 꼬리: 아래 방향 (시바 귀 위로) */
 .bubble::after {
   content: '';
   position: absolute;
-  right: -9px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
   border: 5px solid transparent;
-  border-left-color: #217346;
+  border-top-color: #217346;
 }
 
 .bubble::before {
   content: '';
   position: absolute;
-  right: -6px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
   border: 5px solid transparent;
-  border-left-color: #fff;
+  border-top-color: #fff;
   z-index: 1;
 }
 

@@ -31,7 +31,7 @@ const ShibaWag = () => {
   return (
     <>
       <div className={styles.wrap}>
-        <div className={styles.house}>🏠</div>
+        <img src="/sibazip.png" className={styles.house} alt="" />
         <div className={styles.inner} onClick={() => setOpen(true)}>
           <div className={styles.bubble}>{MESSAGES[msgIdx]}</div>
           <div className={styles.shiba} />
