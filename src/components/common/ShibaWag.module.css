@@ -27,7 +27,7 @@
 .installWrap {
   position: fixed;
   bottom: -50px; /* 시바와 동일한 bottom */
-  left: max(0px, calc((100vw - 720px) / 2 + 210px + 100px));
+  left: max(0px, calc((100vw - 720px) / 2 + 210px - 50px));
   display: flex;
   flex-direction: column;
   align-items: flex-end; /* 라벨을 오른쪽 끝으로 */
