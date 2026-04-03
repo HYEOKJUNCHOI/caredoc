@@ -4,7 +4,7 @@ import styles from './SupportModal.module.css';
 const AMOUNTS = [300, 500];
 
 const SupportModal = ({ onClose }) => {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(300);
   const [custom, setCustom]     = useState('');
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState(null);

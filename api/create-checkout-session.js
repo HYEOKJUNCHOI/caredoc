@@ -22,7 +22,7 @@ export default async function handler(req, res) {
         price_data: {
           currency: 'jpy',
           product_data: {
-            name: 'CareDoc サイト維持費のご支援 🐾',
+            name: 'サイト維持費のご支援 🐾',
             description: 'いつもご利用いただきありがとうございます。',
           },
           unit_amount: amount, /* JPY는 소수점 없는 통화 — 100 = ¥100 */
