@@ -28,6 +28,17 @@ const ShibaWag = () => {
   const { canInstall, isInstalled, install } = useInstallPrompt();
   const [showGuide, setShowGuide] = useState(false);
 
+  const handleShortcut = () => {
+    /* .url 파일 생성 — Windows 바로가기 형식 */
+    const content = `[InternetShortcut]\nURL=https://caredoc-navy.vercel.app/\n`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'CareDoc.url';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
   const [msgIdx, setMsgIdx] = useState(0);
 
   useEffect(() => {
@@ -47,20 +58,13 @@ const ShibaWag = () => {
         <div className={styles.installWrap}>
           <button
             className={styles.installBtn}
-            onClick={canInstall ? install : () => setShowGuide((v) => !v)}
+            onClick={canInstall ? install : handleShortcut}
           >
             <span className={styles.installIcon}>📲</span>
             <span className={styles.installLabel}>
               {lang === 'ko' ? '바탕화면에 추가' : 'ホーム画面に追加'}
             </span>
           </button>
-          {showGuide && !canInstall && (
-            <div className={styles.installGuide}>
-              {lang === 'ko'
-                ? 'Chrome 주소창 오른쪽 ⊕ 버튼을 누르거나\niOS는 공유 → 홈 화면에 추가'
-                : 'Chromeのアドレスバー右の⊕\niOSは共有→ホーム画面に追加'}
-            </div>
-          )}
         </div>
       )}
       <div className={styles.wrap}>
