@@ -1,109 +1,49 @@
-import { useState } from 'react';
+/* ShibaHelp — 시바견 NPC 도움말 모달 */
+
+import { useTranslation } from 'react-i18next';
 import styles from './SupportModal.module.css';
 
-const AMOUNTS = [300, 500];
+const TIPS = {
+  ja: [
+    '🐾 利用者を長押しすると削除ボタンが出るよ！',
+    '📄 書類はプレビュー画面からPDFで保存できるよ！',
+    '☁️ ログインすると複数の端末でデータを共有できるよ！',
+    '✏️ 担当者名を入力すると書類に自動で入るよ！',
+    '📋 利用者を追加してから書類の種類を選んでね！',
+    '🔄 別のアカウントでログインすると自動でデータが切り替わるよ！',
+  ],
+  ko: [
+    '🐾 이용자를 꾹 누르면 삭제 버튼이 나와요!',
+    '📄 서류는 미리보기 화면에서 PDF로 저장할 수 있어요!',
+    '☁️ 로그인하면 여러 기기에서 데이터를 공유할 수 있어요!',
+    '✏️ 담당자 이름을 입력하면 서류에 자동으로 들어가요!',
+    '📋 이용자를 추가한 뒤 서류 종류를 선택해 보세요!',
+    '🔄 다른 계정으로 로그인하면 데이터가 자동으로 전환돼요!',
+  ],
+};
 
-const SupportModal = ({ onClose }) => {
-  const [selected, setSelected] = useState(300);
-  const [custom, setCustom]     = useState('');
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState(null);
-
-  const finalAmount = selected === 'custom'
-    ? parseInt(custom, 10)
-    : selected;
-
-  const handlePay = async () => {
-    if (!finalAmount || finalAmount < 100) {
-      setError('100円以上でご入力ください。');
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      const res  = await fetch('/api/create-checkout-session', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ amount: finalAmount }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url; /* Stripe Checkout 페이지로 이동 */
-      } else {
-        setError(data.error || 'エラーが発生しました。');
-      }
-    } catch {
-      setError('通信エラーが発生しました。');
-    } finally {
-      setLoading(false);
-    }
-  };
+const ShibaHelp = ({ onClose }) => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language === 'ko' ? 'ko' : 'ja';
+  const tips = TIPS[lang];
 
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.card} onClick={(e) => e.stopPropagation()}>
-        <p className={styles.title}>🐾 サイト維持費のご支援</p>
-        <p className={styles.desc}>
-          いつもご利用いただきありがとうございます。<br />
-          サーバー維持のため、ご支援いただけると嬉しいです。
+        <p className={styles.title}>
+          {lang === 'ko' ? '🐾 시바의 도움말' : '🐾 シバのヘルプ'}
         </p>
-
-        <div className={styles.amounts}>
-          {AMOUNTS.map((a) => (
-            <button
-              key={a}
-              className={`${styles.amountBtn} ${selected === a ? styles.active : ''}`}
-              onClick={() => { setSelected(a); setCustom(''); }}
-            >
-              ¥{a}
-            </button>
+        <ul className={styles.tipList}>
+          {tips.map((tip, i) => (
+            <li key={i} className={styles.tipItem}>{tip}</li>
           ))}
-          <button
-            className={`${styles.amountBtn} ${selected === 'custom' ? styles.active : ''}`}
-            onClick={() => setSelected('custom')}
-          >
-            自由入力
-          </button>
-        </div>
-
-        {selected === 'custom' && (
-          <div className={styles.customWrap}>
-            <span className={styles.yen}>¥</span>
-            <input
-              className={styles.customInput}
-              type="number"
-              min={100}
-              placeholder="例: 1000"
-              value={custom}
-              onChange={(e) => setCustom(e.target.value)}
-              autoFocus
-            />
-          </div>
-        )}
-
-        {error && <p className={styles.error}>{error}</p>}
-
-        <button
-          className={styles.payBtn}
-          onClick={handlePay}
-          disabled={!finalAmount || loading}
-        >
-          {loading ? '処理中...' : `${finalAmount ? `¥${finalAmount} で支援する ☕` : '金額を選択してください'}`}
+        </ul>
+        <button className={styles.cancelBtn} onClick={onClose}>
+          {lang === 'ko' ? '닫기' : '閉じる'}
         </button>
-
-        <a
-          className={styles.kofiBtn}
-          href="https://ko-fi.com/caredoc"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          ☕ Ko-fi で支援する
-        </a>
-
-        <button className={styles.cancelBtn} onClick={onClose}>キャンセル</button>
       </div>
     </div>
   );
 };
 
-export default SupportModal;
+export default ShibaHelp;
