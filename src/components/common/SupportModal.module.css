@@ -103,6 +103,23 @@
   background: #185c37;
 }
 
+.kofiBtn {
+  display: block;
+  padding: 13px;
+  border-radius: 10px;
+  background: #ff5f5f;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.kofiBtn:hover {
+  background: #e54e4e;
+}
+
 .cancelBtn {
   padding: 8px;
   border: none;

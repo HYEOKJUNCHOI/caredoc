@@ -91,6 +91,15 @@ const SupportModal = ({ onClose }) => {
           {loading ? '処理中...' : `${finalAmount ? `¥${finalAmount} で支援する ☕` : '金額を選択してください'}`}
         </button>
 
+        <a
+          className={styles.kofiBtn}
+          href="https://ko-fi.com/caredoc"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ☕ Ko-fi で支援する
+        </a>
+
         <button className={styles.cancelBtn} onClick={onClose}>キャンセル</button>
       </div>
     </div>
