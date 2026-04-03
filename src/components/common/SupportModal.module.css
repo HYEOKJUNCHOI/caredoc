@@ -1,0 +1,120 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px 20px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+  color: #222;
+}
+
+.desc {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.amounts {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.amountBtn {
+  flex: 1;
+  padding: 10px 0;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.amountBtn.active {
+  border-color: #217346;
+  background: #e8f5ee;
+  color: #217346;
+}
+
+.customWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid #217346;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.yen {
+  font-size: 16px;
+  font-weight: 700;
+  color: #217346;
+}
+
+.customInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
+
+.payBtn {
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: #217346;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.payBtn:disabled {
+  background: #aaa;
+  cursor: default;
+}
+
+.payBtn:not(:disabled):hover {
+  background: #185c37;
+}
+
+.cancelBtn {
+  padding: 8px;
+  border: none;
+  background: none;
+  color: #aaa;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.error {
+  font-size: 12px;
+  color: #e33;
+  text-align: center;
+}

@@ -2,10 +2,24 @@
    원본 이미지(siba.png): 1536×1024, 두 프레임이 좌우로 나란히
    CSS background-position으로 프레임 1↔2 전환 → 꼬리 흔들기 애니메이션 */
 
+import { useState } from 'react';
 import styles from './ShibaWag.module.css';
+import SupportModal from './SupportModal';
 
-const ShibaWag = () => (
-  <div className={styles.shiba} title="🐾 CareDoc" />
-);
+const ShibaWag = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <div
+        className={styles.shiba}
+        title="サイト維持費のご支援 ☕"
+        onClick={() => setOpen(true)}
+        style={{ cursor: 'pointer' }}
+      />
+      {open && <SupportModal onClose={() => setOpen(false)} />}
+    </>
+  );
+};
 
 export default ShibaWag;
