@@ -212,7 +212,6 @@ const Home = () => {
         )}
       </div>
 
-      </div>
       {users.length > 4 && (
         <div className={styles.scrollHint}>▼ 더보기</div>
       )}
