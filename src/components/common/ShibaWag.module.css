@@ -1,7 +1,7 @@
 /* wrap: 콘텐츠 박스(max 720px) 하단 오른쪽 끝에 시바 */
 .wrap {
   position: fixed;
-  bottom: -10px; /* 스프라이트 하단 투명 여백만큼 밀어서 발이 바닥에 닿게 */
+  bottom: -60px; /* 투명 여백(~70px) - 원하는 간격(10px) = -60px */
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
   display: flex;
