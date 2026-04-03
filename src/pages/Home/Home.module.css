@@ -4,8 +4,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  position: relative;
-  min-height: 100%;
 }
 
 /* 상단 타이틀 영역 */

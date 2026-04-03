@@ -1,12 +1,12 @@
 .wrap {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding-right: 15px;
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  z-index: 100;
 }
 
 .bubble {
