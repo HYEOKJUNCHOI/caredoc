@@ -25,7 +25,7 @@ import { useState, useEffect } from 'react';
    signInWithPopup(사인인위드팝업): 팝업 창으로 OAuth 로그인 시도
    GoogleAuthProvider(구글어스프로바이더): Google 로그인 제공자 객체
    signOut(사인아웃): Firebase 로그아웃 함수 */
-import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
 
 /* auth(어스): 초기화된 Firebase Auth 인스턴스 */
 import { auth } from '../lib/firebase';
@@ -119,6 +119,9 @@ export const useAuth = () => {
      3. 클린업 함수(unsub())로 컴포넌트 언마운트 시 구독 해제 → 메모리 누수 방지
 
      의존성 배열([]) — 빈 배열이므로 마운트 시 한 번만 실행됨 */
+  /* 브라우저 탭/창 닫으면 자동 로그아웃 */
+  useEffect(() => { setPersistence(auth, browserSessionPersistence); }, []);
+
   useEffect(() => {
     /* onAuthStateChanged(온어스스테이트체인지드): Firebase 인증 상태 변화를 실시간 감지하는 구독자
        반환값 unsub(언섭): 구독 해제 함수 — useEffect 클린업에서 호출 */
