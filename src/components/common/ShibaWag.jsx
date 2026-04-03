@@ -54,6 +54,7 @@ const ShibaWag = () => {
 
   return (
     <>
+      <div className={styles.ground} />
       {!isInstalled && (
         <div className={styles.installWrap} onClick={canInstall ? install : handleShortcut}>
           <div className={styles.installLabel}>
