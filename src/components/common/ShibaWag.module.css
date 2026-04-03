@@ -13,7 +13,7 @@
 
 /* 집: 왼쪽 끝, 시바(100px)보다 크게 */
 .house {
-  width: 280px;
+  width: 275px;
   height: auto;
   pointer-events: none;
   padding-left: 12px;
@@ -68,7 +68,7 @@
 }
 
 .shiba {
-  margin-top: -28px; /* 꼬리~머리 간격 제거 */
+  margin-top: -40px; /* 꼬리~머리 간격 제거 */
   width: 120px;
   height: 160px; /* 120 * (1024/768) */
   background-image: url('/siba2.png');

@@ -40,12 +40,17 @@
   color: var(--text-primary);
 }
 
+/* 이용자 목록 래퍼 — 힌트 화살표 포지셔닝 기준 */
+.userListWrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+
 /* 이용자 목록 */
 .userList {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 16px;
   max-height: 256px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -55,6 +60,26 @@
 
 .userList::-webkit-scrollbar {
   display: none; /* Chrome/Safari */
+}
+
+/* 스크롤 힌트 — 더 있을 때 아래에 표시 */
+.scrollHint {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-tertiary);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(3px); }
 }
 
 .empty {

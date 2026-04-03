@@ -157,6 +157,7 @@ const Home = () => {
         <h1 className={styles.title}>{t('home.title')}</h1>
       </div>
 
+      <div className={styles.userListWrap}>
       <div className={styles.userList} data-qa="home-user-list">
         {users.length === 0 ? (
           <p className={styles.empty}>{t('home.noUsers')}</p>
@@ -209,6 +210,12 @@ const Home = () => {
             </div>
           ))
         )}
+      </div>
+
+      </div>
+      {users.length > 4 && (
+        <div className={styles.scrollHint}>▼ 더보기</div>
+      )}
       </div>
 
       {/* 이용자가 한 명이라도 있을 때만 구분선을 표시하는 조건부 렌더링 */}
