@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './SupportModal.module.css';
 
-const AMOUNTS = [100, 500];
+const AMOUNTS = [300, 500];
 
 const SupportModal = ({ onClose }) => {
   const [selected, setSelected] = useState(null);
@@ -14,8 +14,8 @@ const SupportModal = ({ onClose }) => {
     : selected;
 
   const handlePay = async () => {
-    if (!finalAmount || finalAmount < 100) {
-      setError('100円以上でご入力ください。');
+    if (!finalAmount || finalAmount < 300) {
+      setError('300円以上でご入力ください。');
       return;
     }
     setLoading(true);
