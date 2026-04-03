@@ -44,6 +44,16 @@ const UserForm = () => {
       /* 기존 이용자 목록 조회 */
       const users = getUsers();
 
+      /* 이름 중복 체크 */
+      const isDuplicate = users.some(
+        (u) => u.name.trim() === form.name.trim()
+      );
+      if (isDuplicate) {
+        setError('같은 이름의 이용자가 이미 존재합니다.');
+        setLoading(false);
+        return;
+      }
+
       /* 새 이용자 객체 생성
          - id: Date.now() → 밀리초 타임스탬프를 고유 ID로 활용
          - manager: 입력이 없으면 defaultManager(언어별 기본값) 사용
