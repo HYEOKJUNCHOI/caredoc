@@ -55,16 +55,11 @@ const ShibaWag = () => {
   return (
     <>
       {!isInstalled && (
-        <div className={styles.installWrap}>
-          <button
-            className={styles.installBtn}
-            onClick={canInstall ? install : handleShortcut}
-          >
-            <span className={styles.installIcon}>📲</span>
-            <span className={styles.installLabel}>
-              {lang === 'ko' ? '바탕화면에 추가' : 'ホーム画面に追加'}
-            </span>
-          </button>
+        <div className={styles.installWrap} onClick={canInstall ? install : handleShortcut}>
+          <div className={styles.installLabel}>
+            {lang === 'ko' ? '바탕화면에 추가' : 'ホーム画面に追加'}
+          </div>
+          <img src="/sibazip.png" className={styles.houseImg} alt="바로가기" />
         </div>
       )}
       <div className={styles.wrap}>
