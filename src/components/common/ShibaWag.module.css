@@ -2,7 +2,9 @@
 .shiba {
   position: fixed;
   bottom: 20px;
-  right: 24px;
+  /* #root가 max-width:720px 중앙정렬이므로
+     뷰포트 우측에서 (뷰포트-720px)/2 만큼 안쪽 + 16px 여백 */
+  right: max(16px, calc((100vw - 720px) / 2 + 16px));
   width: 140px;
   height: 93px; /* 140 * (1024/1536) */
   background-image: url('/siba2.png');
