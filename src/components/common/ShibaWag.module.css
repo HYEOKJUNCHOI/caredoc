@@ -1,7 +1,7 @@
 /* wrap: 콘텐츠 박스(max 720px) 하단 오른쪽 끝에 시바 */
 .wrap {
   position: fixed;
-  bottom: -60px; /* 투명 여백(~70px) - 원하는 간격(10px) = -60px */
+  bottom: -50px; /* 투명 여백(~70px) - 원하는 간격(20px) = -50px */
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
   display: flex;

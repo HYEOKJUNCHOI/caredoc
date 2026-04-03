@@ -100,11 +100,11 @@
   pointer-events: auto;
 }
 
-/* 삭제 버튼 — 호버 시 우측 상단 모서리에 크로스오버 */
+/* 삭제 버튼 — 우측 상단, overflow-x:hidden에 잘리지 않도록 카드 안에 배치 */
 .deleteUserBtn {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: 4px;
+  right: 4px;
   width: 22px;
   height: 22px;
   border-radius: 50%;
