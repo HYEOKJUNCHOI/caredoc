@@ -14,33 +14,35 @@
 /* 설치 — 콘텐츠 박스 중앙에서 150px 왼쪽, 시바와 같은 선상 */
 .installWrap {
   position: fixed;
-  bottom: 20px; /* 시바 발 높이에 맞춤 */
+  bottom: -50px; /* 시바와 동일한 bottom */
   left: max(0px, calc((100vw - 720px) / 2 + 210px));
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end; /* 라벨을 오른쪽 끝으로 */
   pointer-events: auto;
   z-index: 100;
   cursor: pointer;
 }
 
-/* 뱃지형 라벨 — 말풍선과 다른 스타일 */
+/* 뱃지형 라벨 */
 .installLabel {
-  background: #217346;
+  background: #fff2cc;
   border-radius: 6px;
   padding: 4px 10px;
   font-size: 11px;
   font-weight: 700;
-  color: #fff;
+  color: #7a6000;
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  margin-bottom: 6px;
+  margin-bottom: -14px; /* 집 쪽으로 더 붙이고 20px 내림 */
   letter-spacing: 0.3px;
+  position: relative;
+  z-index: 1;
 }
 
-/* sibazip 집 이미지 */
+/* sibazip 집 이미지 — 현재 160px × 3 = 480px */
 .houseImg {
-  width: 160px;
+  width: 480px;
   height: auto;
   filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.3));
   transition: filter 0.12s;
