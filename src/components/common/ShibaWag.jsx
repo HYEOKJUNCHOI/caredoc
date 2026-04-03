@@ -11,12 +11,10 @@ const ShibaWag = () => {
 
   return (
     <>
-      <div
-        className={styles.shiba}
-        title="サイト維持費のご支援 ☕"
-        onClick={() => setOpen(true)}
-        style={{ cursor: 'pointer' }}
-      />
+      <div className={styles.wrap} onClick={() => setOpen(true)}>
+        <div className={styles.bubble}>コーヒー一杯のご支援を ☕</div>
+        <div className={styles.shiba} />
+      </div>
       {open && <SupportModal onClose={() => setOpen(false)} />}
     </>
   );

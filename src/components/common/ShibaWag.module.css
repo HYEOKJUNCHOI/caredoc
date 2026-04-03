@@ -1,13 +1,54 @@
-.shiba {
+.wrap {
   position: absolute;
   bottom: 0;
   right: 0;
-  padding-bottom: 0px;
-  padding-right: 0;
+  padding-right: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.bubble {
+  background: #fff;
+  border: 2px solid #217346;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #217346;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  margin-bottom: 6px;
+  position: relative;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #217346;
+}
+
+.bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #fff;
+  z-index: 1;
+}
+
+.shiba {
   width: 170px;
-  height: 113px; /* 170 * (1024/1536) */
+  height: 227px; /* 170 * (1024/768) — 프레임 1장 기준 */
   background-image: url('/siba2.png');
-  background-size: 340px 113px;
+  background-size: 340px 227px;
   background-repeat: no-repeat;
   animation: wag 1.7s steps(1) infinite;
   cursor: pointer;
