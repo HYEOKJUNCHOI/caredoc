@@ -17,7 +17,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
-import { useInstallPrompt } from '../../hooks/useInstallPrompt';
 import LanguageToggle from '../common/LanguageToggle';
 import styles from './Header.module.css';
 
@@ -44,7 +43,6 @@ const Header = () => {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const { logout } = useAuth();
-  const { canInstall, install } = useInstallPrompt();
 
   /* 로그아웃 확인 모달 표시 여부 */
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -159,12 +157,7 @@ const Header = () => {
         </div>
         {/* 언어 토글 컴포넌트 — 한국어/일본어 전환 */}
         <LanguageToggle />
-        {canInstall && (
-          <button className={styles.installBtn} onClick={install} tabIndex={-1}>
-            {i18n.language === 'ja' ? '📲 追加' : '📲 설치'}
-          </button>
-        )}
-        <button className={styles.logoutBtn} onClick={() => setShowLogoutModal(true)} tabIndex={-1}>
+<button className={styles.logoutBtn} onClick={() => setShowLogoutModal(true)} tabIndex={-1}>
           {i18n.language === 'ja' ? 'ログアウト' : '로그아웃'}
         </button>
       </div>

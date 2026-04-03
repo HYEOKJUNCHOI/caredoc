@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useInstallPrompt } from '../../hooks/useInstallPrompt';
 import styles from './ShibaWag.module.css';
 
 const MESSAGES = {
@@ -24,6 +25,7 @@ const MESSAGES = {
 const ShibaWag = () => {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'ko' ? 'ko' : 'ja';
+  const { canInstall, install } = useInstallPrompt();
 
   const [msgIdx, setMsgIdx] = useState(0);
 
@@ -40,6 +42,16 @@ const ShibaWag = () => {
 
   return (
     <div className={styles.wrap}>
+      {canInstall && (
+        <div className={styles.installWrap}>
+          <button className={styles.installBtn} onClick={install}>
+            <span className={styles.installIcon}>📲</span>
+            <span className={styles.installLabel}>
+              {lang === 'ko' ? '바탕화면에 추가' : 'ホーム画面に追加'}
+            </span>
+          </button>
+        </div>
+      )}
       <div className={styles.inner}>
         <div className={styles.bubble}>{MESSAGES[lang][msgIdx]}</div>
         <div className={styles.shiba} />

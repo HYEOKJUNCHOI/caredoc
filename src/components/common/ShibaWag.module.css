@@ -1,14 +1,55 @@
-/* wrap: 콘텐츠 박스(max 720px) 하단 오른쪽 끝에 시바 */
+/* wrap: 콘텐츠 박스(max 720px) 하단 — 왼쪽 설치버튼 + 오른쪽 시바 */
 .wrap {
   position: fixed;
-  bottom: -50px; /* 투명 여백(~70px) - 원하는 간격(20px) = -50px */
+  bottom: -50px;
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: flex-end;
-  pointer-events: none; /* 클릭 가능한 자식만 pointer-events: auto */
+  pointer-events: none;
   z-index: 100;
+}
+
+/* 설치 버튼 — 왼쪽 하단 */
+.installWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 16px;
+  padding-bottom: 60px; /* 시바 발 높이만큼 올려서 바닥 기준 맞춤 */
+  pointer-events: auto;
+  gap: 6px;
+}
+
+.installBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border: 2px solid #217346;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.12s;
+}
+
+.installBtn:hover {
+  background: #e8f5ee;
+}
+
+.installIcon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.installLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #217346;
+  white-space: nowrap;
 }
 
 /* 시바 + 말풍선 묶음: 오른쪽 끝, 바닥 밀착 */
