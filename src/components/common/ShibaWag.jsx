@@ -30,7 +30,6 @@ const ShibaWag = () => {
     <>
       {/* wrap: 콘텐츠 박스 하단 전체 폭에 걸쳐 집(왼쪽) + 시바(오른쪽) 배치 */}
       <div className={styles.wrap}>
-        <img src="/sibazip.png" className={styles.house} alt="시바 집" />
         <div className={styles.inner} onClick={() => setOpen(true)}>
           <div className={styles.bubble}>{MESSAGES[msgIdx]}</div>
           <div className={styles.shiba} />

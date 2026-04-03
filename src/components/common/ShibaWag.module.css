@@ -1,23 +1,14 @@
-/* wrap: 콘텐츠 박스(max 720px) 하단에 집(왼쪽 끝) + 시바(오른쪽 끝) */
+/* wrap: 콘텐츠 박스(max 720px) 하단 오른쪽 끝에 시바 */
 .wrap {
   position: fixed;
   bottom: 0;
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: flex-end;
   pointer-events: none; /* 클릭 가능한 자식만 pointer-events: auto */
   z-index: 100;
-}
-
-/* 집: 왼쪽 끝, 시바(100px)보다 크게 */
-.house {
-  width: 275px;
-  height: auto;
-  pointer-events: none;
-  padding-left: 12px;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
 }
 
 /* 시바 + 말풍선 묶음: 오른쪽 끝 */
@@ -69,10 +60,10 @@
 
 .shiba {
   margin-top: -40px; /* 꼬리~머리 간격 제거 */
-  width: 120px;
-  height: 160px; /* 120 * (1024/768) */
+  width: 275px;
+  height: 367px; /* 275 * (160/120) */
   background-image: url('/siba2.png');
-  background-size: 240px 160px;
+  background-size: 550px 367px; /* 2프레임 × 275px */
   background-repeat: no-repeat;
   animation: wag 1.7s steps(1) infinite;
   image-rendering: auto;
@@ -81,7 +72,7 @@
 
 @keyframes wag {
   0%,  49% { background-position: 0 0; }
-  50%, 100% { background-position: -120px 0; }
+  50%, 100% { background-position: -275px 0; }
 }
 
 @media print {
