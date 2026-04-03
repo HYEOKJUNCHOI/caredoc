@@ -30,6 +30,7 @@ export default async function handler(req, res) {
         quantity: 1,
       }],
       mode: 'payment',
+      locale: 'ja',
       success_url: `${origin}/?support=thanks`,
       cancel_url:  `${origin}/`,
     });
