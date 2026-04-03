@@ -27,7 +27,7 @@
 .installWrap {
   position: fixed;
   bottom: -50px; /* 시바와 동일한 bottom */
-  left: max(0px, calc((100vw - 720px) / 2 + 210px - 200px));
+  left: max(0px, calc((100vw - 720px) / 2));
   display: flex;
   flex-direction: column;
   align-items: flex-end; /* 라벨을 오른쪽 끝으로 */
@@ -54,7 +54,7 @@
 
 /* sibazip 집 이미지 — 현재 160px × 3 = 480px */
 .houseImg {
-  width: 480px;
+  width: 384px;
   height: auto;
   filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.3));
   transition: filter 0.12s;
