@@ -16,7 +16,7 @@ import Admin from './pages/Admin/Admin';
 import UserForm from './pages/UserForm/UserForm';
 import Privacy from './pages/Privacy/Privacy';
 import LineCallback from './pages/LineCallback/LineCallback';
-import ShibaWag from './components/common/ShibaWag';
+import Footer from './components/layout/Footer';
 
 /* 인증 가드 내부 — /privacy, /auth/line/callback은 로그인 없이 접근 가능 */
 const AuthGate = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) => {
@@ -36,17 +36,19 @@ const AuthGate = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) 
   return (
     <>
       <Header />
-      <ShibaWag />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/user/new" element={<UserForm />} />
-        <Route path="/select" element={<Select />} />
-        <Route path="/edit/:type" element={<Edit />} />
-        <Route path="/preview/all" element={<PrintAll />} />
-        <Route path="/preview/:type" element={<Preview />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <div style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/user/new" element={<UserForm />} />
+          <Route path="/select" element={<Select />} />
+          <Route path="/edit/:type" element={<Edit />} />
+          <Route path="/preview/all" element={<PrintAll />} />
+          <Route path="/preview/:type" element={<Preview />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+      <Footer />
     </>
   );
 };
