@@ -47,7 +47,7 @@ const Home = () => {
   const [userToDelete, setUserToDelete] = useState(null);
 
   /* 무한스크롤 — 6개씩 추가 표시 */
-  const PAGE_SIZE = 6;
+  const PAGE_SIZE = 4;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const sentinelRef = useRef(null);
 
