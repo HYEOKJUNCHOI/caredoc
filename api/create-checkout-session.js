@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: '최소 금액은 100엔입니다.' });
   }
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
   const origin = req.headers.origin || 'https://caredoc-navy.vercel.app';
 
   try {
