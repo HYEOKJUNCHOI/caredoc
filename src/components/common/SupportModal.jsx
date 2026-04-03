@@ -14,8 +14,8 @@ const SupportModal = ({ onClose }) => {
     : selected;
 
   const handlePay = async () => {
-    if (!finalAmount || finalAmount < 300) {
-      setError('300円以上でご入力ください。');
+    if (!finalAmount || finalAmount < 100) {
+      setError('100円以上でご入力ください。');
       return;
     }
     setLoading(true);
