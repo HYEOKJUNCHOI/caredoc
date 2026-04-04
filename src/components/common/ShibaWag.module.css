@@ -26,7 +26,7 @@
 /* 집 — 왼쪽 끝, 시바 발 선상(bottom:20px)에 집 바닥 맞춤 */
 .installWrap {
   position: fixed;
-  bottom: 20px;
+  bottom: -30px;
   left: max(0px, calc((100vw - 720px) / 2 - 20px));
   display: flex;
   flex-direction: column;
