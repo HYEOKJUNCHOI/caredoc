@@ -114,7 +114,6 @@ const Home = () => {
         </div>
       )}
 
-      <div className={styles.homeFooter} />
     </div>
   );
 };
