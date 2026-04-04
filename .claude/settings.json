@@ -12,7 +12,14 @@
       "Bash(git push:*)",
       "Bash(npx vercel:*)",
       "Bash(gh api:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(jq -r keys[])",
+      "Bash(/c/Users/gurwn/Desktop/Project/yasuko/.env:*)",
+      "Bash(ls /c/Users/gurwn/Desktop/Project/yasuko/siba*)",
+      "Bash(python3 -c ':*)",
+      "Bash(node -e ':*)",
+      "Bash(ls /c/Users/gurwn/Desktop/Project/yasuko/public/siba2*)",
+      "Read(//c/Users/gurwn/Desktop/**)"
     ],
     "additionalDirectories": [
       "c:\\Users\\gurwn\\Desktop\\Project\\yasuko"

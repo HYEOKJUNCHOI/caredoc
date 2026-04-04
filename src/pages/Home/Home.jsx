@@ -53,6 +53,16 @@ const Home = () => {
         <h1 className={styles.title}>{t('home.title')}</h1>
       </div>
 
+      <div className={styles.searchWrap}>
+        <input
+          className={styles.searchInput}
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder={t('home.search')}
+        />
+      </div>
+
       <div className={styles.userList} data-qa="home-user-list">
         {users.length === 0 ? (
           <p className={styles.empty}>{t('home.noUsers')}</p>
@@ -106,15 +116,6 @@ const Home = () => {
 
     </div>
     <div className={styles.bottomBar}>
-      <div className={styles.searchWrap}>
-        <input
-          className={styles.searchInput}
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder={t('home.search') || '이름으로 검색...'}
-        />
-      </div>
       <div className={styles.addBtnWrap}>
         {users.length > 0 && <div className={styles.divider} />}
         <button

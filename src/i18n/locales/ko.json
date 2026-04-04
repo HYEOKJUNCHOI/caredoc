@@ -14,7 +14,8 @@
     "title": "이용자 목록",
     "addUser": "+ 새 이용자 추가",
     "noUsers": "등록된 이용자가 없습니다",
-    "selectDoc": "서류 선택"
+    "selectDoc": "서류 선택",
+    "search": "이름을 검색해서 찾아보세요"
   },
 
   "userForm": {

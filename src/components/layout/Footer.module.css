@@ -4,10 +4,8 @@
   justify-content: space-between;
   height: 46px;
   padding: 0 16px;
-  background: #217346;
-  border-top: 1px solid #185C37;
-  position: relative; /* 시바 절대 위치 기준점 */
-  overflow: visible;  /* 시바가 위로 솟아나오도록 */
+  background: rgba(100, 100, 100, 0.55);
+  border-top: 1px solid rgba(80, 80, 80, 0.4);
   margin-top: auto;   /* 콘텐츠가 적어도 항상 하단 고정 */
 }
 
@@ -17,11 +15,10 @@
   letter-spacing: 0.03em;
 }
 
-/* 시바가 footer 위로 솟아나오는 래퍼 */
+/* 시바를 footer 안 세로 중앙에 배치 */
 .shibaWrap {
-  position: absolute;
-  bottom: 0;       /* footer 바닥에 발 맞춤 */
-  right: 16px;
+  display: flex;
+  align-items: center;
 }
 
 @media print {

@@ -14,7 +14,8 @@
     "title": "利用者一覧",
     "addUser": "+ 新しい利用者を追加",
     "noUsers": "登録された利用者がいません",
-    "selectDoc": "書類選択"
+    "selectDoc": "書類選択",
+    "search": "名前を検索して探してみましょう"
   },
 
   "userForm": {

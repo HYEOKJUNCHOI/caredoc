@@ -109,7 +109,7 @@ const BasicInfoDocA = ({ d }) => {
                나머지 colSpan={2}: 정상 테두리 */}
           <tr style={{ height: '2%' }}>
             {/* 왼쪽 빈 공간 — プロフィール(10%) + ふりがな라벨(13%) 합쳐서 숨김 */}
-            <td colSpan={2} style={{ borderLeft: 'hidden', borderTop: 'hidden', borderRight: 'none', borderBottom: '1px solid #000' }} />
+            <td colSpan={2} style={{ borderLeft: 'hidden', borderTop: 'hidden', borderRight: 'none', borderBottom: '1px solid #000', background: '#FFFBEA' }} />
             <td style={{ border: '1px solid #000', padding: 0, fontSize: '7.5pt', background: '#FFFBEA' }}>
               <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
                 <span style={{ width: '22%', flexShrink: 0, background: '#FEF3C7', borderRight: BD, padding: '2px 4px', fontWeight: 'bold', whiteSpace: 'nowrap', alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7pt' }}>
