@@ -10,8 +10,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
 /* 상단 타이틀 영역 */
@@ -53,16 +51,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: visible;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding-right: 12px;
-}
-
-.userList::-webkit-scrollbar {
-  display: none;
+  margin-bottom: 16px;
 }
 
 .empty {
@@ -107,7 +96,7 @@
   border: none;
   cursor: pointer;
   opacity: 0;
-  pointer-events: none; /* 숨어있을 땐 클릭 방지 */
+  pointer-events: none;
   transition: opacity 0.15s, transform 0.1s;
   box-shadow: 0 1px 6px rgba(255, 59, 48, 0.6);
   z-index: 2;
@@ -188,9 +177,8 @@
   margin: 8px 0;
 }
 
-/* bottomBar — addBtn + 푸터 묶음 */
+/* bottomBar — 새 이용자 추가 + 푸터 묶음 */
 .bottomBar {
-  flex-shrink: 0;
   position: sticky;
   bottom: 0;
   z-index: 100;
@@ -199,8 +187,7 @@
 
 /* 새 이용자 추가 버튼 래퍼 */
 .addBtnWrap {
-  padding: 8px 20px;
-  background: var(--bg-page, #fff);
+  padding: 8px 0;
 }
 
 /* 새 이용자 추가 버튼 */
@@ -237,15 +224,11 @@
   color: var(--text-secondary);
 }
 
-/* 하단 초록 푸터 — 헤더와 동일 속성 */
+/* 하단 초록 푸터 */
 .homeFooter {
-  position: sticky;
-  bottom: 0;
   height: 46px;
   background: #217346;
   border-top: 1px solid #185C37;
-  z-index: 100;
-  flex-shrink: 0;
 }
 
 /* --- 모달 (Modal) 스타일 --- */
