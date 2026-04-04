@@ -84,7 +84,7 @@ const Home = () => {
           )}
         </div>
 
-        {users.length > 5 && (
+        {users.length > 6 && (
           <div className={styles.scrollHint}>▼ もっと見る</div>
         )}
       </div>
