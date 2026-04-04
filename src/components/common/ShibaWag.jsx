@@ -25,7 +25,7 @@ const MESSAGES = {
 const ShibaWag = () => {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'ko' ? 'ko' : 'ja';
-  const { canInstall, isInstalled, install } = useInstallPrompt();
+  const { canInstall, install } = useInstallPrompt();
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleShortcut = () => {
@@ -47,46 +47,22 @@ const ShibaWag = () => {
   };
 
   const [msgIdx, setMsgIdx] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     setMsgIdx(0);
   }, [lang]);
 
   useEffect(() => {
+    if (isHovered) return;
     const timer = setInterval(() => {
       setMsgIdx((i) => (i + 1) % MESSAGES[lang].length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [lang]);
+  }, [lang, isHovered]);
 
   return (
     <>
-      <div className={styles.ground}>
-        {/* 집 입구 오른쪽에서 시바 방향으로 — 왼발·오른발 교차 */}
-        {[
-          { left: '28%', top: '12px', rotate:  80 },  /* 몸통 기준(높은 위치) */
-          { left: '37%', top: '44px', rotate: 100 },  /* 발 기준(낮은 위치) */
-          { left: '46%', top: '12px', rotate:  80 },  /* 몸통 기준 */
-          { left: '55%', top: '44px', rotate: 100 },  /* 발 기준 */
-          { left: '64%', top: '12px', rotate:  80 },  /* 몸통 기준 */
-          { left: '73%', top: '44px', rotate: 100 },  /* 발 기준 */
-        ].map((p, i) => (
-          <span
-            key={i}
-            className={styles.paw}
-            style={{
-              left: p.left,
-              top: p.top,
-              transform: `rotate(${p.rotate}deg)`,
-            }}
-          >🐾</span>
-        ))}
-      </div>
-      {!isInstalled && (
-        <div className={styles.installWrap} onClick={handleHouseClick}>
-          <img src="/sibazip.png" className={styles.houseImg} alt="바로가기" />
-        </div>
-      )}
       {showConfirm && (
         <div className={styles.confirmOverlay} onClick={() => setShowConfirm(false)}>
           <div className={styles.confirmCard} onClick={(e) => e.stopPropagation()}>
@@ -106,8 +82,17 @@ const ShibaWag = () => {
       )}
       <div className={styles.wrap}>
         <div className={styles.inner}>
-          <div className={styles.bubble}>{MESSAGES[lang][msgIdx]}</div>
-          <div className={styles.shiba} />
+          <div className={`${styles.bubble} ${isHovered ? styles.bubbleHover : ''}`}>
+            {isHovered
+              ? (lang === 'ko' ? '🏠 바탕화면에 추가하기' : '🏠 ホーム画面に追加する')
+              : MESSAGES[lang][msgIdx]}
+          </div>
+          <div
+            className={styles.shiba}
+            onClick={handleHouseClick}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          />
         </div>
       </div>
     </>

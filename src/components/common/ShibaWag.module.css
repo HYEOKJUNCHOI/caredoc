@@ -84,6 +84,16 @@
   margin-bottom: 0;
 }
 
+.bubbleHover {
+  background: #217346;
+  color: #fff;
+  border-color: #217346;
+}
+
+.bubbleHover::before {
+  border-top-color: #217346;
+}
+
 /* 꼬리: 아래 중앙 */
 .bubble::after {
   content: '';
@@ -116,6 +126,8 @@
   animation: wag 1.7s steps(1) infinite;
   image-rendering: auto;
   filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.45));
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 @keyframes wag {
