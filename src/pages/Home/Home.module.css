@@ -1,11 +1,9 @@
-/* Home — 이용자 목록 */
+/* Home — Notion 스타일 이용자 목록 */
 .container {
+  padding: 32px 20px 24px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  padding: 32px 20px 0;
-  box-sizing: border-box;
-  overflow: hidden;
+  flex: 1;
 }
 
 /* 상단 타이틀 영역 */
@@ -13,8 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
-  flex-shrink: 0;
+  margin-bottom: 24px;
 }
 
 .title {
@@ -23,20 +20,32 @@
   color: var(--text-primary);
 }
 
-/* 이용자 목록 — 남은 공간 채우고 스크롤 */
+/* 관리자 버튼 */
+.adminBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.12s;
+}
+
+.adminBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* 이용자 목록 */
 .userList {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.userList::-webkit-scrollbar {
-  display: none;
+  margin-bottom: 16px;
 }
 
 .empty {
@@ -44,41 +53,6 @@
   color: var(--text-tertiary);
   padding: 48px 0;
   font-size: 14px;
-}
-
-/* 스크롤 버튼 영역 */
-.scrollControls {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  padding: 10px 0 6px;
-  flex-shrink: 0;
-}
-
-.scrollBtn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--border-default);
-  background: var(--bg-surface);
-  color: var(--text-secondary);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.12s, color 0.12s;
-}
-
-.scrollBtn:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-}
-
-/* 고정 푸터 */
-.footer {
-  flex-shrink: 0;
-  padding: 8px 0 24px 0;
 }
 
 /* 카드 래퍼 — 삭제 버튼 포지셔닝 기준 */
@@ -92,11 +66,17 @@
   pointer-events: auto;
 }
 
-/* 삭제 버튼 */
+/* 터치 디바이스용 — JS에서 클래스 제어 */
+.userCardWrap.showDelete .deleteUserBtn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 삭제 버튼 — 호버 시 우측 상단 모서리에 크로스오버 */
 .deleteUserBtn {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: -8px;
+  right: -8px;
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -110,22 +90,22 @@
   border: none;
   cursor: pointer;
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none; /* 숨어있을 땐 클릭 방지 */
   transition: opacity 0.15s, transform 0.1s;
   box-shadow: 0 1px 6px rgba(255, 59, 48, 0.6);
   z-index: 2;
 }
 
-.deleteUserBtn:hover {
+.deleteUserBtn:hover, .userCardWrap.showDelete .deleteUserBtn {
   transform: scale(1.15);
 }
 
-/* 이용자 카드 */
+/* 이용자 카드 — Notion 페이지 행 스타일 */
 .userCard {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
+  padding: 10px 12px;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   background: var(--bg-page);
@@ -143,7 +123,7 @@
 .userCardLeft {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 /* 아바타 원형 */
@@ -184,12 +164,19 @@
   font-size: 16px;
 }
 
+/* 구분선 */
+.divider {
+  height: 1px;
+  background: var(--divider);
+  margin: 8px 0;
+}
+
 /* 새 이용자 추가 버튼 */
 .addBtn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 10px 12px;
   border-radius: var(--radius-md);
   border: 1px dashed var(--border-strong);
   background: none;
@@ -218,7 +205,7 @@
   color: var(--text-secondary);
 }
 
-/* --- 모달 --- */
+/* --- 모달 (Modal) 스타일 --- */
 .modalOverlay {
   position: fixed;
   top: 0;

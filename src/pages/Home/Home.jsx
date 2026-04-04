@@ -1,6 +1,6 @@
 /* 홈 — 이용자 목록 */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getUsers, saveUsers, setCurrentUserId } from '../../utils/storage';
@@ -12,7 +12,6 @@ const Home = () => {
 
   const [users, setUsers] = useState([]);
   const [userToDelete, setUserToDelete] = useState(null);
-  const listRef = useRef(null);
 
   useEffect(() => {
     setUsers(getUsers());
@@ -46,21 +45,13 @@ const Home = () => {
     setUserToDelete(null);
   };
 
-  const scrollUp = () => {
-    listRef.current?.scrollBy({ top: -120, behavior: 'smooth' });
-  };
-
-  const scrollDown = () => {
-    listRef.current?.scrollBy({ top: 120, behavior: 'smooth' });
-  };
-
   return (
     <div className={styles.container} data-qa="home-page">
       <div className={styles.titleRow}>
         <h1 className={styles.title}>{t('home.title')}</h1>
       </div>
 
-      <div className={styles.userList} ref={listRef} data-qa="home-user-list">
+      <div className={styles.userList} data-qa="home-user-list">
         {users.length === 0 ? (
           <p className={styles.empty}>{t('home.noUsers')}</p>
         ) : (
@@ -91,21 +82,16 @@ const Home = () => {
         )}
       </div>
 
-      <div className={styles.scrollControls}>
-        <button className={styles.scrollBtn} onClick={scrollUp}>▲</button>
-        <button className={styles.scrollBtn} onClick={scrollDown}>▼</button>
-      </div>
+      {users.length > 0 && <div className={styles.divider} />}
 
-      <div className={styles.footer}>
-        <button
-          className={styles.addBtn}
-          onClick={() => navigate('/user/new')}
-          data-qa="home-add-button"
-        >
-          <span className={styles.addIcon}>+</span>
-          {t('home.addUser')}
-        </button>
-      </div>
+      <button
+        className={styles.addBtn}
+        onClick={() => navigate('/user/new')}
+        data-qa="home-add-button"
+      >
+        <span className={styles.addIcon}>+</span>
+        {t('home.addUser')}
+      </button>
 
       {userToDelete && (
         <div className={styles.modalOverlay} onClick={cancelDelete}>
