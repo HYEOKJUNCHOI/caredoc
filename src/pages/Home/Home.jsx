@@ -46,7 +46,7 @@ const Home = () => {
   };
 
   return (
-    <>
+    <div className={styles.outer}>
     <div className={styles.container} data-qa="home-page">
       <div className={styles.titleRow}>
         <h1 className={styles.title}>{t('home.title')}</h1>
@@ -117,7 +117,7 @@ const Home = () => {
 
     </div>
     <div className={styles.homeFooter} />
-    </>
+    </div>
   );
 };
 

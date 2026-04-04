@@ -35,7 +35,7 @@ const AuthGate = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) 
   return (
     <div style={{ position: 'relative', minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
       <Header />
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/user/new" element={<UserForm />} />
