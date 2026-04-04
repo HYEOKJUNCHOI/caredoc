@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getUsers, saveUsers, setCurrentUserId } from '../../utils/storage';
 import styles from './Home.module.css';
-import ShibaWag from '../../components/common/ShibaWag';
 
 const Home = () => {
   const { t } = useTranslation();
@@ -127,7 +126,6 @@ const Home = () => {
           </div>
         </div>
       )}
-      <ShibaWag />
     </div>
   );
 };
