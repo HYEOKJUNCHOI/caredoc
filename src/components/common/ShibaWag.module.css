@@ -23,10 +23,10 @@
   z-index: 100;
 }
 
-/* 설치 — 왼쪽 끝, 시바 발 선상(bottom:20px)에 집 바닥 맞춤 */
+/* 집 — 왼쪽 끝, 시바 발 선상(bottom:20px)에 집 바닥 맞춤 */
 .installWrap {
   position: fixed;
-  bottom: 20px; /* 시바 시각적 발 높이와 동일 */
+  bottom: 20px;
   left: max(0px, calc((100vw - 720px) / 2 - 20px));
   display: flex;
   flex-direction: column;
@@ -36,23 +36,9 @@
   cursor: pointer;
 }
 
-/* 뱃지형 라벨 — 집 바로 위, 시바-말풍선 간격(약 8px) */
-.installLabel {
-  background: #fff2cc;
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #7a6000;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  margin-bottom: 8px;
-  letter-spacing: 0.3px;
-}
-
-/* sibazip 집 이미지 */
+/* sibazip 집 이미지 — 384 × 0.7 = 269px */
 .houseImg {
-  width: 384px;
+  width: 269px;
   height: auto;
   filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.3));
   transition: filter 0.12s;
@@ -110,11 +96,11 @@
 }
 
 .shiba {
-  margin-top: -70px; /* 말풍선 꼬리를 머리 바로 위에 */
-  width: 200px;
-  height: 267px; /* 200 * (160/120) */
+  margin-top: -56px; /* 말풍선 꼬리를 머리 바로 위에 */
+  width: 160px;
+  height: 213px; /* 160 * (160/120) */
   background-image: url('/siba2.png');
-  background-size: 400px 267px; /* 2프레임 × 200px */
+  background-size: 320px 213px; /* 2프레임 × 160px */
   background-repeat: no-repeat;
   animation: wag 1.7s steps(1) infinite;
   image-rendering: auto;
@@ -123,7 +109,7 @@
 
 @keyframes wag {
   0%,  49% { background-position: 0 0; }
-  50%, 100% { background-position: -200px 0; }
+  50%, 100% { background-position: -160px 0; }
 }
 
 @media print {
