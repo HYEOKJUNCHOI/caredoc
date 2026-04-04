@@ -78,7 +78,7 @@
 /* 고정 푸터 */
 .footer {
   flex-shrink: 0;
-  padding: 8px 0 160px;
+  padding: 8px 150px 160px 0;
 }
 
 /* 카드 래퍼 — 삭제 버튼 포지셔닝 기준 */
