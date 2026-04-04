@@ -84,7 +84,7 @@ const ShibaWag = () => {
         <div className={styles.inner}>
           <div className={`${styles.bubble} ${isHovered ? styles.bubbleHover : ''}`}>
             {isHovered
-              ? (lang === 'ko' ? '🏠 바탕화면에 추가하기' : '🏠 ホーム画面に追加する')
+              ? (lang === 'ko' ? '🏠 바탕화면에 바로가기 추가하기' : '🏠 ホーム画面にショートカットを追加する')
               : MESSAGES[lang][msgIdx]}
           </div>
           <div

@@ -85,13 +85,13 @@
 }
 
 .bubbleHover {
-  background: #217346;
-  color: #fff;
+  background: #fff2cc;
+  color: #217346;
   border-color: #217346;
 }
 
 .bubbleHover::before {
-  border-top-color: #217346;
+  border-top-color: #fff2cc;
 }
 
 /* 꼬리: 아래 중앙 */
