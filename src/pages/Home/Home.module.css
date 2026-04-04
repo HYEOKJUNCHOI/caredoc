@@ -183,6 +183,7 @@
   bottom: 0;
   z-index: 100;
   background: var(--bg-page, #fff);
+  padding: 0 20px;
 }
 
 /* 새 이용자 추가 버튼 래퍼 */
