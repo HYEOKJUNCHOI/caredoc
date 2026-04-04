@@ -4,10 +4,12 @@
   bottom: 0;
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
-  height: 60px;
-  background: rgba(217, 191, 143, 0.45);
+  height: 120px;
+  background: #eee2cc url('/sibaback.png') center top / cover no-repeat;
+  border-radius: 24px 24px 0 0;
   pointer-events: none;
   z-index: 99;
+  overflow: hidden;
 }
 
 /* wrap: 콘텐츠 박스(max 720px) 하단 오른쪽 끝에 시바 */
