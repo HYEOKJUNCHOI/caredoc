@@ -112,6 +112,61 @@
   50%, 100% { background-position: -160px 0; }
 }
 
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.confirmCard {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px 20px 16px;
+  width: 280px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.confirmTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 10px;
+}
+
+.confirmCancel {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #f2f2f7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirmOk {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #217346;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 @media print {
   .wrap { display: none; }
 }

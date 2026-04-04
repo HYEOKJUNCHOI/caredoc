@@ -26,10 +26,9 @@ const ShibaWag = () => {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'ko' ? 'ko' : 'ja';
   const { canInstall, isInstalled, install } = useInstallPrompt();
-  const [showGuide, setShowGuide] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleShortcut = () => {
-    /* .url 파일 생성 — Windows 바로가기 형식 */
     const content = `[InternetShortcut]\nURL=https://caredoc-navy.vercel.app/\n`;
     const blob = new Blob([content], { type: 'text/plain' });
     const a = document.createElement('a');
@@ -37,6 +36,14 @@ const ShibaWag = () => {
     a.download = 'CareDoc.url';
     a.click();
     URL.revokeObjectURL(a.href);
+  };
+
+  const handleHouseClick = () => setShowConfirm(true);
+
+  const handleConfirm = () => {
+    setShowConfirm(false);
+    if (canInstall) install();
+    else handleShortcut();
   };
 
   const [msgIdx, setMsgIdx] = useState(0);
@@ -56,8 +63,25 @@ const ShibaWag = () => {
     <>
       <div className={styles.ground} />
       {!isInstalled && (
-        <div className={styles.installWrap} onClick={canInstall ? install : handleShortcut}>
+        <div className={styles.installWrap} onClick={handleHouseClick}>
           <img src="/sibazip.png" className={styles.houseImg} alt="바로가기" />
+        </div>
+      )}
+      {showConfirm && (
+        <div className={styles.confirmOverlay} onClick={() => setShowConfirm(false)}>
+          <div className={styles.confirmCard} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.confirmTitle}>
+              {lang === 'ko' ? '🏠 바탕화면에 추가하시겠습니까?' : '🏠 ホーム画面に追加しますか？'}
+            </p>
+            <div className={styles.confirmActions}>
+              <button className={styles.confirmCancel} onClick={() => setShowConfirm(false)}>
+                {lang === 'ko' ? '취소' : 'キャンセル'}
+              </button>
+              <button className={styles.confirmOk} onClick={handleConfirm}>
+                {lang === 'ko' ? '추가' : '追加する'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
       <div className={styles.wrap}>
