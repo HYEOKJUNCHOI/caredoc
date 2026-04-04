@@ -183,6 +183,8 @@
 
 /* 새 이용자 추가 버튼 래퍼 — 항상 표시 */
 .addBtnWrap {
+  position: sticky;
+  bottom: 0;
   flex-shrink: 0;
   padding: 8px 0;
   background: var(--bg-page, #fff);
