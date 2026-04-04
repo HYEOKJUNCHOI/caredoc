@@ -1,6 +1,6 @@
 /* 홈 — 이용자 목록 */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getUsers, saveUsers, setCurrentUserId } from '../../utils/storage';
@@ -12,10 +12,7 @@ const Home = () => {
 
   const [users, setUsers] = useState([]);
   const [userToDelete, setUserToDelete] = useState(null);
-  const listRef = useRef(null);
-
-  const scrollUp = () => listRef.current?.scrollBy({ top: -120, behavior: 'smooth' });
-  const scrollDown = () => listRef.current?.scrollBy({ top: 120, behavior: 'smooth' });
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     setUsers(getUsers());
@@ -56,11 +53,11 @@ const Home = () => {
         <h1 className={styles.title}>{t('home.title')}</h1>
       </div>
 
-      <div className={styles.userList} data-qa="home-user-list" ref={listRef}>
+      <div className={styles.userList} data-qa="home-user-list">
         {users.length === 0 ? (
           <p className={styles.empty}>{t('home.noUsers')}</p>
         ) : (
-          users.map((user) => (
+          users.filter((u) => u.name?.includes(searchQuery)).map((user) => (
             <div key={user.id} className={styles.userCardWrap}>
               <button
                 className={styles.userCard}
@@ -109,9 +106,14 @@ const Home = () => {
 
     </div>
     <div className={styles.bottomBar}>
-      <div className={styles.scrollControls}>
-        <button className={styles.scrollBtn} onClick={scrollUp}>▲</button>
-        <button className={styles.scrollBtn} onClick={scrollDown}>▼</button>
+      <div className={styles.searchWrap}>
+        <input
+          className={styles.searchInput}
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder={t('home.search') || '이름으로 검색...'}
+        />
       </div>
       <div className={styles.addBtnWrap}>
         {users.length > 0 && <div className={styles.divider} />}
