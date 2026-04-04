@@ -91,8 +91,8 @@
 /* 삭제 버튼 — 호버 시 우측 상단 모서리에 크로스오버 */
 .deleteUserBtn {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: 4px;
+  right: 4px;
   width: 22px;
   height: 22px;
   border-radius: 50%;
