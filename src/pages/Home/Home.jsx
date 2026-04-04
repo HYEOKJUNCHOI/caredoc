@@ -1,6 +1,6 @@
 /* 홈 — 이용자 목록 */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getUsers, saveUsers, setCurrentUserId } from '../../utils/storage';
@@ -12,6 +12,10 @@ const Home = () => {
 
   const [users, setUsers] = useState([]);
   const [userToDelete, setUserToDelete] = useState(null);
+  const listRef = useRef(null);
+
+  const scrollUp = () => listRef.current?.scrollBy({ top: -120, behavior: 'smooth' });
+  const scrollDown = () => listRef.current?.scrollBy({ top: 120, behavior: 'smooth' });
 
   useEffect(() => {
     setUsers(getUsers());
@@ -52,7 +56,7 @@ const Home = () => {
         <h1 className={styles.title}>{t('home.title')}</h1>
       </div>
 
-      <div className={styles.userList} data-qa="home-user-list">
+      <div className={styles.userList} data-qa="home-user-list" ref={listRef}>
         {users.length === 0 ? (
           <p className={styles.empty}>{t('home.noUsers')}</p>
         ) : (
@@ -105,6 +109,10 @@ const Home = () => {
 
     </div>
     <div className={styles.bottomBar}>
+      <div className={styles.scrollControls}>
+        <button className={styles.scrollBtn} onClick={scrollUp}>▲</button>
+        <button className={styles.scrollBtn} onClick={scrollDown}>▼</button>
+      </div>
       <div className={styles.addBtnWrap}>
         {users.length > 0 && <div className={styles.divider} />}
         <button

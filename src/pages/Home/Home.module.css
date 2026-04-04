@@ -186,9 +186,37 @@
   padding: 0 20px;
 }
 
+/* 스크롤 버튼 */
+.scrollControls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+
+.scrollBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+}
+
+.scrollBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
 /* 새 이용자 추가 버튼 래퍼 */
 .addBtnWrap {
-  padding: 8px 20px 12px;
+  padding: 4px 0 12px;
 }
 
 /* 새 이용자 추가 버튼 */
