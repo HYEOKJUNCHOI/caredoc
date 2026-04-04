@@ -10,6 +10,8 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow-y: auto;
+  overflow-x: visible;
 }
 
 /* 상단 타이틀 영역 */
@@ -190,7 +192,7 @@
 /* 스크롤 버튼 */
 .scrollControls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 4px;
   padding: 8px 0 4px;
 }
