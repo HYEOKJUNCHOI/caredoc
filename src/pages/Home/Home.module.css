@@ -55,9 +55,10 @@
   gap: 4px;
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: visible;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  padding-right: 12px;
 }
 
 .userList::-webkit-scrollbar {
@@ -91,8 +92,8 @@
 /* 삭제 버튼 — 호버 시 우측 상단 모서리에 크로스오버 */
 .deleteUserBtn {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: -8px;
+  right: -8px;
   width: 22px;
   height: 22px;
   border-radius: 50%;
