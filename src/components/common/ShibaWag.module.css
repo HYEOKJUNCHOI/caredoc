@@ -6,7 +6,7 @@
   right: max(0px, calc((100vw - 720px) / 2));
   height: 90px;
   background: #eee2cc;
-  border-radius: 24px 24px 0 0;
+  border-radius: 8px 8px 0 0;
   pointer-events: none;
   z-index: 99;
   overflow: hidden;
@@ -15,7 +15,7 @@
 /* 발자국들 */
 .paw {
   position: absolute;
-  font-size: 36px;
+  font-size: 25px;
   opacity: 0.5;
   pointer-events: none;
   line-height: 1;
@@ -24,7 +24,7 @@
 /* wrap: 콘텐츠 박스(max 720px) 하단 오른쪽 끝에 시바 */
 .wrap {
   position: fixed;
-  bottom: -50px;
+  bottom: -40px;
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
   display: flex;
@@ -47,9 +47,9 @@
   cursor: pointer;
 }
 
-/* sibazip 집 이미지 — 384 × 0.7 = 269px */
+/* sibazip 집 이미지 */
 .houseImg {
-  width: 269px;
+  width: 300px;
   height: auto;
   filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.3));
   transition: filter 0.12s;
@@ -107,11 +107,11 @@
 }
 
 .shiba {
-  margin-top: -56px; /* 말풍선 꼬리를 머리 바로 위에 */
-  width: 160px;
-  height: 213px; /* 160 * (160/120) */
+  margin-top: -45px; /* 말풍선 꼬리를 머리 바로 위에 */
+  width: 130px;
+  height: 173px; /* 130/160 비율 유지 */
   background-image: url('/siba2.png');
-  background-size: 320px 213px; /* 2프레임 × 160px */
+  background-size: 260px 173px; /* 2프레임 × 130px */
   background-repeat: no-repeat;
   animation: wag 1.7s steps(1) infinite;
   image-rendering: auto;
@@ -120,7 +120,7 @@
 
 @keyframes wag {
   0%,  49% { background-position: 0 0; }
-  50%, 100% { background-position: -160px 0; }
+  50%, 100% { background-position: -130px 0; }
 }
 
 .confirmOverlay {
