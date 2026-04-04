@@ -82,16 +82,17 @@ const Home = () => {
         )}
       </div>
 
-      {users.length > 0 && <div className={styles.divider} />}
-
-      <button
-        className={styles.addBtn}
-        onClick={() => navigate('/user/new')}
-        data-qa="home-add-button"
-      >
-        <span className={styles.addIcon}>+</span>
-        {t('home.addUser')}
-      </button>
+      <div className={styles.addBtnWrap}>
+        {users.length > 0 && <div className={styles.divider} />}
+        <button
+          className={styles.addBtn}
+          onClick={() => navigate('/user/new')}
+          data-qa="home-add-button"
+        >
+          <span className={styles.addIcon}>+</span>
+          {t('home.addUser')}
+        </button>
+      </div>
 
       {userToDelete && (
         <div className={styles.modalOverlay} onClick={cancelDelete}>
@@ -112,6 +113,8 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      <div className={styles.homeFooter} />
     </div>
   );
 };
