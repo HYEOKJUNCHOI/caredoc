@@ -64,11 +64,11 @@ const ShibaWag = () => {
       <div className={styles.ground}>
         {/* 집 입구 오른쪽에서 시바 방향으로 — 왼발·오른발 교차 */}
         {[
-          { left: '32%', top: '14px', rotate:  10 },
-          { left: '40%', top: '28px', rotate: -10 },
-          { left: '48%', top: '12px', rotate:  10 },
-          { left: '56%', top: '26px', rotate: -10 },
-          { left: '64%', top: '14px', rotate:  10 },
+          { left: '32%', top: '8px',  rotate:  80 },
+          { left: '40%', top: '22px', rotate: 100 },
+          { left: '48%', top: '6px',  rotate:  80 },
+          { left: '56%', top: '20px', rotate: 100 },
+          { left: '64%', top: '8px',  rotate:  80 },
         ].map((p, i) => (
           <span
             key={i}
