@@ -61,7 +61,31 @@ const ShibaWag = () => {
 
   return (
     <>
-      <div className={styles.ground} />
+      <div className={styles.ground}>
+        {/* 집→시바 방향으로 발자국 흔적 */}
+        {[
+          { left: '22%', top: '18px', rotate: -10, size: 13 },
+          { left: '28%', top: '32px', rotate: 15,  size: 12 },
+          { left: '34%', top: '16px', rotate: -5,  size: 14 },
+          { left: '40%', top: '30px', rotate: 10,  size: 13 },
+          { left: '46%', top: '14px', rotate: -15, size: 12 },
+          { left: '52%', top: '28px', rotate: 5,   size: 14 },
+          { left: '58%', top: '12px', rotate: -8,  size: 13 },
+          { left: '64%', top: '26px', rotate: 12,  size: 12 },
+          { left: '70%', top: '16px', rotate: -12, size: 13 },
+        ].map((p, i) => (
+          <span
+            key={i}
+            className={styles.paw}
+            style={{
+              left: p.left,
+              top: p.top,
+              fontSize: p.size,
+              transform: `rotate(${p.rotate}deg)`,
+            }}
+          >🐾</span>
+        ))}
+      </div>
       {!isInstalled && (
         <div className={styles.installWrap} onClick={handleHouseClick}>
           <img src="/sibazip.png" className={styles.houseImg} alt="바로가기" />

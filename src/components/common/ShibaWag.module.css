@@ -5,11 +5,19 @@
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
   height: 120px;
-  background: #eee2cc url('/sibaback.png') center top / cover no-repeat;
+  background: #eee2cc;
   border-radius: 24px 24px 0 0;
   pointer-events: none;
   z-index: 99;
   overflow: hidden;
+}
+
+/* 발자국들 */
+.paw {
+  position: absolute;
+  font-size: 14px;
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 /* wrap: 콘텐츠 박스(max 720px) 하단 오른쪽 끝에 시바 */
