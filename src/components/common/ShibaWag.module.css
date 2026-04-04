@@ -4,7 +4,7 @@
   bottom: 0;
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
-  height: 90px;
+  height: 105px;
   background: #eee2cc;
   border-radius: 8px 8px 0 0;
   pointer-events: none;
@@ -24,7 +24,7 @@
 /* wrap: 콘텐츠 박스(max 720px) 하단 오른쪽 끝에 시바 */
 .wrap {
   position: fixed;
-  bottom: -40px;
+  bottom: -20px;
   left: max(0px, calc((100vw - 720px) / 2));
   right: max(0px, calc((100vw - 720px) / 2));
   display: flex;
