@@ -187,14 +187,19 @@
   margin: 8px 0;
 }
 
-/* 새 이용자 추가 버튼 래퍼 — 항상 표시 */
-.addBtnWrap {
+/* bottomBar — addBtn + 푸터 묶음 */
+.bottomBar {
+  flex-shrink: 0;
   position: sticky;
   bottom: 0;
-  flex-shrink: 0;
-  padding: 8px 0;
-  background: var(--bg-page, #fff);
   z-index: 100;
+  background: var(--bg-page, #fff);
+}
+
+/* 새 이용자 추가 버튼 래퍼 */
+.addBtnWrap {
+  padding: 8px 20px;
+  background: var(--bg-page, #fff);
 }
 
 /* 새 이용자 추가 버튼 */
