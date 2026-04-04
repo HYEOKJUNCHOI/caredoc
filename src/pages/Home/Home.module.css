@@ -1,6 +1,6 @@
 /* Home — Notion 스타일 이용자 목록 */
 .container {
-  padding: 32px 20px 24px;
+  padding: 27px 20px 24px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 19px;
 }
 
 .title {
