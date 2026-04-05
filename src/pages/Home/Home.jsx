@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { getUsers, saveUsers, setCurrentUserId } from '../../utils/storage';
 import styles from './Home.module.css';
 
-/* Windows PC 여부 (모바일 제외) */
-const isWindowsPC = typeof navigator !== 'undefined'
-  && /Windows/i.test(navigator.userAgent)
-  && !/Mobi|Android/i.test(navigator.userAgent);
+/* 데스크톱 크로미움 계열 여부 (beforeinstallprompt를 지원하는 환경) */
+const isDesktopChromium = typeof navigator !== 'undefined'
+  && !/Mobi|Android/i.test(navigator.userAgent)
+  && /Chrome/.test(navigator.userAgent);
 
 const Home = () => {
   const { t, i18n } = useTranslation();
@@ -150,7 +150,7 @@ const Home = () => {
         </button>
       </div>
       <div className={styles.homeFooter}>
-        {isWindowsPC && deferredPrompt && (
+        {isDesktopChromium && deferredPrompt && (
           <button className={styles.installShortcutBtn} onClick={handleInstall}>
             {i18n.language === 'ja' ? 'デスクトップに追加' : '바탕화면 바로가기'}
           </button>
