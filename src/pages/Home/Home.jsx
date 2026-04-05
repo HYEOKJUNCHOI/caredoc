@@ -6,13 +6,35 @@ import { useTranslation } from 'react-i18next';
 import { getUsers, saveUsers, setCurrentUserId } from '../../utils/storage';
 import styles from './Home.module.css';
 
+/* Windows PC 여부 (모바일 제외) */
+const isWindowsPC = typeof navigator !== 'undefined'
+  && /Windows/i.test(navigator.userAgent)
+  && !/Mobi|Android/i.test(navigator.userAgent);
+
 const Home = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
   const [userToDelete, setUserToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    setDeferredPrompt(null);
+  };
 
   useEffect(() => {
     setUsers(getUsers());
@@ -127,7 +149,13 @@ const Home = () => {
           {t('home.addUser')}
         </button>
       </div>
-      <div className={styles.homeFooter} />
+      <div className={styles.homeFooter}>
+        {isWindowsPC && deferredPrompt && (
+          <button className={styles.installShortcutBtn} onClick={handleInstall}>
+            {i18n.language === 'ja' ? 'デスクトップに追加' : '바탕화면 바로가기'}
+          </button>
+        )}
+      </div>
     </div>
     </div>
   );

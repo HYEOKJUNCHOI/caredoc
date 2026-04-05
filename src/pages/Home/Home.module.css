@@ -184,7 +184,7 @@
 .bottomBar {
   position: sticky;
   bottom: 0;
-  z-index: 100;
+  z-index: 50; /* 헤더(z-index:100) 안의 로그아웃 모달이 위에 표시되도록 낮춤 */
   background: var(--bg-page, #fff);
   padding: 0 20px;
 }
@@ -201,7 +201,7 @@
   border: 1px solid var(--border-default);
   background: var(--bg-surface);
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 16px; /* 16px 미만이면 iOS Safari가 focus 시 자동 확대함 */
   box-sizing: border-box;
   outline: none;
 }
@@ -255,6 +255,28 @@
   background: #217346;
   border-top: 1px solid #185C37;
   margin: 0 -20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+/* 바탕화면 바로가기 버튼 (Windows PC 전용) */
+.installShortcutBtn {
+  font-size: 12px;
+  color: #fff;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 2px;
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.1s;
+}
+
+.installShortcutBtn:hover {
+  background: rgba(255,255,255,0.22);
 }
 
 /* --- 모달 (Modal) 스타일 --- */
