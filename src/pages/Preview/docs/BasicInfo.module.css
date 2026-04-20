@@ -360,7 +360,9 @@
   .page {
     width: 100vw !important;
     height: 100vh !important;
-    padding: 4mm 6mm !important;
+    /* 프린터 하드웨어 마진(하단 5~8mm)을 고려해 비대칭 패딩 적용
+       상 2mm / 좌우 6mm / 하 8mm — 하단 짤림 방지 */
+    padding: 2mm 6mm 8mm !important;
     transform: none !important;
     box-shadow: none;
     overflow: hidden;
