@@ -25,7 +25,7 @@ import { useState, useEffect } from 'react';
    signInWithPopup(사인인위드팝업): 팝업 창으로 OAuth 로그인 시도
    GoogleAuthProvider(구글어스프로바이더): Google 로그인 제공자 객체
    signOut(사인아웃): Firebase 로그아웃 함수 */
-import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { onAuthStateChanged, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
 
 /* auth(어스): 초기화된 Firebase Auth 인스턴스 */
 import { auth } from '../lib/firebase';
@@ -84,30 +84,27 @@ export const useAuth = () => {
     window.location.href = `https://access.line.me/oauth2/v2.1/authorize?${params.toString()}`;
   };
 
-  /* ── Firebase 표준 팝업 로그인 ──
-     【의도】 Firebase에서 권장하는 signInWithPopup 방식 사용.
-             팝업이 완료되면 onAuthStateChanged가 자동으로 user 상태를 업데이트하므로
-             여기서는 에러 처리만 담당함. */
+  /* ── Google 리디렉트 로그인 ──
+     【의도】 Chrome의 팝업 차단(auth/popup-blocked) + 서드파티 쿠키 제한 정책으로
+             signInWithPopup이 실패하는 사례가 많아 signInWithRedirect로 전환.
+             LINE 로그인과 동일한 리디렉트 흐름이라 안정성 ↑.
+     【흐름】 1) signInWithRedirect 호출 → Google 로그인 페이지로 이동
+             2) 인증 완료 후 원래 도메인으로 복귀
+             3) 복귀 시 아래 useEffect의 getRedirectResult가 결과 확인
+             4) 성공 시 onAuthStateChanged 콜백이 자동 발화하여 user 갱신 */
   const loginWithGoogle = async () => {
     setLoginError(null);
     setLoginLoading(true);
     try {
-      /* GoogleAuthProvider(구글어스프로바이더): Google OAuth를 위한 공급자 인스턴스 생성 */
       const provider = new GoogleAuthProvider();
-      /* setCustomParameters(셋커스텀파라미터스): OAuth 요청 시 추가 파라미터 설정
-         prompt: 'select_account' — 이미 로그인되어 있어도 계정 선택 창을 강제로 표시 */
-      provider.setCustomParameters({ prompt: 'select_account' }); // 기본적으로 계정 선택창 띄움
-      await signInWithPopup(auth, provider);
-      /* 로그인 성공 후 setLoginLoading(false)는 onAuthStateChanged 콜백에서 처리됨 */
+      /* prompt: 'select_account' — 이미 로그인되어 있어도 계정 선택 창을 강제로 표시 */
+      provider.setCustomParameters({ prompt: 'select_account' });
+      /* signInWithRedirect(사인인위드리디렉트): 페이지를 Google 로그인 페이지로 이동시킴
+         호출 후 현재 페이지는 언로드되므로 이후 코드는 실행되지 않음 */
+      await signInWithRedirect(auth, provider);
     } catch (e) {
-      console.error('[useAuth] signInWithPopup 에러:', e.code);
-      /* e.code(이코드): Firebase Auth 에러 코드 — 에러 종류를 문자열로 식별
-         사용자가 팝업을 닫으면 'auth/popup-closed-by-user' 에러 발생 → 에러 메시지 분기 처리 */
-      if (e.code === 'auth/popup-closed-by-user') {
-        setLoginError('ログインがキャンセルされました。');
-      } else {
-        setLoginError('ログインに失敗しました。もう一度お試しください。');
-      }
+      console.error('[useAuth] signInWithRedirect 에러:', e.code);
+      setLoginError('ログインに失敗しました。もう一度お試しください。');
       setLoginLoading(false);
     }
   };
@@ -121,6 +118,17 @@ export const useAuth = () => {
      의존성 배열([]) — 빈 배열이므로 마운트 시 한 번만 실행됨 */
   /* 브라우저 탭/창 닫으면 자동 로그아웃 */
   useEffect(() => { setPersistence(auth, browserSessionPersistence); }, []);
+
+  /* ── 리디렉트 복귀 시 결과 확인 ──
+     signInWithRedirect로 Google 인증 후 돌아왔을 때 실패 여부를 잡기 위함.
+     성공 시에는 onAuthStateChanged가 자동 발화하므로 여기서는 에러만 처리. */
+  useEffect(() => {
+    getRedirectResult(auth).catch((e) => {
+      console.error('[useAuth] getRedirectResult 에러:', e.code);
+      setLoginError('ログインに失敗しました。もう一度お試しください。');
+      setLoginLoading(false);
+    });
+  }, []);
 
   useEffect(() => {
     /* onAuthStateChanged(온어스스테이트체인지드): Firebase 인증 상태 변화를 실시간 감지하는 구독자
