@@ -19,10 +19,14 @@
       "Bash(python3 -c ':*)",
       "Bash(node -e ':*)",
       "Bash(ls /c/Users/gurwn/Desktop/Project/yasuko/public/siba2*)",
-      "Read(//c/Users/gurwn/Desktop/**)"
+      "Read(//c/Users/gurwn/Desktop/**)",
+      "Bash(git -C \"C:/Users/gurwn/Desktop/Project/Lucid\" log --oneline -5)",
+      "Bash(npm create:*)",
+      "Bash(git -C \"C:/Users/gurwn/Desktop/Project/yasuko\" remote -v)"
     ],
     "additionalDirectories": [
-      "c:\\Users\\gurwn\\Desktop\\Project\\yasuko"
+      "c:\\Users\\gurwn\\Desktop\\Project\\yasuko",
+      "C:\\Users\\gurwn\\Desktop\\Project\\Lucid"
     ]
   }
 }

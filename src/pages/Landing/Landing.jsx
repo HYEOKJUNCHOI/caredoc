@@ -85,9 +85,13 @@ const Landing = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) =
         </button>
       </div>
 
-      {/* && 단축 평가(Short-circuit Evaluation 숏서킷 이벨류에이션):
-          loginError가 truthy일 때만 에러 메시지 렌더링 */}
-      {loginError && <p className={styles.errorMsg}>{loginError}</p>}
+      {/* loginError는 에러 코드 문자열('cancelled' | 'popupBlocked' | 'generic')
+          현재 언어에 맞는 번역 키로 매핑해 표시 */}
+      {loginError && (
+        <p className={styles.errorMsg}>
+          {t(`landing.error${loginError.charAt(0).toUpperCase() + loginError.slice(1)}`)}
+        </p>
+      )}
 
       <p className={styles.note}>{renderMultiline(t('landing.note'))}</p>
 

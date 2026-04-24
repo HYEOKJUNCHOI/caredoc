@@ -100,17 +100,17 @@ export const useAuth = () => {
       /* 성공 시 onAuthStateChanged 콜백이 loginLoading을 해제함 */
     } catch (e) {
       console.error('[useAuth] signInWithPopup 에러:', e.code);
-      /* 에러 종류별 분기 안내 */
+      /* 에러 종류별로 i18n 키만 저장 — UI에서 현재 언어에 맞게 번역
+         문자열을 직접 저장하면 훅 레이어에 언어 의존성이 생겨 i18n 적용이 어려움 */
       if (e.code === 'auth/popup-closed-by-user') {
-        setLoginError('ログインがキャンセルされました。');
+        setLoginError('cancelled');
       } else if (e.code === 'auth/popup-blocked') {
-        /* 브라우저가 팝업을 차단한 경우 — 주소창 오른쪽 팝업 아이콘 허용 안내 */
-        setLoginError('ブラウザがポップアップをブロックしました。アドレスバー右のアイコンからポップアップを許可してください。');
+        setLoginError('popupBlocked');
       } else if (e.code === 'auth/cancelled-popup-request') {
         /* 중복 요청 — 조용히 무시 */
         setLoginError(null);
       } else {
-        setLoginError('ログインに失敗しました。もう一度お試しください。');
+        setLoginError('generic');
       }
       setLoginLoading(false);
     }
