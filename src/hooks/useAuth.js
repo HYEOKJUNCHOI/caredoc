@@ -25,7 +25,7 @@ import { useState, useEffect } from 'react';
    signInWithPopup(사인인위드팝업): 팝업 창으로 OAuth 로그인 시도
    GoogleAuthProvider(구글어스프로바이더): Google 로그인 제공자 객체
    signOut(사인아웃): Firebase 로그아웃 함수 */
-import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { onAuthStateChanged, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, setPersistence, browserLocalPersistence } from 'firebase/auth';
 
 /* auth(어스): 초기화된 Firebase Auth 인스턴스 */
 import { auth } from '../lib/firebase';
@@ -84,34 +84,23 @@ export const useAuth = () => {
     window.location.href = `https://access.line.me/oauth2/v2.1/authorize?${params.toString()}`;
   };
 
-  /* ── Google 팝업 로그인 ──
-     【의도】 signInWithRedirect는 authDomain(caredoc-ca98d.firebaseapp.com)과
-             앱 origin(caredoc-navy.vercel.app)이 달라 Chrome의 스토리지 파티셔닝
-             정책상 세션 복원이 깨지는 문제가 있음. 팝업 방식은 origin이 유지되므로
-             안정적. 팝업 차단은 사용자가 1회 허용하면 이후 지속 허용됨. */
+  /* ── Google 리디렉트 로그인 ──
+     【의도】 LINE과 동일한 페이지 전환 방식. 팝업 차단에 영향받지 않음.
+     【흐름】 1) signInWithRedirect 호출 → Google 로그인 페이지로 이동
+             2) 계정 선택 후 원래 도메인으로 복귀
+             3) 복귀 시 아래 init() useEffect의 getRedirectResult가 결과 확인
+             4) 성공 시 onAuthStateChanged가 자동 발화하여 user 갱신 */
   const loginWithGoogle = async () => {
     setLoginError(null);
     setLoginLoading(true);
     try {
       const provider = new GoogleAuthProvider();
-      /* prompt: 'select_account' — 이미 로그인되어 있어도 계정 선택 창을 강제로 표시 */
       provider.setCustomParameters({ prompt: 'select_account' });
-      await signInWithPopup(auth, provider);
-      /* 성공 시 onAuthStateChanged 콜백이 loginLoading을 해제함 */
+      /* signInWithRedirect 호출 후 현재 페이지는 언로드되므로 이후 코드 미실행 */
+      await signInWithRedirect(auth, provider);
     } catch (e) {
-      console.error('[useAuth] signInWithPopup 에러:', e.code);
-      /* 에러 종류별로 i18n 키만 저장 — UI에서 현재 언어에 맞게 번역
-         문자열을 직접 저장하면 훅 레이어에 언어 의존성이 생겨 i18n 적용이 어려움 */
-      if (e.code === 'auth/popup-closed-by-user') {
-        setLoginError('cancelled');
-      } else if (e.code === 'auth/popup-blocked') {
-        setLoginError('popupBlocked');
-      } else if (e.code === 'auth/cancelled-popup-request') {
-        /* 중복 요청 — 조용히 무시 */
-        setLoginError(null);
-      } else {
-        setLoginError('generic');
-      }
+      console.error('[useAuth] signInWithRedirect 에러:', e.code);
+      setLoginError('generic');
       setLoginLoading(false);
     }
   };
@@ -123,8 +112,39 @@ export const useAuth = () => {
      3. 클린업 함수(unsub())로 컴포넌트 언마운트 시 구독 해제 → 메모리 누수 방지
 
      의존성 배열([]) — 빈 배열이므로 마운트 시 한 번만 실행됨 */
-  /* 브라우저 탭/창 닫으면 자동 로그아웃 (세션 영속성) */
-  useEffect(() => { setPersistence(auth, browserSessionPersistence); }, []);
+  /* ── persistence + 탭 세션 마커 + redirect 결과 초기화 ──
+     【왜 browserLocalPersistence?】
+       signInWithRedirect는 local persistence에서만 안정 동작 (Firebase 공식).
+       session persistence는 redirect 복귀 시 세션이 복원되지 않음.
+     【탭 닫으면 로그아웃 구현】
+       sessionStorage는 탭을 닫으면 자동으로 사라짐. 앱 첫 로드 시 마커가
+       없으면 "새 탭" 또는 "브라우저 재시작"으로 판단하여 이전 세션을 signOut.
+       redirect 복귀는 같은 탭이라 마커가 유지되므로 로그아웃되지 않음.
+     【getRedirectResult】
+       redirect 복귀 시 인증 결과를 소비. 성공 시 onAuthStateChanged가 자동 발화. */
+  useEffect(() => {
+    const SESSION_MARKER = 'caredoc-tab-session';
+    const init = async () => {
+      try {
+        await setPersistence(auth, browserLocalPersistence);
+        const hasMarker = sessionStorage.getItem(SESSION_MARKER);
+        /* redirect 복귀 결과 먼저 확인 — 있으면 로그인 성공 */
+        const result = await getRedirectResult(auth);
+        /* 새 탭이고 redirect 복귀도 아닌 경우 → 이전 세션 종료 */
+        if (!hasMarker && !result) {
+          await signOut(auth);
+        }
+        sessionStorage.setItem(SESSION_MARKER, '1');
+      } catch (e) {
+        console.error('[useAuth] init 에러:', e.code || e.message);
+        if (e.code && e.code.startsWith('auth/')) {
+          setLoginError('generic');
+          setLoginLoading(false);
+        }
+      }
+    };
+    init();
+  }, []);
 
   useEffect(() => {
     /* onAuthStateChanged(온어스스테이트체인지드): Firebase 인증 상태 변화를 실시간 감지하는 구독자
