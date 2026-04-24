@@ -25,7 +25,7 @@ import { useState, useEffect } from 'react';
    signInWithPopup(사인인위드팝업): 팝업 창으로 OAuth 로그인 시도
    GoogleAuthProvider(구글어스프로바이더): Google 로그인 제공자 객체
    signOut(사인아웃): Firebase 로그아웃 함수 */
-import { onAuthStateChanged, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { onAuthStateChanged, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, setPersistence, browserLocalPersistence } from 'firebase/auth';
 
 /* auth(어스): 초기화된 Firebase Auth 인스턴스 */
 import { auth } from '../lib/firebase';
@@ -116,8 +116,11 @@ export const useAuth = () => {
      3. 클린업 함수(unsub())로 컴포넌트 언마운트 시 구독 해제 → 메모리 누수 방지
 
      의존성 배열([]) — 빈 배열이므로 마운트 시 한 번만 실행됨 */
-  /* 브라우저 탭/창 닫으면 자동 로그아웃 */
-  useEffect(() => { setPersistence(auth, browserSessionPersistence); }, []);
+  /* signInWithRedirect는 browserLocalPersistence에서만 안정 동작.
+     browserSessionPersistence 상태에서는 redirect 복귀 시 세션이 복원되지 않아
+     계정 선택 후 다시 로그인 화면으로 튕기는 문제가 발생.
+     (탭 닫으면 자동 로그아웃 기능은 제거됨 — 로그아웃 버튼으로 명시적 처리) */
+  useEffect(() => { setPersistence(auth, browserLocalPersistence); }, []);
 
   /* ── 리디렉트 복귀 시 결과 확인 ──
      signInWithRedirect로 Google 인증 후 돌아왔을 때 실패 여부를 잡기 위함.
