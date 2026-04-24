@@ -13,12 +13,25 @@
    - loginWithGoogle: 버튼 클릭 시 실행할 로그인 함수 → App.jsx에서 주입
    ============================================================ */
 
+import { useTranslation } from 'react-i18next';
 import LanguageToggle from '../../components/common/LanguageToggle';
 import styles from './Landing.module.css';
 
 /* 구조 분해 할당(Destructuring 디스트럭처링):
    props 객체에서 필요한 값만 꺼내 변수로 사용 */
 const Landing = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) => {
+  /* useTranslation(유즈트랜슬레이션): 현재 언어 번역 함수 t 제공
+     언어 토글 시 자동으로 리렌더링되어 텍스트 교체됨 */
+  const { t } = useTranslation();
+
+  /* \n(줄바꿈 문자) 기준으로 잘라 <br />로 연결 — 번역 문자열에서 줄바꿈 처리 */
+  const renderMultiline = (text) =>
+    text.split('\n').map((line, i, arr) => (
+      <span key={i}>
+        {line}
+        {i < arr.length - 1 && <br />}
+      </span>
+    ));
 
   return (
     <div className={styles.wrap}>
@@ -29,7 +42,7 @@ const Landing = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) =
 
       {/* 로고 */}
       <div className={styles.logo}>CareDoc</div>
-      <p className={styles.sub}>介護書類をかんたんに、もっとスマートに。</p>
+      <p className={styles.sub}>{t('landing.sub')}</p>
 
       {/* 워드/엑셀 → CareDoc 전환 흐름 안내 (서비스 가치 설명 섹션) */}
       <div className={styles.flow}>
@@ -38,8 +51,8 @@ const Landing = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) =
             <span className={styles.officeIcon} style={{ background: '#2B579A' }}>W</span>
             <span className={styles.officeIcon} style={{ background: '#217346' }}>X</span>
           </div>
-          <div className={styles.flowLabel}>Word / Excel</div>
-          <div className={styles.flowDesc}>手書き・手入力<br />毎回ゼロから作成</div>
+          <div className={styles.flowLabel}>{t('landing.wordExcel')}</div>
+          <div className={styles.flowDesc}>{renderMultiline(t('landing.wordExcelDesc'))}</div>
         </div>
 
         <div className={styles.arrow}>→</div>
@@ -48,11 +61,11 @@ const Landing = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) =
         <div className={`${styles.flowItem} ${styles.flowItemActive}`}>
           <div className={styles.flowIcon}>🌐</div>
           <div className={styles.flowLabel}>CareDoc</div>
-          <div className={styles.flowDesc}>ブラウザで入力<br />即PDF・自動保存</div>
+          <div className={styles.flowDesc}>{renderMultiline(t('landing.caredocDesc'))}</div>
         </div>
       </div>
 
-      <p className={styles.catchCopy}>もっとスマートに、もっとラクに。</p>
+      <p className={styles.catchCopy}>{t('landing.catchCopy')}</p>
 
       {/* Google 로그인 버튼
           disabled(디세이블드): loginLoading이 true인 동안 버튼 비활성화 → 중복 클릭 방지
@@ -63,12 +76,12 @@ const Landing = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) =
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={{ marginRight: 8, flexShrink: 0 }}>
             <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.105.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
           </svg>
-          LINEでログイン
+          {t('landing.loginLine')}
         </button>
 
         <button className={styles.loginBtn} onClick={loginWithGoogle} disabled={loginLoading}>
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className={styles.googleIcon} />
-          {loginLoading ? 'ログイン中...' : 'Googleアカウントでログイン'}
+          {loginLoading ? t('landing.loginLoading') : t('landing.loginGoogle')}
         </button>
       </div>
 
@@ -76,7 +89,7 @@ const Landing = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) =
           loginError가 truthy일 때만 에러 메시지 렌더링 */}
       {loginError && <p className={styles.errorMsg}>{loginError}</p>}
 
-      <p className={styles.note}>ログインするとデータがクラウドに保存され<br />どの端末からでもアクセスできます。</p>
+      <p className={styles.note}>{renderMultiline(t('landing.note'))}</p>
 
     </div>
   );

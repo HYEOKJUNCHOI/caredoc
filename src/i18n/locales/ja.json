@@ -124,6 +124,18 @@
     "goAdmin": "文言管理"
   },
 
+  "landing": {
+    "sub": "介護書類をかんたんに、もっとスマートに。",
+    "wordExcel": "Word / Excel",
+    "wordExcelDesc": "手書き・手入力\n毎回ゼロから作成",
+    "caredocDesc": "ブラウザで入力\n即PDF・自動保存",
+    "catchCopy": "もっとスマートに、もっとラクに。",
+    "loginLine": "LINEでログイン",
+    "loginGoogle": "Googleアカウントでログイン",
+    "loginLoading": "ログイン中...",
+    "note": "ログインするとデータがクラウドに保存され\nどの端末からでもアクセスできます。"
+  },
+
   "common": {
     "save": "保存",
     "cancel": "キャンセル",

@@ -124,6 +124,18 @@
     "goAdmin": "문구 관리"
   },
 
+  "landing": {
+    "sub": "간병 서류를 간단하고, 더 스마트하게.",
+    "wordExcel": "Word / Excel",
+    "wordExcelDesc": "손으로 작성 · 수기 입력\n매번 처음부터 작성",
+    "caredocDesc": "브라우저에서 입력\n즉시 PDF · 자동 저장",
+    "catchCopy": "더 스마트하게, 더 편하게.",
+    "loginLine": "LINE으로 로그인",
+    "loginGoogle": "Google 계정으로 로그인",
+    "loginLoading": "로그인 중...",
+    "note": "로그인하면 데이터가 클라우드에 저장되어\n어떤 기기에서든 접속할 수 있습니다."
+  },
+
   "common": {
     "save": "저장",
     "cancel": "취소",
