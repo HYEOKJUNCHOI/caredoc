@@ -35,8 +35,8 @@ const Landing = ({ loginLoading, loginError, loginWithGoogle, loginWithLine }) =
 
   return (
     <div className={styles.wrap}>
-      {/* 오른쪽 상단 언어 토글 — position fixed로 랜딩 위에 항상 표시 */}
-      <div style={{ position: 'fixed', top: 12, right: 16, zIndex: 100 }}>
+      {/* 오른쪽 상단 언어 토글 — .wrap(position:relative) 내부 우상단 */}
+      <div style={{ position: 'absolute', top: 16, right: 20, zIndex: 100 }}>
         <LanguageToggle />
       </div>
 

@@ -1,4 +1,6 @@
 .wrap {
+  /* position: relative — 내부 LanguageToggle(absolute)의 기준 박스 */
+  position: relative;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
