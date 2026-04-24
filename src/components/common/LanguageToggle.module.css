@@ -1,22 +1,26 @@
-/* 언어 토글 버튼 — Excel 헤더 위 스타일 */
+/* 언어 토글 버튼 — 다크/라이트 배경 모두에서 잘 보이도록 강화 */
 .toggle {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: 2px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #FFFFFF;
-  font-size: 12px;
-  font-weight: 500;
-  transition: background 0.1s;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  /* 반투명 흰색 → 진한 흰색으로 변경. 배경 상관없이 잘 띔 */
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.15);
+  color: #222;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  transition: background 0.15s, transform 0.1s;
 }
 
 .toggle:hover {
-  background: rgba(255,255,255,0.22);
+  background: #fff;
+  transform: translateY(-1px);
 }
 
 .flag {
-  font-size: 13px;
+  font-size: 15px;
 }
