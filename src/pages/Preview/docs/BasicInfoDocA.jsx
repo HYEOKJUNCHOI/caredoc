@@ -90,7 +90,7 @@ const flexRow = {
 
 const BasicInfoDocA = ({ d }) => {
   const pad = (arr, n) => { const a = arr || []; return a.length >= n ? a : [...a, ...Array(n - a.length).fill({})]; };
-  const medicalRows     = pad(d?.medicalRows,     4);
+  const medicalRows     = pad(d?.medicalRows,     5);
   const pastServiceRows = pad(d?.pastServiceRows, 3);
 
   /* 주거상황 선택지 표시 헬퍼 */
@@ -239,8 +239,8 @@ const BasicInfoDocA = ({ d }) => {
             </td>
           </tr>
 
-          {/* ═══ Row 8~11: 障害の状況 (各 3.8%) ═══ */}
-          <tr style={{ height: '3.8%' }}>
+          {/* ═══ Row 8~11: 障害の状況 (各 3.3%) ═══ */}
+          <tr style={{ height: '3.3%' }}>
             <td rowSpan={4} style={{ ...fLabel, whiteSpace: 'normal', wordBreak: 'break-all', fontWeight: 'bold' }}>障害の状況</td>
             <td style={{ ...fValue, padding: 0 }}>
               <div style={flexRow}>
@@ -249,7 +249,7 @@ const BasicInfoDocA = ({ d }) => {
               </div>
             </td>
           </tr>
-          <tr style={{ height: '3.8%' }}>
+          <tr style={{ height: '3.3%' }}>
             <td style={{ ...fValue, padding: 0 }}>
               <div style={flexRow}>
                 <div style={subLabel}>手　帳</div>
@@ -259,7 +259,7 @@ const BasicInfoDocA = ({ d }) => {
               </div>
             </td>
           </tr>
-          <tr style={{ height: '3.8%' }}>
+          <tr style={{ height: '3.3%' }}>
             <td style={{ ...fValue, padding: 0 }}>
               <div style={flexRow}>
                 <div style={subLabel}>障害年金</div>
@@ -267,7 +267,7 @@ const BasicInfoDocA = ({ d }) => {
               </div>
             </td>
           </tr>
-          <tr style={{ height: '3.8%' }}>
+          <tr style={{ height: '3.3%' }}>
             <td style={{ ...fValue, padding: 0 }}>
               <div style={flexRow}>
                 <div style={subLabel}>概　況</div>
@@ -294,8 +294,8 @@ const BasicInfoDocA = ({ d }) => {
             </td>
           </tr>
 
-          {/* ═══ Row 13: 医療機関服薬状況 (15%) ═══ */}
-          <tr style={{ height: '15%' }}>
+          {/* ═══ Row 13: 医療機関服薬状況 (17%) ═══ */}
+          <tr style={{ height: '17%' }}>
             <td style={{ ...fLabel, whiteSpace: 'normal', wordBreak: 'keep-all', lineHeight: 1.3, fontSize: '7pt', fontWeight: 'bold' }}>
               医療機関<br />服薬状況
             </td>
