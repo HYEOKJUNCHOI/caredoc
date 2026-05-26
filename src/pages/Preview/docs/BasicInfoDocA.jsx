@@ -7,6 +7,13 @@
 import s from './BasicInfo.module.css';
 import GenogramSVG from '../../../components/common/GenogramSVG';
 
+const formatNotebookType = (value) => {
+  if (Array.isArray(value)) return value.filter(Boolean).join('、');
+  return value || '';
+};
+
+const FULL_WIDTH_SPACE = '\u3000';
+
 /* YYYY-MM-DD → 일본 원호(元号) 표기 변환 */
 const toJaEra = (iso) => {
   if (!iso) return '';
@@ -237,7 +244,9 @@ const BasicInfoDocA = ({ d }) => {
             <td style={{ ...fValue, padding: 0 }}>
               <div style={flexRow}>
                 <div style={subLabel}>手　帳</div>
-                <div style={{ flex: 1, fontSize: '8.5pt', padding: '2px 6px', display: 'flex', alignItems: 'center' }}>{d?.notebookType || '　'}{d?.notebookLevel ? `　${d.notebookLevel}` : ''}</div>
+                <div style={{ flex: 1, fontSize: '8.2pt', lineHeight: 1.25, padding: '2px 6px', display: 'flex', alignItems: 'center', whiteSpace: 'normal', overflowWrap: 'anywhere' }}>
+                  {[formatNotebookType(d?.notebookType), d?.notebookLevel].filter(Boolean).join(FULL_WIDTH_SPACE) || FULL_WIDTH_SPACE}
+                </div>
               </div>
             </td>
           </tr>

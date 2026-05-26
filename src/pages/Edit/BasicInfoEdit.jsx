@@ -33,30 +33,55 @@ const getKuroshiro = async () => {
 const initRows = (data, key, count, empty) =>
   data[key]?.length ? data[key] : Array.from({ length: count }, () => ({ ...empty }));
 
-/* 라디오 느낌의 옵션 토글 버튼 */
-const ToggleOptions = ({ options, value, onChange }) => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-    {options.map((opt) => (
-      <button
-        key={opt}
-        type="button"
-        tabIndex={-1}
-        onClick={() => onChange(value === opt ? '' : opt)}
-        style={{
-          padding: '3px 10px',
-          fontSize: '13px',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-          background: value === opt ? '#333' : '#fff',
-          color: value === opt ? '#fff' : '#333',
-          cursor: 'pointer',
-        }}
-      >
-        {opt}
-      </button>
-    ))}
-  </div>
-);
+/* Radio / checkbox-style option toggle buttons */
+const toOptionArray = (value) => {
+  if (Array.isArray(value)) return value.filter(Boolean);
+  return value ? [value] : [];
+};
+
+const ToggleOptions = ({ options, value, onChange, multiple = false }) => {
+  const selectedValues = toOptionArray(value);
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+      {options.map((opt) => {
+        const selected = multiple ? selectedValues.includes(opt) : value === opt;
+
+        return (
+          <button
+            key={opt}
+            type="button"
+            tabIndex={-1}
+            aria-pressed={selected}
+            onClick={() => {
+              if (multiple) {
+                onChange(
+                  selected
+                    ? selectedValues.filter((v) => v !== opt)
+                    : [...selectedValues, opt]
+                );
+                return;
+              }
+
+              onChange(value === opt ? '' : opt);
+            }}
+            style={{
+              padding: '3px 10px',
+              fontSize: '13px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              background: selected ? '#333' : '#fff',
+              color: selected ? '#fff' : '#333',
+              cursor: 'pointer',
+            }}
+          >
+            {opt}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 const BasicInfoEdit = ({ data, onChange }) => {
   const { i18n } = useTranslation();
@@ -269,7 +294,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
       onChange('address',          '白浜町中嶋44');
       onChange('residenceType',    'グループホーム等');
       onChange('disabilityName',   '両下肢機能全廃（1級）、二分脊椎排便排尿障害（4級）');
-      onChange('notebookType',     '療育手帳');
+      onChange('notebookType',     ['療育手帳', '身体障害手帳']);
       onChange('notebookLevel',    'B2');
       onChange('disabilityPension','1級');
       onChange('careInsurance',    '無');
@@ -330,7 +355,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
       onChange('address',          '경기도 수원시 팔달구 중동 44');
       onChange('residenceType',    'グループホーム等');
       onChange('disabilityName',   '지체장애 1급, 신경인성 방광 4급');
-      onChange('notebookType',     '장애인 등록증');
+      onChange('notebookType',     ['치료교육수첩', '신체장애수첩']);
       onChange('notebookLevel',    'B2');
       onChange('disabilityPension','1급');
       onChange('careInsurance',    '무');
@@ -776,7 +801,8 @@ const BasicInfoEdit = ({ data, onChange }) => {
             <label className={styles.fieldLabel}>{lbl('수첩 종류', '手帳種別')}</label>
             <ToggleOptions
               options={isJa ? ['療育手帳', '精神障害手帳', '身体障害手帳'] : ['치료교육수첩', '정신장애수첩', '신체장애수첩']}
-              value={data.notebookType || ''}
+              value={data.notebookType || []}
+              multiple
               onChange={(v) => onChange('notebookType', v)}
             />
           </div>
