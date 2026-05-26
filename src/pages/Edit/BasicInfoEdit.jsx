@@ -33,6 +33,12 @@ const getKuroshiro = async () => {
 const initRows = (data, key, count, empty) =>
   data[key]?.length ? data[key] : Array.from({ length: count }, () => ({ ...empty }));
 
+const ensureRows = (rows, count, empty) => {
+  const current = Array.isArray(rows) ? rows : [];
+  if (current.length >= count) return current;
+  return [...current, ...Array.from({ length: count - current.length }, () => ({ ...empty }))];
+};
+
 const NOTEBOOK_SEPARATOR = '\u30fb';
 
 /* Radio / checkbox-style option toggle buttons */
@@ -224,16 +230,17 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
   /* 반복 행 업데이트 헬퍼 */
   const updateRow = (key, idx, field, val) => {
-    const rows = initRows(data, key, key === 'medicalRows' ? 3 : key === 'pastServiceRows' ? 3 : 3,
-      key === 'medicalRows' ? { hospital: '', disease: '', medication: '' }
-      : key === 'pastServiceRows' ? { serviceName: '', facility: '', period: '' }
-      : { type: '', amount: '' }
-    );
+    const rows = key === 'medicalRows'
+      ? ensureRows(data[key], 5, { hospital: '', disease: '', medication: '' })
+      : initRows(data, key, key === 'pastServiceRows' ? 3 : 3,
+        key === 'pastServiceRows' ? { serviceName: '', facility: '', period: '' }
+        : { type: '', amount: '' }
+      );
     const updated = rows.map((r, i) => i === idx ? { ...r, [field]: val } : r);
     onChange(key, updated);
   };
 
-  const medicalRows     = initRows(data, 'medicalRows',     3, { hospital: '', disease: '', medication: '' });
+  const medicalRows     = ensureRows(data.medicalRows, 5, { hospital: '', disease: '', medication: '' });
   const pastServiceRows = initRows(data, 'pastServiceRows', 3, { serviceName: '', facility: '', period: '' });
   const serviceTypeLaw  = initRows(data, 'serviceTypeLaw',  3, { type: '', amount: '' });
   const serviceTypeLocal= initRows(data, 'serviceTypeLocal',3, { type: '', amount: '' });
@@ -313,6 +320,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
         { hospital: '紀南病院泌尿器科',     disease: '排尿障害',     medication: '導尿（自己）' },
         { hospital: '南和歌山医療センター', disease: '高血圧',       medication: '朝1錠' },
         { hospital: '南紀整形外科',         disease: '脊椎側弯症',   medication: 'リハビリ週1回' },
+        {},
       ]);
       onChange('historyBirth',        '大阪府堺市にて出生。出生時より二分脊椎の診断を受ける。');
       onChange('historyKindergarten', '南紀福祉センター療育園（3歳〜6歳）');
@@ -374,6 +382,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
         { hospital: '수원성모병원 비뇨기과', disease: '신경인성 방광', medication: '자가 도뇨' },
         { hospital: '아주대병원',       disease: '고혈압',        medication: '아침 1정' },
         { hospital: '수원정형외과',     disease: '척추측만증',    medication: '재활 주 1회' },
+        {},
       ]);
       onChange('historyBirth',        '경기도 수원시 출생. 출생 시부터 이분척추 진단을 받음.');
       onChange('historyKindergarten', '수원 복지센터 치료교육원 (3세~6세)');
@@ -439,7 +448,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
       'chiefComplaintOther','chiefComplaintFamily','bloodType','remarks',
     ];
     fields.forEach(f => onChange(f, ''));
-    onChange('medicalRows',     [{},{},{},{}]);
+    onChange('medicalRows',     [{},{},{},{},{}]);
     onChange('pastServiceRows', [{},{},{}]);
     onChange('serviceTypeLaw',  [{}]);
     onChange('serviceTypeLocal',[{}]);
