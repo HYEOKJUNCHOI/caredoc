@@ -33,9 +33,17 @@ const getKuroshiro = async () => {
 const initRows = (data, key, count, empty) =>
   data[key]?.length ? data[key] : Array.from({ length: count }, () => ({ ...empty }));
 
+const NOTEBOOK_SEPARATOR = '\u30fb';
+
 /* Radio / checkbox-style option toggle buttons */
 const toOptionArray = (value) => {
   if (Array.isArray(value)) return value.filter(Boolean);
+  if (typeof value === 'string' && value.includes(NOTEBOOK_SEPARATOR)) {
+    return value.split(NOTEBOOK_SEPARATOR).map((v) => v.trim()).filter(Boolean);
+  }
+  if (typeof value === 'string' && value.includes('\u3001')) {
+    return value.split('\u3001').map((v) => v.trim()).filter(Boolean);
+  }
   return value ? [value] : [];
 };
 
@@ -294,7 +302,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
       onChange('address',          '白浜町中嶋44');
       onChange('residenceType',    'グループホーム等');
       onChange('disabilityName',   '両下肢機能全廃（1級）、二分脊椎排便排尿障害（4級）');
-      onChange('notebookType',     ['療育手帳', '身体障害手帳']);
+      onChange('notebookType',     `療育手帳${NOTEBOOK_SEPARATOR}身体障害手帳`);
       onChange('notebookLevel',    'B2');
       onChange('disabilityPension','1級');
       onChange('careInsurance',    '無');
@@ -355,7 +363,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
       onChange('address',          '경기도 수원시 팔달구 중동 44');
       onChange('residenceType',    'グループホーム等');
       onChange('disabilityName',   '지체장애 1급, 신경인성 방광 4급');
-      onChange('notebookType',     ['치료교육수첩', '신체장애수첩']);
+      onChange('notebookType',     `치료교육수첩${NOTEBOOK_SEPARATOR}신체장애수첩`);
       onChange('notebookLevel',    'B2');
       onChange('disabilityPension','1급');
       onChange('careInsurance',    '무');
@@ -801,9 +809,9 @@ const BasicInfoEdit = ({ data, onChange }) => {
             <label className={styles.fieldLabel}>{lbl('수첩 종류', '手帳種別')}</label>
             <ToggleOptions
               options={isJa ? ['療育手帳', '精神障害手帳', '身体障害手帳'] : ['치료교육수첩', '정신장애수첩', '신체장애수첩']}
-              value={data.notebookType || []}
+              value={data.notebookType || ''}
               multiple
-              onChange={(v) => onChange('notebookType', v)}
+              onChange={(v) => onChange('notebookType', v.join(NOTEBOOK_SEPARATOR))}
             />
           </div>
           <div className={styles.field}>

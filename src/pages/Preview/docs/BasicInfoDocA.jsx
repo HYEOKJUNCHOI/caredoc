@@ -7,8 +7,17 @@
 import s from './BasicInfo.module.css';
 import GenogramSVG from '../../../components/common/GenogramSVG';
 
+const NOTEBOOK_SEPARATOR = '\u30fb';
+
 const formatNotebookType = (value) => {
-  if (Array.isArray(value)) return value.filter(Boolean).join('、');
+  if (Array.isArray(value)) return value.filter(Boolean).join(NOTEBOOK_SEPARATOR);
+  if (typeof value === 'string') {
+    return value
+      .split(/[\u3001\u30fb]/)
+      .map((v) => v.trim())
+      .filter(Boolean)
+      .join(NOTEBOOK_SEPARATOR);
+  }
   return value || '';
 };
 
