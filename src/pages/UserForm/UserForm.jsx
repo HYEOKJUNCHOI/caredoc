@@ -12,11 +12,7 @@ const UserForm = () => {
   /* useTranslation: react-i18next가 제공하는 훅
      - t('키'): 현재 언어에 맞는 번역 문자열 반환
      - i18n.language: 현재 선택된 언어 코드 ('ko' 또는 'ja') */
-  const { t, i18n } = useTranslation();
-
-  /* 언어에 따라 기본 담당자 이름 결정
-     담당자를 비웠을 때 자동으로 채워주는 기본값 */
-  const defaultManager = i18n.language === 'ja' ? '栗須康子' : '최혁준';
+  const { t } = useTranslation();
 
   /* useNavigate: 페이지 이동을 코드로 제어하는 훅
      navigate('/') → 홈 화면으로 이동 */
@@ -36,45 +32,36 @@ const UserForm = () => {
 
   const handleSave = async () => {
     if (!form.name.trim()) {
-      setError('이름을 입력해주세요.');
+      setError(t('userForm.nameRequired'));
+      return;
+    }
+    if (!form.manager.trim()) {
+      setError(t('userForm.managerRequired'));
       return;
     }
     setLoading(true);
     try {
-      /* 기존 이용자 목록 조회 */
       const users = getUsers();
-
-      /* 이름 중복 체크 */
       const isDuplicate = users.some(
         (u) => u.name.trim() === form.name.trim()
       );
       if (isDuplicate) {
-        setError('같은 이름의 이용자가 이미 존재합니다.');
+        setError(t('userForm.duplicateError'));
         setLoading(false);
         return;
       }
-
-      /* 새 이용자 객체 생성
-         - id: Date.now() → 밀리초 타임스탬프를 고유 ID로 활용
-         - manager: 입력이 없으면 defaultManager(언어별 기본값) 사용
-         - createdAt: ISO 8601 형식 날짜 문자열 (예: "2025-03-31T12:00:00.000Z") */
       const newUser = {
         id: Date.now().toString(),
         name: form.name.trim(),
-        manager: form.manager.trim() || defaultManager,
+        manager: form.manager.trim(),
         createdAt: new Date().toISOString(),
       };
-
-      /* [newUser, ...users]: 스프레드(전개) 연산자
-         새 이용자를 배열 맨 앞에 두고 기존 목록을 뒤에 붙임
-         → 목록에서 최신 등록자가 맨 위에 보임 */
       await saveUsers([newUser, ...users]);
       navigate('/');
     } catch (e) {
       console.error('저장 실패:', e);
-      setError('저장에 실패했습니다. 네트워크 연결을 확인해주세요.');
+      setError(t('userForm.saveError'));
     } finally {
-      /* finally: 성공/실패 상관없이 항상 실행 → 로딩 해제 */
       setLoading(false);
     }
   };
@@ -114,7 +101,7 @@ const UserForm = () => {
           {t('userForm.cancel')}
         </button>
         <button className={styles.saveBtn} onClick={handleSave} disabled={loading}>
-          {loading ? '저장 중...' : t('userForm.save')}
+          {loading ? t('userForm.saving') : t('userForm.save')}
         </button>
       </div>
     </div>

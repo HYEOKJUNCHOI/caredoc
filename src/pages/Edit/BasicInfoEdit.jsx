@@ -8,7 +8,7 @@ import styles from './Edit.module.css';
 import GenogramSVG from '../../components/common/GenogramSVG';
 
 /* 시설명 선택지 */
-const FACILITY_OPTIONS = ['生馬ホーム', '奥平ホーム'];
+const FACILITY_OPTIONS = ['奥平ホーム', '生馬ホーム', '神島ホーム', '朝日ケ丘ホーム'];
 
 /* 가족 관계 선택지 */
 const RELATION_OPTIONS = ['父', '母', '兄', '姉', '弟', '妹', '夫', '妻', '子'];
@@ -253,36 +253,36 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
     /* ── 언어별 테스트 데이터 풀 ── */
     const pool = isJa ? [
-      ['田中　一郎', 'たなか　いちろう', '男性'],
-      ['山田　太郎', 'やまだ　たろう',   '男性'],
-      ['佐藤　健二', 'さとう　けんじ',   '男性'],
-      ['鈴木　正志', 'すずき　まさし',   '男性'],
-      ['中村　浩三', 'なかむら　こうぞう','男性'],
-      ['山本　花子', 'やまもと　はなこ', '女性'],
-      ['小林　由美', 'こばやし　ゆみ',   '女性'],
-      ['加藤　幸子', 'かとう　さちこ',   '女性'],
-      ['伊藤　雅子', 'いとう　まさこ',   '女性'],
-      ['渡辺　里美', 'わたなべ　さとみ', '女性'],
+      ['キツネ　タロウ', 'きつね　たろう',   '男性'],
+      ['タヌキ　ケンジ', 'たぬき　けんじ',   '男性'],
+      ['クマ　ヒロシ',   'くま　ひろし',     '男性'],
+      ['カメ　マサシ',   'かめ　まさし',     '男性'],
+      ['ウサギ　コウゾウ','うさぎ　こうぞう', '男性'],
+      ['パンダ　ハナコ',  'ぱんだ　はなこ',  '女性'],
+      ['ネコ　ユミ',     'ねこ　ゆみ',       '女性'],
+      ['イルカ　サチコ',  'いるか　さちこ',  '女性'],
+      ['コアラ　マサコ',  'こあら　まさこ',  '女性'],
+      ['フクロウ　サトミ','ふくろう　さとみ', '女性'],
     ] : [
-      /* 한국어 모드 — 한국식 이름 + 한글 독음 */
-      ['김민준', '김민준', '男性'],
-      ['이서준', '이서준', '男性'],
-      ['박지훈', '박지훈', '男性'],
-      ['최도윤', '최도윤', '男性'],
-      ['정시우', '정시우', '男性'],
-      ['이서연', '이서연', '女性'],
-      ['김지아', '김지아', '女性'],
-      ['박하은', '박하은', '女性'],
-      ['최수아', '최수아', '女性'],
-      ['윤아린', '윤아린', '女性'],
+      /* 한국어 모드 — 3글자 동물 이름 */
+      ['고라니', '고라니', '男性'],
+      ['너구리', '너구리', '男性'],
+      ['다람쥐', '다람쥐', '男性'],
+      ['두더지', '두더지', '男性'],
+      ['오소리', '오소리', '男性'],
+      ['두루미', '두루미', '女性'],
+      ['올빼미', '올빼미', '女性'],
+      ['개구리', '개구리', '女性'],
+      ['거북이', '거북이', '女性'],
+      ['오징어', '오징어', '女性'],
     ];
 
     const emPool = isJa ? [
-      ['父', '田中　次郎'], ['母', '山本　幸子'], ['兄', '佐藤　一男'],
-      ['姉', '鈴木　和子'], ['夫', '中村　博'],   ['妻', '加藤　美智子'],
+      ['父', 'キツネ'], ['母', 'パンダ'], ['兄', 'タヌキ'],
+      ['姉', 'コアラ'], ['夫', 'クマ'],   ['妻', 'イルカ'],
     ] : [
-      ['父', '김 철수'], ['母', '이 영희'], ['兄', '박 민수'],
-      ['姉', '최 수진'], ['夫', '정 재원'], ['妻', '윤 지현'],
+      ['父', '고등어'], ['母', '정어리'], ['兄', '가오리'],
+      ['姉', '기러기'], ['夫', '부엉이'], ['妻', '메뚜기'],
     ];
 
     const [kanji, kana, gender] = pool[rnd(pool.length)];
@@ -305,8 +305,8 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
     if (isJa) {
       /* ── 일본어 고정값 ── */
-      onChange('facilityName',     '生馬ホーム');
-      onChange('address',          '白浜町中嶋44');
+      onChange('facilityName',     'さくらホーム');
+      onChange('address',          'みどり町うさぎ丘1-1');
       onChange('residenceType',    'グループホーム等');
       onChange('disabilityName',   '両下肢機能全廃（1級）、二分脊椎排便排尿障害（4級）');
       onChange('notebookType',     `療育手帳${NOTEBOOK_SEPARATOR}身体障害手帳`);
@@ -316,28 +316,28 @@ const BasicInfoEdit = ({ data, onChange }) => {
       onChange('disabilityOverview','車椅子を使用しており、日常生活全般に介助が必要。意思疎通は良好で、自分の意見をしっかりと伝えられる。');
       onChange('careLevel',        '');
       onChange('medicalRows', [
-        { hospital: 'こころの医療センター', disease: '統合失調症',   medication: '3食後、寝る前' },
-        { hospital: '紀南病院泌尿器科',     disease: '排尿障害',     medication: '導尿（自己）' },
-        { hospital: '南和歌山医療センター', disease: '高血圧',       medication: '朝1錠' },
-        { hospital: '南紀整形外科',         disease: '脊椎側弯症',   medication: 'リハビリ週1回' },
+        { hospital: 'はなまる医療センター', disease: '統合失調症',   medication: '3食後、寝る前' },
+        { hospital: 'みずほ病院泌尿器科',   disease: '排尿障害',     medication: '導尿（自己）' },
+        { hospital: 'そよかぜ医療センター', disease: '高血圧',       medication: '朝1錠' },
+        { hospital: 'たんぽぽ整形外科',     disease: '脊椎側弯症',   medication: 'リハビリ週1回' },
         {},
       ]);
-      onChange('historyBirth',        '大阪府堺市にて出生。出生時より二分脊椎の診断を受ける。');
-      onChange('historyKindergarten', '南紀福祉センター療育園（3歳〜6歳）');
-      onChange('historyElementary',   '安居小学校入学後、愛徳整肢園へ転院。小4より南紀養護学校へ転校。');
-      onChange('historyJuniorHigh',   '南紀養護学校中学部');
-      onChange('historySeniorHigh',   '南紀養護学校高等部');
+      onChange('historyBirth',        '架空県みどり市にて出生。出生時より二分脊椎の診断を受ける。');
+      onChange('historyKindergarten', 'みどり福祉センター療育園（3歳〜6歳）');
+      onChange('historyElementary',   'うさぎ小学校入学後、たんぽぽ整肢園へ転院。小4よりさくら養護学校へ転校。');
+      onChange('historyJuniorHigh',   'さくら養護学校中学部');
+      onChange('historySeniorHigh',   'さくら養護学校高等部');
       onChange('historyOtherSchool',  '');
-      onChange('historyAdult',        'いきいき作業所（H.20〜H.27）→ふたば作業所（H.28.4〜現在）');
+      onChange('historyAdult',        'にじ作業所（H.20〜H.27）→はなまる作業所（H.28.4〜現在）');
       onChange('pastServiceRows', [
-        { serviceName: '移動支援',     facility: 'すてっぷ',               period: 'H.28〜現在' },
-        { serviceName: '日中一時支援', facility: '奥平デイサービス',         period: 'R.2〜現在' },
-        { serviceName: '居宅介護',     facility: 'ヘルパーステーション白浜', period: 'R.3〜現在' },
+        { serviceName: '移動支援',     facility: 'ステップ',               period: 'H.28〜現在' },
+        { serviceName: '日中一時支援', facility: 'たんぽぽデイサービス',   period: 'R.2〜現在' },
+        { serviceName: '居宅介護',     facility: 'ヘルパーステーションみどり', period: 'R.3〜現在' },
       ]);
       onChange('supportLevel',        '4');
       onChange('certValidFrom',       '2022-09-01');
       onChange('certValidTo',         '2025-08-31');
-      onChange('paymentCity',         '白浜町');
+      onChange('paymentCity',         'みどり町');
       onChange('certIssuedDate',      '2022-09-20');
       onChange('certNumber',          `401${String(rnd(90000000) + 10000000)}`);
       onChange('serviceTypeLaw', [
@@ -350,14 +350,14 @@ const BasicInfoEdit = ({ data, onChange }) => {
         { type: '移動支援（身体介護有）',       amount: '7h/月' },
         { type: '',                               amount: '' },
       ]);
-      onChange('consultationOffice',   '西牟婁障害者支援センター　リーふ');
-      onChange('socialRelationNodes',  'ヘルパー\nふたば作業所\n奥平マンション\n訪着すてっぷ');
-      onChange('mainOffices',          'ふたば作業所　奥平マンション');
-      onChange('otherInfo',            '田辺市社協権利擁護事業利用（金銭管理）2か月に1回');
+      onChange('consultationOffice',   'みどり障害者支援センター　ひかり');
+      onChange('socialRelationNodes',  'ヘルパー\nはなまる作業所\nさくらホーム\nステップ');
+      onChange('mainOffices',          'はなまる作業所　さくらホーム');
+      onChange('otherInfo',            'みどり市権利擁護事業利用（金銭管理）2か月に1回');
       onChange('chiefComplaintGeneral','いろいろなことを経験したい');
       onChange('chiefComplaintWork',   '給料をたくさん稼ぎたい');
-      onChange('chiefComplaintLife',   '奥平マンションで良い。できることは自分でやる');
-      onChange('chiefComplaintOther',  '長期休暇には実家に帰省するのを楽しみにしている');
+      onChange('chiefComplaintLife',   'さくらホームで良い。できることは自分でやる');
+      onChange('chiefComplaintOther',  '長期休暇には旅行を楽しみにしている');
       onChange('chiefComplaintFamily', '家族が定期的に様子を見にきてくれる。');
       onChange('remarks',              '毎月第3木曜日にケース会議を実施。緊急時は施設長へ連絡すること。');
       onChange('familyMembers', [
@@ -367,8 +367,8 @@ const BasicInfoEdit = ({ data, onChange }) => {
       setDisabilityNames(['両下肢機能全廃（1級）', '二分脊椎排便排尿障害（4級）']);
     } else {
       /* ── 한국어 고정값 ── */
-      onChange('facilityName',     '생마 홈');
-      onChange('address',          '경기도 수원시 팔달구 중동 44');
+      onChange('facilityName',     '초록 홈');
+      onChange('address',          '가상도 초록시 토끼구 들꽃동 44');
       onChange('residenceType',    'グループホーム等');
       onChange('disabilityName',   '지체장애 1급, 신경인성 방광 4급');
       onChange('notebookType',     `치료교육수첩${NOTEBOOK_SEPARATOR}신체장애수첩`);
@@ -378,17 +378,17 @@ const BasicInfoEdit = ({ data, onChange }) => {
       onChange('disabilityOverview','휠체어를 사용하며 일상생활 전반에 도움이 필요합니다. 의사소통은 원활하며 자신의 의견을 명확히 표현할 수 있습니다.');
       onChange('careLevel',        '');
       onChange('medicalRows', [
-        { hospital: '마음건강의원',     disease: '조현병',        medication: '3식 후, 취침 전' },
-        { hospital: '수원성모병원 비뇨기과', disease: '신경인성 방광', medication: '자가 도뇨' },
-        { hospital: '아주대병원',       disease: '고혈압',        medication: '아침 1정' },
-        { hospital: '수원정형외과',     disease: '척추측만증',    medication: '재활 주 1회' },
+        { hospital: '초록의원',         disease: '조현병',        medication: '3식 후, 취침 전' },
+        { hospital: '들꽃병원 비뇨기과', disease: '신경인성 방광', medication: '자가 도뇨' },
+        { hospital: '토끼종합병원',     disease: '고혈압',        medication: '아침 1정' },
+        { hospital: '초록정형외과',     disease: '척추측만증',    medication: '재활 주 1회' },
         {},
       ]);
-      onChange('historyBirth',        '경기도 수원시 출생. 출생 시부터 이분척추 진단을 받음.');
-      onChange('historyKindergarten', '수원 복지센터 치료교육원 (3세~6세)');
-      onChange('historyElementary',   '영통초등학교 입학 후 재활병원 입원. 4학년부터 특수학교 전학.');
-      onChange('historyJuniorHigh',   '경기도립 특수학교 중학부');
-      onChange('historySeniorHigh',   '경기도립 특수학교 고등부');
+      onChange('historyBirth',        '가상도 초록시 출생. 출생 시부터 이분척추 진단을 받음.');
+      onChange('historyKindergarten', '초록 복지센터 치료교육원 (3세~6세)');
+      onChange('historyElementary',   '들꽃초등학교 입학 후 재활병원 입원. 4학년부터 특수학교 전학.');
+      onChange('historyJuniorHigh',   '가상도립 특수학교 중학부');
+      onChange('historySeniorHigh',   '가상도립 특수학교 고등부');
       onChange('historyOtherSchool',  '');
       onChange('historyAdult',        '희망 작업장 (2008~2015) → 나눔 작업장 (2016~현재)');
       onChange('pastServiceRows', [
@@ -399,7 +399,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
       onChange('supportLevel',        '4');
       onChange('certValidFrom',       '2022-09-01');
       onChange('certValidTo',         '2025-08-31');
-      onChange('paymentCity',         '수원시');
+      onChange('paymentCity',         '초록시');
       onChange('certIssuedDate',      '2022-09-20');
       onChange('certNumber',          `401${String(rnd(90000000) + 10000000)}`);
       onChange('serviceTypeLaw', [
@@ -412,10 +412,10 @@ const BasicInfoEdit = ({ data, onChange }) => {
         { type: '이동 지원 (신체 도움 포함)', amount: '월 7h' },
         { type: '',                            amount: '' },
       ]);
-      onChange('consultationOffice',   '수원 장애인 지원센터 나래');
-      onChange('socialRelationNodes',  '돌봄 헬퍼\n나눔 작업장\n생마 홈\n스텝 복지관');
-      onChange('mainOffices',          '나눔 작업장  생마 홈');
-      onChange('otherInfo',            '수원시 권리 옹호 사업 이용 (금전 관리) 2개월에 1회');
+      onChange('consultationOffice',   '초록 장애인 지원센터 나래');
+      onChange('socialRelationNodes',  '돌봄 헬퍼\n나눔 작업장\n초록 홈\n스텝 복지관');
+      onChange('mainOffices',          '나눔 작업장  초록 홈');
+      onChange('otherInfo',            '초록시 권리 옹호 사업 이용 (금전 관리) 2개월에 1회');
       onChange('chiefComplaintGeneral','다양한 경험을 하고 싶다');
       onChange('chiefComplaintWork',   '급여를 많이 받고 싶다');
       onChange('chiefComplaintLife',   '지금 사는 곳이 좋다. 할 수 있는 건 스스로 하고 싶다');
@@ -456,6 +456,17 @@ const BasicInfoEdit = ({ data, onChange }) => {
     setDisabilityNames([]);
     setFacilityCustomMode(false);
   };
+
+  /* 포트폴리오 데모: 진입 시 테스트 데이터 자동 채움 + 토글 활성화 */
+  useEffect(() => {
+    if (import.meta.env.VITE_PORTFOLIO_DEMO !== '1') return;
+    const t = setTimeout(() => {
+      fillTestData();
+      setTestMode(true);
+      testModeRef.current = true;
+    }, 0);
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* 페이지 이탈 시 테스트 데이터 정리 */
   useEffect(() => {
@@ -749,7 +760,7 @@ const BasicInfoEdit = ({ data, onChange }) => {
 
       {/* ── 장애 상황 ── */}
       <div className={styles.spBox} data-qa="edit-section-disability">
-        <div className={styles.spBoxHeader}>障害の状況</div>
+        <div className={styles.spBoxHeader}>{lbl('장애 상황', '障害の状況')}</div>
         <div className={styles.spBoxBody}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           <div className={styles.field} style={{ gridColumn: '1 / -1' }}>

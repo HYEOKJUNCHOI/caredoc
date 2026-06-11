@@ -24,7 +24,12 @@
     "name": "利用者氏名",
     "manager": "記入者名",
     "namePlaceholder": "お名前を入力してください",
-    "managerPlaceholder": "空白のままにすると栗須康子が入ります",
+    "managerPlaceholder": "記入者名を入力してください",
+    "nameRequired": "利用者氏名を入力してください。",
+    "managerRequired": "記入者名を入力してください。",
+    "duplicateError": "同じ名前の利用者がすでに存在します。",
+    "saveError": "保存に失敗しました。ネットワーク接続を確認してください。",
+    "saving": "保存中...",
     "save": "保存",
     "cancel": "キャンセル"
   },
@@ -101,6 +106,7 @@
     "preview": "プレビューへ",
     "goalRow": "目標",
     "autoLinked": "個別支援計画書から自動連動",
+    "editInfoBtn": "編集",
     "section": {
       "goals":        "支援目標",
       "support":      "支援内容",
@@ -122,6 +128,30 @@
     "default": "デフォルト",
     "addPlaceholder": "新しい文言を入力してください...",
     "goAdmin": "文言管理"
+  },
+
+  "transfer": {
+    "navLabel": "データ移行",
+    "exportTitle": "データの書き出し",
+    "exportDesc": "移行する利用者を選択してコードを生成してください。コードは24時間有効です。",
+    "importTitle": "データの取り込み",
+    "importDesc": "受け取ったコード6桁を入力してください。",
+    "selectAll": "全員選択",
+    "generateBtn": "名のコードを生成",
+    "generating": "生成中...",
+    "codePlaceholder": "コード6桁",
+    "checkBtn": "確認",
+    "checking": "確認中...",
+    "importBtn": "このデータを取り込む",
+    "importing": "保存中...",
+    "cancelBtn": "キャンセル",
+    "copyBtn": "コピー",
+    "codeLabel": "移行コード（24時間有効）",
+    "codeHint": "共用アカウントでログイン後、/transfer でこのコードを入力してください。",
+    "senderLabel": "送信元",
+    "previewCount": "名",
+    "noUsers": "登録された利用者がいません。",
+    "successMsg": "名の移行完了！ホームに戻ると反映されます。"
   },
 
   "landing": {

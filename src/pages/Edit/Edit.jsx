@@ -91,15 +91,9 @@ const Edit = () => {
      - todayISO: 저장용 포맷 (YYYY-MM-DD) — input type="date"의 value에 사용
      - today: 표시용 포맷 (2026. 03. 21) — 화면에 보여줄 때 사용
      ──────────────────────────────────────────────────────── */
-  /* 오늘 날짜 — ISO(YYYY-MM-DD)와 표시용(2026. 03. 21) 두 가지 */
-  const todayISO = new Date().toISOString().split('T')[0];
-  const today = new Date().toLocaleDateString('ja-JP', {
-    year: 'numeric', month: '2-digit', day: '2-digit',
-  }).replace(/\//g, '. ');
-
   /* YYYY-MM-DD → 2026. 03. 21 표시용 변환 */
   const formatDateDisplay = (iso) => {
-    if (!iso) return today;
+    if (!iso) return '';
     if (iso.includes('-')) {
       const [y, m, d] = iso.split('-');
       return `${y}. ${m}. ${d}`;
@@ -209,7 +203,7 @@ const Edit = () => {
     setInfoValues({
       name: localUser?.name || '',
       manager: localUser?.manager || '',
-      writeDate: formData.writeDate || todayISO,
+      writeDate: formData.writeDate || '',
     });
     setEditingInfo(true);
   };
@@ -274,7 +268,7 @@ const Edit = () => {
          — 스프레드(...) 로 두 배열을 병합 */
       const snapshot = {
         ...formData,
-        writeDate:      formData.writeDate || todayISO,
+        writeDate:      formData.writeDate || '',
         shortTermGoals: [
           ...resolveArray(formData.shortTermGoals),
           ...(formData.shortTermGoalItems || []),
@@ -343,7 +337,7 @@ const Edit = () => {
               />
             </div>
             {/* tabIndex={-1}: 탭 키 이동 대상에서 제외 — 헤더 버튼은 폼 탭 순환에 포함하지 않는다 */}
-            <button className={styles.infoSaveBtn} onClick={saveInfo} tabIndex={-1}>저장</button>
+            <button className={styles.infoSaveBtn} onClick={saveInfo} tabIndex={-1}>{t('common.save')}</button>
           </>
         ) : (
           /* 읽기 모드: 저장된 값을 텍스트로 표시 */
@@ -361,7 +355,7 @@ const Edit = () => {
               <span className={styles.infoLabel}>{t('doc.writeDate')}</span>
               <span className={styles.infoValue}>{displayDate}</span>
             </div>
-            <button className={styles.infoEditBtn} onClick={startEditInfo} tabIndex={-1}>수정</button>
+            <button className={styles.infoEditBtn} onClick={startEditInfo} tabIndex={-1}>{t('edit.editInfoBtn')}</button>
           </>
         )}
       </div>

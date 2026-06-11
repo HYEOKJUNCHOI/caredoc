@@ -24,7 +24,12 @@
     "name": "이용자 성명",
     "manager": "담당자 성명",
     "namePlaceholder": "이름을 입력하세요",
-    "managerPlaceholder": "비우면 최혁준으로 저장됩니다",
+    "managerPlaceholder": "담당자 성명을 입력하세요",
+    "nameRequired": "이용자 성명을 입력해주세요.",
+    "managerRequired": "담당자 성명을 입력해주세요.",
+    "duplicateError": "같은 이름의 이용자가 이미 존재합니다.",
+    "saveError": "저장에 실패했습니다. 네트워크 연결을 확인해주세요.",
+    "saving": "저장 중...",
     "save": "저장",
     "cancel": "취소"
   },
@@ -101,6 +106,7 @@
     "preview": "미리보기로 이동",
     "goalRow": "목표",
     "autoLinked": "개별지원계획서에서 자동 연동",
+    "editInfoBtn": "수정",
     "section": {
       "goals":        "지원 목표",
       "support":      "지원 내용",
@@ -122,6 +128,30 @@
     "default": "기본",
     "addPlaceholder": "새 문구를 입력하세요...",
     "goAdmin": "문구 관리"
+  },
+
+  "transfer": {
+    "navLabel": "데이터 이전",
+    "exportTitle": "데이터 내보내기",
+    "exportDesc": "이전할 이용자를 선택하고 코드를 생성하세요. 코드는 24시간 유효합니다.",
+    "importTitle": "데이터 가져오기",
+    "importDesc": "받은 코드 6자리를 입력하세요.",
+    "selectAll": "전체 선택",
+    "generateBtn": "명 코드 생성",
+    "generating": "생성 중...",
+    "codePlaceholder": "코드 6자리",
+    "checkBtn": "확인",
+    "checking": "확인 중...",
+    "importBtn": "이 데이터 가져오기",
+    "importing": "저장 중...",
+    "cancelBtn": "취소",
+    "copyBtn": "복사",
+    "codeLabel": "이전 코드 (24시간 유효)",
+    "codeHint": "공용 계정으로 로그인 후 /transfer 에서 이 코드를 입력하세요.",
+    "senderLabel": "발신",
+    "previewCount": "명",
+    "noUsers": "등록된 이용자가 없습니다.",
+    "successMsg": "명 이전 완료! 홈으로 돌아가면 반영됩니다."
   },
 
   "landing": {
